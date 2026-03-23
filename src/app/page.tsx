@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product, Size, SugarLevel, IceLevel, ProductWithQuantity, Topping } from "@/types/database";
+import { Product, Size, SugarLevel, IceLevel, Topping } from "@/types/database";
 import { useCartStore } from "@/store/cart";
-import { Plus, Minus, X, ShoppingCart, Coffee, CheckCircle2, Trash2, Bell, Check, Edit3 } from "lucide-react";
+import { Plus, Minus, X, ShoppingCart, Coffee, CheckCircle2, Trash2, Check, Edit3 } from "lucide-react";
 
 export default function POSPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,9 +26,7 @@ export default function POSPage() {
   const [checkoutNotice, setCheckoutNotice] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"tiền mặt" | "chuyển khoản">("tiền mặt");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -95,32 +93,180 @@ export default function POSPage() {
     else { setSelectedToppings(prev => [...prev, name]); }
   };
 
+  // --- Improved Printing Logic for Xprinter 365B ---
+  const printLabels = (orderItems: any[]) => {
+    // 1. Create a hidden iframe for clean printing
+    const frameId = 'print-frame';
+    let frame = document.getElementById(frameId) as HTMLIFrameElement;
+    if (!frame) {
+      frame = document.createElement('iframe');
+      frame.id = frameId;
+      frame.style.display = 'none';
+      document.body.appendChild(frame);
+    }
+
+    const doc = frame.contentWindow?.document;
+    if (!doc) return;
+
+    const now = new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+    let labelsHtml = '';
+
+    orderItems.forEach(item => {
+      for (let i = 0; i < item.quantity; i++) {
+        labelsHtml += `
+          <div class="label">
+            <div class="header">
+              <span class="shop">LOTOMO TEA</span>
+              <span class="time">${now}</span>
+            </div>
+            <div class="product-name">${item.name} (${item.size})</div>
+            <div class="options">
+              ${item.sugar} Đường - ${item.ice} Đá
+            </div>
+            ${item.toppings.length > 0 ? `<div class="toppings">Top: ${item.toppings.join(', ')}</div>` : ''}
+            ${item.note ? `<div class="note">Ghi chú: ${item.note}</div>` : ''}
+            <div class="footer">
+               <span>Số: ${i + 1}/${item.quantity}</span>
+               <span>Đơn: #${item.order_id?.slice(-4).toUpperCase() || 'POS'}</span>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    const style = `
+      <style>
+        @page { 
+          size: 50mm 30mm; 
+          margin: 0; 
+        }
+        @media print {
+          html, body { margin: 0; padding: 0; }
+          /* Suppress browser headers/footers */
+          header, footer { display: none !important; }
+        }
+        body { 
+          margin: 0; 
+          padding: 0; 
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          -webkit-print-color-adjust: exact;
+        }
+        .label { 
+          width: 50mm; 
+          height: 30mm; 
+          padding: 1.5mm 3mm; 
+          box-sizing: border-box; 
+          display: flex; 
+          flex-direction: column; 
+          page-break-after: always;
+          overflow: hidden;
+          background: white;
+        }
+        .header { 
+          display: flex; 
+          justify-content: space-between; 
+          border-bottom: 0.1mm solid #000; 
+          padding-bottom: 0.4mm; 
+          margin-bottom: 0.8mm; 
+        }
+        .shop { font-size: 6.5pt; font-weight: 900; letter-spacing: 0.5px; }
+        .time { font-size: 5.5pt; font-weight: 500; opacity: 0.7; }
+        .product-name { 
+          font-size: 10.5pt; 
+          font-weight: 900; 
+          text-transform: uppercase; 
+          margin-bottom: 0.5mm;
+          line-height: 1.1;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .options { font-size: 7.5pt; font-weight: 700; margin-bottom: 0.3mm; }
+        .toppings { 
+          font-size: 6.5pt; 
+          font-weight: 500;
+          white-space: nowrap; 
+          overflow: hidden; 
+          text-overflow: ellipsis; 
+          opacity: 0.8;
+        }
+        .note { 
+          font-size: 6.5pt; 
+          font-style: italic;
+          background: #f0f0f0; 
+          padding: 0.3mm 0.8mm; 
+          border-radius: 0.4mm; 
+          margin-top: 0.8mm;
+          line-height: 1.1;
+        }
+        .footer { 
+          margin-top: auto; 
+          font-size: 5.5pt; 
+          font-weight: 700;
+          display: flex; 
+          justify-content: space-between; 
+          color: #333;
+          border-top: 0.1mm dashed #ccc;
+          padding-top: 0.5mm;
+        }
+      </style>
+    `;
+
+    doc.open();
+    doc.write(`<html><head>${style}</head><body>${labelsHtml}</body></html>`);
+    doc.close();
+
+    // Trigger print
+    setTimeout(() => {
+      frame.contentWindow?.focus();
+      frame.contentWindow?.print();
+    }, 500);
+  };
+
   const handleCheckout = async () => {
     if (items.length === 0) return;
     setIsCheckingOut(true);
     const totalAmount = getTotal();
+    const orderItemsPayload = items.map(item => ({
+      product_id: item.id,
+      quantity: item.quantity,
+      size: item.size,
+      sugar: item.sugar,
+      ice: item.ice,
+      toppings: item.toppings,
+      unit_price: item.unit_price,
+      total_price: item.total_price,
+      note: item.note,
+      name: item.name // Added for label printing
+    }));
+
     const payload = {
       total_amount: totalAmount,
       status: "preparing",
       payment_method: paymentMethod,
       is_paid: true,
       paid_at: new Date().toISOString(),
-      items: items.map(item => ({
-        product_id: item.id,
-        quantity: item.quantity,
-        size: item.size,
-        sugar: item.sugar,
-        ice: item.ice,
-        toppings: item.toppings,
-        unit_price: item.unit_price,
-        total_price: item.total_price,
-        note: item.note
-      }))
+      items: orderItemsPayload
     };
+
     try {
       const res = await fetch("/api/orders", { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
-      if (res.ok) { clearCart(); setIsCheckingOut(false); setCheckoutNotice(true); setTimeout(() => setCheckoutNotice(false), 2000); }
-    } catch (e) { alert("Thanh toán lỗi!"); setIsCheckingOut(false); }
+      const orderData = await res.json();
+      
+      if (res.ok) {
+        // Trigger label printing
+        printLabels(orderItemsPayload.map(i => ({ ...i, order_id: orderData.id })));
+        
+        clearCart();
+        setIsCheckingOut(false);
+        setCheckoutNotice(true);
+        setTimeout(() => setCheckoutNotice(false), 2000);
+      }
+    } catch (e) {
+      alert("Thanh toán lỗi!");
+      setIsCheckingOut(false);
+    }
   };
 
   const formatCurrency = (amount: number) => new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
@@ -131,15 +277,7 @@ export default function POSPage() {
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <div className="p-6 bg-white/50 backdrop-blur-xl border-b flex gap-3 overflow-x-auto no-scrollbar scroll-smooth">
           {["all", "matcha", "trà sữa", "cà phê"].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-10 py-4 rounded-[2rem] font-black text-xs uppercase tracking-widest transition-all duration-500 border-2 ${
-                activeCategory === cat ? "bg-primary text-white border-primary shadow-2xl scale-105" : "bg-white text-muted-foreground border-transparent hover:border-black/5"
-              }`}
-            >
-              {cat}
-            </button>
+            <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-10 py-4 rounded-[2rem] font-black text-xs uppercase tracking-widest transition-all duration-500 border-2 ${activeCategory === cat ? "bg-primary text-white border-primary shadow-2xl scale-105" : "bg-white text-muted-foreground border-transparent hover:border-black/5"}`}>{cat}</button>
           ))}
         </div>
 
@@ -160,7 +298,7 @@ export default function POSPage() {
         </div>
       </div>
 
-      {/* Checkout Sidebar (Made narrower) */}
+      {/* Checkout Sidebar */}
       <div className="w-[380px] flex flex-col h-full bg-white shadow-[0_0_100px_rgba(0,0,0,0.05)] border-l z-20">
          <div className="p-8 border-b">
             <h2 className="text-2xl font-black uppercase tracking-tighter flex items-center gap-3"><ShoppingCart className="w-6 h-6 text-primary" /> Cart ({items.length})</h2>
@@ -235,7 +373,6 @@ export default function POSPage() {
               </div>
 
               <div className="flex-1 p-6 space-y-4 overflow-hidden">
-                 {/* SIZE ROW */}
                  <div className="flex items-center gap-4">
                     <label className="text-[9px] font-black uppercase tracking-widest opacity-30 w-12">Size</label>
                     <div className="flex-1 grid grid-cols-3 gap-1.5">
@@ -245,7 +382,6 @@ export default function POSPage() {
                     </div>
                  </div>
 
-                 {/* SUGAR ROW */}
                  <div className="flex items-center gap-4">
                     <label className="text-[9px] font-black uppercase tracking-widest opacity-30 w-12">Đường</label>
                     <div className="flex-1 grid grid-cols-3 gap-1.5">
@@ -255,7 +391,6 @@ export default function POSPage() {
                     </div>
                  </div>
 
-                 {/* ICE ROW */}
                  <div className="flex items-center gap-4">
                     <label className="text-[9px] font-black uppercase tracking-widest opacity-30 w-12">Đá</label>
                     <div className="flex-1 grid grid-cols-3 gap-1.5">
@@ -265,7 +400,6 @@ export default function POSPage() {
                     </div>
                  </div>
 
-                 {/* TOPPINGS */}
                  <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-widest opacity-30">Toppings</label>
                     <div className="grid grid-cols-2 gap-1.5 max-h-[120px] overflow-y-auto no-scrollbar pr-1 bg-[#f8f9fa] p-2 rounded-2xl border border-black/5">
@@ -278,7 +412,6 @@ export default function POSPage() {
                     </div>
                  </div>
 
-                 {/* NOTE */}
                  <div className="space-y-2">
                     <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full bg-[#f8f9fa] border-2 border-transparent focus:border-primary/20 rounded-2xl p-3 outline-none font-bold text-xs h-12 resize-none" placeholder="Ghi chú..."></textarea>
                  </div>
