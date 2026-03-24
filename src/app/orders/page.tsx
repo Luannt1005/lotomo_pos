@@ -12,6 +12,7 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<OrderWithItems[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("preparing");
+  const [dateFilter, setDateFilter] = useState(new Date().toISOString().split('T')[0]);
   
   // Modal for extra details/actions
   const [selectedOrder, setSelectedOrder] = useState<OrderWithItems | null>(null);
@@ -32,9 +33,12 @@ export default function OrdersPage() {
     if (showLoading) setLoading(false);
   };
 
-  const filteredOrders = statusFilter === "all" 
-    ? orders 
-    : orders.filter(o => o.status === statusFilter);
+  const filteredOrders = orders.filter(o => {
+    const orderDate = o.created_at.split('T')[0];
+    const statusMatch = statusFilter === "all" || o.status === statusFilter;
+    const dateMatch = !dateFilter || orderDate === dateFilter;
+    return statusMatch && dateMatch;
+  });
 
   const updateItemStatus = async (itemId: string, newStatus: OrderStatus, orderId: string) => {
     try {
@@ -89,18 +93,32 @@ export default function OrdersPage() {
   return (
     <div className="p-6 h-full flex flex-col bg-muted/5">
       <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter">QUẢN LÝ PHA CHẾ</h1>
-          <div className="flex gap-2 mt-2">
-            {[ "preparing", "done", "all"].map(s => (
-                <button 
-                  key={s} 
-                  onClick={() => setStatusFilter(s as any)}
-                  className={`px-6 py-1.5 rounded-xl font-black uppercase text-[9px] tracking-widest transition-all ${statusFilter === s ? "bg-primary text-white shadow-lg" : "bg-white text-muted-foreground hover:bg-muted"}`}
-                >
-                  {s === "all" ? "Tất cả" : s === "preparing" ? "ĐANG LÀM" : "HOÀN TẤT"}
-                </button>
-            ))}
+        <div className="flex items-center gap-6">
+          <div>
+            <h1 className="text-3xl font-black uppercase tracking-tighter">QUẢN LÝ PHA CHẾ</h1>
+            <div className="flex gap-2 mt-2">
+              {[ "preparing", "done", "all"].map(s => (
+                  <button 
+                    key={s} 
+                    onClick={() => setStatusFilter(s as any)}
+                    className={`px-4 py-1.5 rounded-xl font-black uppercase text-[9px] tracking-widest transition-all ${statusFilter === s ? "bg-primary text-white shadow-lg" : "bg-white text-muted-foreground hover:bg-muted"}`}
+                  >
+                    {s === "all" ? "Tất cả" : s === "preparing" ? "ĐANG LÀM" : "HOÀN TẤT"}
+                  </button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="h-12 w-[2px] bg-black/5 mx-2" />
+
+          <div className="space-y-1">
+             <label className="text-[8px] font-black uppercase opacity-30 tracking-widest pl-1">Lọc theo ngày</label>
+             <input 
+                type="date" 
+                value={dateFilter} 
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="block bg-white border-2 border-white shadow-sm rounded-xl px-4 py-1.5 font-black text-xs outline-none focus:border-primary/20 transition-all cursor-pointer"
+             />
           </div>
         </div>
         <button onClick={() => fetchOrders()} className="p-4 bg-white text-primary rounded-2xl shadow-xl hover:scale-110 active:rotate-180 transition-all border-2 border-white"><RefreshCw className="w-6 h-6" /></button>
