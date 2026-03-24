@@ -161,7 +161,11 @@ export default function OrdersPage() {
                                    <span className="text-primary font-black mr-2 bg-primary/10 px-1.5 py-0.5 rounded text-[10px]">{item.quantity}x</span>
                                    {item.products?.name} 
                                 </h4>
-                                <p className="text-[8px] font-black opacity-30 mt-0.5 tracking-widest">{item.size} • {item.sugar} đường • {item.ice} đá</p>
+                                <p className="text-[8px] font-black opacity-30 mt-0.5 tracking-widest">
+                                    {item.size}
+                                    {item.sugar !== "100%" && ` • ${item.sugar} đường`}
+                                    {item.ice !== "bình thường" && ` • ${item.ice} đá`}
+                                 </p>
                                 {item.note && <div className="mt-1 text-[8px] text-yellow-800 font-bold bg-yellow-50 px-2 py-0.5 rounded-lg border border-yellow-100 italic">Note: {item.note}</div>}
                              </div>
                           </div>

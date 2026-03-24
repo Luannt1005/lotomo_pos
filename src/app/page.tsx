@@ -121,7 +121,9 @@ export default function POSPage() {
             </div>
             <div class="product-name">${item.name} (${item.size})</div>
             <div class="options">
-              ${item.sugar} Đường - ${item.ice} Đá
+              ${item.sugar !== "100%" ? `${item.sugar} Đường` : ''} 
+              ${item.sugar !== "100%" && item.ice !== "bình thường" ? ' - ' : ''}
+              ${item.ice !== "bình thường" ? `${item.ice} Đá` : ''}
             </div>
             ${item.toppings.length > 0 ? `<div class="toppings">Top: ${item.toppings.join(', ')}</div>` : ''}
             ${item.note ? `<div class="note">Ghi chú: ${item.note}</div>` : ''}
@@ -316,7 +318,11 @@ export default function POSPage() {
                         <div className="flex justify-between items-start">
                            <div>
                               <h4 className="font-black text-sm uppercase tracking-tight">{item.name}</h4>
-                              <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-1">{item.size} • {item.sugar} đường • {item.ice} đá</p>
+                               <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-1">
+                                  {item.size}
+                                  {item.sugar !== "100%" && ` • ${item.sugar} đường`}
+                                  {item.ice !== "bình thường" && ` • ${item.ice} đá`}
+                               </p>
                               {item.toppings.length > 0 && <p className="text-[10px] italic text-muted-foreground mt-1 line-clamp-1">+ {item.toppings.join(", ")}</p>}
                               {item.note && <p className="text-[10px] bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md mt-2 font-bold flex items-center gap-1 w-fit"><Edit3 className="w-2 h-2"/> {item.note}</p>}
                            </div>
