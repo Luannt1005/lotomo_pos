@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product, Size, SugarLevel, IceLevel, Topping } from "@/types/database";
+import { Product, Size, SugarLevel, IceLevel, Topping, Discount, MilkType } from "@/types/database";
 import { useCartStore } from "@/store/cart";
-import { Plus, Minus, X, ShoppingCart, Coffee, CheckCircle2, Trash2, Check, Edit3 } from "lucide-react";
+import { Plus, Minus, X, ShoppingCart, Coffee, CheckCircle2, Trash2, Check, Edit3, Tag } from "lucide-react";
+import { getActiveDiscount, calculateDiscount } from "@/lib/discounts";
 
 export default function POSPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [allToppings, setAllToppings] = useState<Topping[]>([]);
+  const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   
@@ -18,6 +20,7 @@ export default function POSPage() {
   const [size, setSize] = useState<Size>("M");
   const [sugar, setSugar] = useState<SugarLevel>("100%");
   const [ice, setIce] = useState<IceLevel>("bình thường");
+  const [milk, setMilk] = useState<MilkType>("sữa tươi");
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [note, setNote] = useState("");
   
@@ -26,19 +29,26 @@ export default function POSPage() {
   const [checkoutNotice, setCheckoutNotice] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"tiền mặt" | "chuyển khoản">("tiền mặt");
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const activeDiscount = getActiveDiscount(discounts);
 
   useEffect(() => { fetchData(); }, []);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const pRes = await fetch("/api/products");
-      const pData = await pRes.json();
-      if (!pData.error) setProducts(pData.filter((p: Product) => p.is_available));
+      const [pRes, tRes, dRes] = await Promise.all([
+        fetch("/api/products"),
+        fetch("/api/toppings"),
+        fetch("/api/discounts")
+      ]);
       
-      const tRes = await fetch("/api/toppings");
+      const pData = await pRes.json();
       const tData = await tRes.json();
+      const dData = await dRes.json();
+      
+      if (!pData.error) setProducts(pData.filter((p: Product) => p.is_available));
       if (!tData.error) setAllToppings(tData);
+      if (!dData.error) setDiscounts(dData);
     } catch (e) { console.error(e); }
     setLoading(false);
   };
@@ -47,6 +57,7 @@ export default function POSPage() {
     if (!selectedProduct) return 0;
     const sizeData = selectedProduct.sizes.find(s => s.size === size);
     let price = sizeData ? sizeData.price : 0;
+    if (selectedProduct.category === 'matcha' && (milk === 'sữa Oat' || milk === 'sữa Meiji')) price += 5000;
     selectedToppings.forEach(name => {
       const topping = allToppings.find(t => t.name === name);
       if (topping) price += topping.price;
@@ -65,6 +76,7 @@ export default function POSPage() {
       size,
       sugar,
       ice,
+      milk: selectedProduct.category === 'matcha' ? milk : undefined,
       toppings: selectedToppings,
       unit_price: unitPrice,
       total_price: unitPrice,
@@ -78,6 +90,7 @@ export default function POSPage() {
     setSize("M");
     setSugar("100%");
     setIce("bình thường");
+    setMilk("sữa tươi");
     setSelectedToppings([]);
     setNote("");
   };
@@ -97,13 +110,17 @@ export default function POSPage() {
   const handleCheckout = async () => {
     if (items.length === 0) return;
     setIsCheckingOut(true);
-    const totalAmount = getTotal();
+    const subtotal = getTotal();
+    const discountAmount = calculateDiscount(subtotal, activeDiscount);
+    const totalAmount = subtotal - discountAmount;
+
     const orderItemsPayload = items.map(item => ({
       product_id: item.id,
       quantity: item.quantity,
       size: item.size,
       sugar: item.sugar,
       ice: item.ice,
+      milk: item.milk,
       toppings: item.toppings,
       unit_price: item.unit_price,
       total_price: item.total_price,
@@ -113,6 +130,7 @@ export default function POSPage() {
 
     const payload = {
       total_amount: totalAmount,
+      discount_amount: discountAmount, // Including it even if DB doesn't have it yet for future proofing
       status: "preparing",
       payment_method: paymentMethod,
       is_paid: true,
@@ -141,8 +159,14 @@ export default function POSPage() {
     <div className="flex lg:flex-row flex-col h-full w-full bg-[#f8f9fa] overflow-hidden antialiased relative">
       {/* Products Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
+        {activeDiscount && (
+          <div className="bg-primary/95 text-white py-2 px-6 flex items-center justify-center gap-3 animate-pulse border-b border-white/20">
+            <Tag className="w-4 h-4" />
+            <span className="text-[10px] font-black uppercase tracking-widest">{activeDiscount.label}</span>
+          </div>
+        )}
         <div className="p-4 lg:p-6 bg-white/50 backdrop-blur-xl border-b flex gap-3 overflow-x-auto no-scrollbar scroll-smooth">
-          {["all", "matcha", "trà sữa", "cà phê"].map((cat) => (
+          {["all", "matcha", "trà sữa", "trà trái cây"].map((cat) => (
             <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-6 lg:px-10 py-3 lg:py-4 rounded-[2rem] font-black text-[10px] lg:text-xs uppercase tracking-widest transition-all duration-500 border-2 shrink-0 ${activeCategory === cat ? "bg-primary text-white border-primary shadow-2xl scale-105" : "bg-white text-muted-foreground border-transparent hover:border-black/5"}`}>{cat}</button>
           ))}
         </div>
@@ -192,6 +216,7 @@ export default function POSPage() {
                                   <h4 className="font-black text-xs lg:text-sm uppercase tracking-tight">{item.name}</h4>
                                    <p className="text-[9px] lg:text-[10px] font-black uppercase tracking-widest text-primary mt-1">
                                       {item.size}
+                                      {item.milk && ` • ${item.milk}`}
                                       {item.sugar !== "100%" && ` • ${item.sugar} đ`}
                                       {item.ice !== "bình thường" && ` • ${item.ice} đá`}
                                    </p>
@@ -213,18 +238,30 @@ export default function POSPage() {
                 )}
              </div>
 
-             <div className="p-6 lg:p-8 space-y-4 lg:space-y-6 bg-white border-t rounded-t-[2.5rem] lg:rounded-t-[3rem] shadow-2xl">
-                <div className="flex justify-between items-center font-black">
-                    <span className="text-[9px] font-black uppercase opacity-30">Total</span>
-                    <span className="text-2xl lg:text-3xl text-primary tracking-tighter">{formatCurrency(getTotal())}</span>
+             <div className="p-4 lg:p-5 space-y-3 bg-white border-t rounded-t-[2rem] lg:rounded-t-[2.5rem] shadow-2xl">
+                <div className="space-y-1.5">
+                    <div className="flex justify-between items-center px-1">
+                        <span className="text-[10px] font-black uppercase opacity-30">Tạm tính</span>
+                        <span className="text-sm font-black text-foreground/80">{formatCurrency(getTotal())}</span>
+                    </div>
+                    {calculateDiscount(getTotal(), activeDiscount) > 0 && (
+                        <div className="flex justify-between items-center text-red-500 tracking-tighter px-1">
+                            <span className="text-[10px] font-black uppercase flex items-center gap-1.5"><Tag className="w-3 h-3"/> Giảm giá</span>
+                            <span className="text-sm font-black">-{formatCurrency(calculateDiscount(getTotal(), activeDiscount))}</span>
+                        </div>
+                    )}
+                </div>
+                <div className="flex justify-between items-center font-black pt-2 border-t border-black/5 px-1">
+                    <span className="text-[8px] font-black uppercase opacity-30">Tổng cộng</span>
+                    <span className="text-xl lg:text-2xl text-primary tracking-tighter">{formatCurrency(getTotal() - calculateDiscount(getTotal(), activeDiscount))}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                    {["tiền mặt", "chuyển khoản"].map(m => (
-                       <button key={m} onClick={() => setPaymentMethod(m as any)} className={`py-3 rounded-2xl font-black uppercase text-[9px] lg:text-[10px] tracking-widest border-2 transition-all ${paymentMethod === m ? "bg-primary text-white border-primary shadow-lg" : "bg-muted text-muted-foreground border-transparent"}`}>{m}</button>
+                       <button key={m} onClick={() => setPaymentMethod(m as any)} className={`py-2 rounded-xl font-black uppercase text-[8px] lg:text-[9px] tracking-widest border-2 transition-all ${paymentMethod === m ? "bg-primary text-white border-primary shadow-md" : "bg-muted text-muted-foreground border-transparent"}`}>{m}</button>
                    ))}
                 </div>
-                <button disabled={items.length === 0 || isCheckingOut} onClick={handleCheckout} className="w-full bg-primary text-white py-4 lg:py-5 rounded-[1.5rem] lg:rounded-[2rem] font-black text-xs lg:text-sm uppercase tracking-widest shadow-2xl shadow-primary/30 active:scale-95 transition-all disabled:opacity-30">
-                    {isCheckingOut ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div> : "Thanh Toán"}
+                <button disabled={items.length === 0 || isCheckingOut} onClick={handleCheckout} className="w-full bg-primary text-white py-3 lg:py-4 rounded-2xl font-black text-[10px] lg:text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all disabled:opacity-30">
+                    {isCheckingOut ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div> : "Thanh Toán"}
                 </button>
              </div>
           </div>
@@ -293,6 +330,19 @@ export default function POSPage() {
                         ))}
                     </div>
                  </div>
+
+                 {selectedProduct.category === 'matcha' && (
+                  <div className="flex items-center gap-3 lg:gap-4 animate-in slide-in-from-left-2">
+                      <label className="text-[8px] lg:text-[9px] font-black uppercase tracking-widest opacity-30 w-10 lg:w-12">Loại Sữa</label>
+                      <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
+                          {(['sữa tươi', 'sữa Oat', 'sữa Meiji'] as MilkType[]).map(m => (
+                              <button key={m} onClick={() => setMilk(m)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black uppercase text-[9px] lg:text-[10px] tracking-widest transition-all ${milk === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
+                                {m} {m !== 'sữa tươi' && "+5K"}
+                              </button>
+                          ))}
+                      </div>
+                  </div>
+                 )}
 
                  <div className="space-y-2">
                     <label className="text-[8px] lg:text-[9px] font-black uppercase tracking-widest opacity-30">Toppings</label>

@@ -88,14 +88,37 @@ export default function ProductsPage() {
     const method = editingItem ? "PATCH" : "POST";
     const url = editingItem ? `/api/products/${editingItem.id}` : "/api/products";
     
-    const res = await fetch(url, { method, body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
-    if (res.ok) { setIsProductModalOpen(false); fetchData(); }
+    try {
+      const res = await fetch(url, { method, body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
+      if (res.ok) { 
+        setIsProductModalOpen(false); 
+        fetchData(); 
+      } else {
+        const err = await res.json();
+        alert("Lỗi khi lưu sản phẩm: " + (err.error || "Không xác định"));
+      }
+    } catch (e: any) {
+      alert("Lỗi kết nối server: " + e.message);
+    }
   };
 
   const deleteProduct = async (id: string) => {
-    if (confirm("Xoá sản phẩm này?")) {
-      await fetch(`/api/products/${id}`, { method: "DELETE" });
-      fetchData();
+    if (confirm("Xoá sản phẩm này? Chú ý: Nếu sản phẩm đã từng có trong đơn hàng, bạn sẽ không thể xoá được để bảo toàn dữ liệu.")) {
+      try {
+        const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
+        if (res.ok) {
+           fetchData();
+        } else {
+           const err = await res.json();
+           if (err.error?.includes("violates foreign key constraint")) {
+              alert("Lỗi: Sản phẩm này đang có trong một đơn hàng cũ. Bạn không thể xoá sản phẩm này, nhưng có thể tắt 'Khả dụng' để ngừng bán.");
+           } else {
+              alert("Lỗi khi xoá: " + (err.error || "Không xác định"));
+           }
+        }
+      } catch (e: any) {
+        alert("Lỗi kết nối: " + e.message);
+      }
     }
   };
 
@@ -107,8 +130,18 @@ export default function ProductsPage() {
     const payload = { name: toppingName, price: parseInt(toppingPrice) || 0 };
     const method = editingItem ? "PATCH" : "POST";
     const url = editingItem ? `/api/toppings/${editingItem.id}` : "/api/toppings";
-    const res = await fetch(url, { method, body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
-    if (res.ok) { setIsToppingModalOpen(false); fetchData(); }
+    try {
+      const res = await fetch(url, { method, body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
+      if (res.ok) { 
+        setIsToppingModalOpen(false); 
+        fetchData(); 
+      } else {
+        const err = await res.json();
+        alert("Lỗi lưu topping: " + (err.error || "Không xác định"));
+      }
+    } catch (e: any) {
+      alert("Lỗi kết nối: " + e.message);
+    }
   };
   const deleteTopping = async (id: string) => {
     if (confirm("Xoá topping này?")) {
@@ -214,7 +247,7 @@ export default function ProductsPage() {
                    <div className="space-y-2">
                       <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Phân loại</label>
                       <div className="flex gap-1.5">
-                        {["matcha", "trà sữa", "cà phê"].map(cat => (
+                        {["matcha", "trà sữa", "trà trái cây"].map(cat => (
                             <button key={cat} type="button" onClick={() => setCategory(cat as any)} className={`flex-1 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border-2 transition-all ${category === cat ? "bg-primary text-white border-primary shadow-lg" : "bg-muted text-muted-foreground border-transparent hover:border-primary/10"}`}>{cat}</button>
                         ))}
                       </div>

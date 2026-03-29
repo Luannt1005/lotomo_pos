@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Coffee, ListOrdered, LayoutDashboard } from "lucide-react";
+import { Coffee, ListOrdered, LayoutDashboard, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { name: "POS", href: "/", icon: LayoutDashboard },
   { name: "Sản phẩm", href: "/products", icon: Coffee },
   { name: "Đơn hàng", href: "/orders", icon: ListOrdered },
+  { name: "Khuyến mãi", href: "/discounts", icon: Tag },
 ];
 
 export function Sidebar() {

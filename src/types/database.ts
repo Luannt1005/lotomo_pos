@@ -1,4 +1,4 @@
-export type Category = 'matcha' | 'trà sữa' | 'cà phê';
+export type Category = 'matcha' | 'trà sữa' | 'trà trái cây';
 
 export type Topping = {
   id: string;
@@ -39,6 +39,8 @@ export type Size = 'S' | 'M' | 'L';
 export type SugarLevel = '0%' | '50%' | '100%';
 export type IceLevel = 'không đá' | 'ít đá' | 'bình thường';
 
+export type MilkType = 'sữa tươi' | 'sữa Oat' | 'sữa Meiji';
+
 export type OrderItem = {
   id: string;
   order_id: string;
@@ -47,6 +49,7 @@ export type OrderItem = {
   size: string;
   sugar: string;
   ice: string;
+  milk?: string;
   toppings: string[];
   unit_price: number;
   total_price: number;
@@ -61,8 +64,21 @@ export type ProductWithQuantity = Product & {
   size: Size;
   sugar: SugarLevel;
   ice: IceLevel;
+  milk?: MilkType;
   toppings: string[];
   unit_price: number;
   total_price: number;
   note: string;
+};
+
+export type Discount = {
+  id: string;
+  label: string;
+  type: 'percentage' | 'fixed';
+  value: number;
+  day_of_week: number | null; // 0-6
+  specific_date: string | null; // YYYY-MM-DD
+  min_order_value: number | null;
+  is_active: boolean;
+  created_at: string;
 };

@@ -27,6 +27,10 @@ export default function PrintStationPage() {
             newOrders.sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
             
             for (const order of newOrders) {
+              const orderDiscount = order.discount_amount || 0;
+              const subtotal = order.total_amount + orderDiscount;
+              const discountRatio = subtotal > 0 ? order.total_amount / subtotal : 1;
+
               addLog(`Phát hiện đơn hàng mới: #${order.id.slice(-6).toUpperCase()} - ${order.order_items?.length} món. Bắt đầu in...`);
               
               // Chuyển đổi định dạng dữ liệu cho hàm in
@@ -35,8 +39,11 @@ export default function PrintStationPage() {
                 size: item.size,
                 sugar: item.sugar,
                 ice: item.ice,
+                milk: item.milk,
                 toppings: item.toppings || [],
                 note: item.note,
+                unit_price: item.unit_price * discountRatio, // Giá sau giảm
+                total_price: item.total_price * discountRatio,
                 name: item.products?.name,
                 order_id: order.id
               }));
@@ -84,11 +91,13 @@ export default function PrintStationPage() {
         labelsHtml += `
           <div class="label">
             <div class="header">
-              <span class="shop">LOTOMO TEA</span>
-              <span class="time">${now}</span>
+               <span class="shop">lơ tơ mơ</span>
+               <span class="time">${now}</span>
             </div>
             <div class="product-name">${item.name} (${item.size})</div>
             <div class="options">
+              ${item.milk ? `<span class="milk">${item.milk.toUpperCase()}</span>` : ''}
+              ${item.milk && (item.sugar !== "100%" || item.ice !== "bình thường") ? ' • ' : ''}
               ${item.sugar !== "100%" ? `${item.sugar} Đường` : ''} 
               ${item.sugar !== "100%" && item.ice !== "bình thường" ? ' - ' : ''}
               ${item.ice !== "bình thường" ? `${item.ice} Đá` : ''}
@@ -97,6 +106,7 @@ export default function PrintStationPage() {
             ${item.note ? `<div class="note">Ghi chú: ${item.note}</div>` : ''}
             <div class="footer">
                <span>Số: ${i + 1}/${item.quantity}</span>
+               <span class="price">${new Intl.NumberFormat("vi-VN").format(item.unit_price)}đ</span>
                <span>Đơn: #${item.order_id?.slice(-4).toUpperCase() || 'POS'}</span>
             </div>
           </div>
@@ -106,7 +116,7 @@ export default function PrintStationPage() {
 
     const style = `
       <style>
-        @page { size: 50mm 30mm; margin: 0; }
+        @page { size: 40mm 30mm; margin: 0; }
         @media print {
           html, body { margin: 0; padding: 0; }
           header, footer { display: none !important; }
@@ -117,19 +127,21 @@ export default function PrintStationPage() {
           -webkit-print-color-adjust: exact;
         }
         .label { 
-          width: 50mm; height: 30mm; 
-          padding: 1.5mm 3mm; box-sizing: border-box; 
+          width: 40mm; height: 30mm; 
+          padding: 1.2mm 2.5mm; box-sizing: border-box; 
           display: flex; flex-direction: column; 
           page-break-after: always; overflow: hidden; background: white;
         }
-        .header { display: flex; justify-content: space-between; border-bottom: 0.1mm solid #000; padding-bottom: 0.4mm; margin-bottom: 0.8mm; }
-        .shop { font-size: 6.5pt; font-weight: 900; letter-spacing: 0.5px; }
-        .time { font-size: 5.5pt; font-weight: 500; opacity: 0.7; }
-        .product-name { font-size: 10.5pt; font-weight: 900; text-transform: uppercase; margin-bottom: 0.5mm; line-height: 1.1; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-        .options { font-size: 7.5pt; font-weight: 700; margin-bottom: 0.3mm; }
-        .toppings { font-size: 6.5pt; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
-        .note { font-size: 6.5pt; font-style: italic; background: #f0f0f0; padding: 0.3mm 0.8mm; border-radius: 0.4mm; margin-top: 0.8mm; line-height: 1.1; }
-        .footer { margin-top: auto; font-size: 5.5pt; font-weight: 700; display: flex; justify-content: space-between; color: #333; border-top: 0.1mm dashed #ccc; padding-top: 0.5mm; }
+        .header { display: flex; justify-content: space-between; border-bottom: 0.1mm solid #000; padding-bottom: 0.3mm; margin-bottom: 0.5mm; }
+        .shop { font-size: 6.5pt; font-weight: 900; letter-spacing: 0.1mm; text-transform: lowercase; }
+        .time { font-size: 5pt; font-weight: 500; opacity: 0.7; }
+        .product-name { font-size: 8.5pt; font-weight: 950; text-transform: uppercase; margin-bottom: 0.4mm; line-height: 1.0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .options { font-size: 7pt; font-weight: 700; margin-bottom: 0.2mm; line-height: 1.1; }
+        .milk { background: #000; color: #fff; padding: 0.1mm 0.4mm; border-radius: 0.2mm; font-size: 6.5pt; margin-right: 0.5mm; }
+        .toppings { font-size: 6pt; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
+        .note { font-size: 6pt; font-style: italic; background: #f4f4f4; padding: 0.2mm 0.6mm; border-radius: 0.4mm; margin-top: 0.6mm; line-height: 1.05; }
+        .footer { margin-top: auto; font-size: 5pt; font-weight: 700; display: flex; justify-content: space-between; color: #333; border-top: 0.1mm dashed #ccc; padding-top: 0.4mm; }
+        .price { font-size: 6pt; color: #000; font-weight: 900; }
       </style>
     `;
 

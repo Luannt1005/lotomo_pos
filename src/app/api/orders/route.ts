@@ -24,12 +24,28 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { items, ...orderData } = await request.json();
+    const body = await request.json();
+    const { 
+      items,
+      total_amount, 
+      discount_amount,
+      payment_method, 
+      is_paid, 
+      paid_at, 
+      status: reqStatus 
+    } = body;
 
     // 1. Create order
     const { data: order, error: orderError } = await supabaseAdmin
       .from("orders")
-      .insert([{ ...orderData, status: 'preparing' }])
+      .insert([{ 
+        total_amount, 
+        discount_amount: discount_amount || 0,
+        payment_method, 
+        is_paid, 
+        paid_at, 
+        status: reqStatus || 'preparing' 
+      }])
       .select()
       .single();
 
