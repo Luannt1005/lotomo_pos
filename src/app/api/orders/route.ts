@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
-export async function GET() {
-  const { data, error } = await supabaseAdmin
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const date = searchParams.get("date");
+
+  let query = supabaseAdmin
     .from("orders")
     .select(`
       *,
@@ -14,6 +17,19 @@ export async function GET() {
       )
     `)
     .order("created_at", { ascending: false });
+
+  if (date) {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+    
+    query = query
+      .gte("created_at", startOfDay.toISOString())
+      .lte("created_at", endOfDay.toISOString());
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error("Supabase Error (GET /api/orders):", error);

@@ -72,14 +72,14 @@ export default function DiscountsPage() {
   const DAYS = ["Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
 
   return (
-    <div className="p-10 h-full flex flex-col bg-[#f8f9fa]">
-      <div className="flex justify-between items-center mb-10">
-        <div>
-          <h1 className="text-4xl font-black tracking-tighter uppercase mb-2">QUẢN LÝ KHUYẾN MÃI</h1>
-          <p className="text-muted-foreground font-bold text-xs uppercase tracking-widest opacity-50">Thiết lập các chương trình giảm giá tự động</p>
+    <div className="p-2 md:p-10 h-full flex flex-col bg-[#f8f9fa]">
+      <div className="flex justify-between items-center mb-3">
+        <div className="flex items-center gap-3">
+          <h1 className="text-sm md:text-4xl font-black tracking-tighter uppercase">GIẢM GIÁ</h1>
+          <p className="text-muted-foreground font-bold text-[7px] uppercase tracking-widest opacity-50 hidden md:block">Tự động ưu đãi</p>
         </div>
-        <button onClick={openAdd} className="bg-primary text-white px-8 py-4 rounded-2xl flex items-center gap-3 font-black uppercase text-xs tracking-widest shadow-2xl hover:scale-105 transition-all active:scale-95">
-          <Plus className="w-5 h-5" /> Thêm chương trình
+        <button onClick={openAdd} className="bg-primary text-white px-3 md:px-8 py-1.5 md:py-4 rounded-lg md:rounded-2xl flex items-center gap-2 font-black uppercase text-[8px] md:text-xs tracking-widest shadow-md">
+          <Plus className="w-3 h-3 md:w-5 md:h-5" /> THÊM
         </button>
       </div>
 
@@ -87,33 +87,33 @@ export default function DiscountsPage() {
         {loading ? (
           <div className="col-span-full py-20 text-center font-black uppercase tracking-widest opacity-20 animate-pulse">Đang tải...</div>
         ) : discounts.length === 0 ? (
-          <div className="col-span-full py-20 text-center font-black uppercase tracking-widest opacity-10 italic">Chưa có khuyến mãi nào</div>
+          <div className="col-span-full py-10 text-center font-black uppercase tracking-widest opacity-10 italic">Chưa có khuyến mãi nào</div>
         ) : discounts.map(d => (
-          <div key={d.id} className={`bg-white rounded-[2.5rem] p-8 border-4 transition-all relative group ${d.is_active ? "border-white shadow-xl" : "border-dashed border-muted opacity-60"}`}>
-             <div className="flex justify-between items-start mb-6">
-                <div className={`p-4 rounded-2xl ${d.is_active ? "bg-primary text-white shadow-lg" : "bg-muted text-muted-foreground"}`}>
-                   <Tag className="w-6 h-6" />
+          <div key={d.id} className={`bg-white rounded-2xl md:rounded-[2.5rem] p-4 md:p-8 border-2 transition-all relative group ${d.is_active ? "border-white shadow-sm" : "border-dashed border-muted opacity-60"}`}>
+             <div className="flex justify-between items-start mb-3 md:mb-6">
+                <div className={`p-2 lg:p-4 rounded-xl ${d.is_active ? "bg-primary text-white shadow-lg" : "bg-muted text-muted-foreground"}`}>
+                   <Tag className="w-4 h-4 lg:w-6 lg:h-6" />
                 </div>
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                   <button onClick={() => openEdit(d)} className="p-3 bg-secondary rounded-xl hover:bg-primary hover:text-white transition-all"><Pencil className="w-4 h-4"/></button>
-                   <button onClick={() => deleteItem(d.id)} className="p-3 bg-destructive/5 text-destructive rounded-xl hover:bg-destructive hover:text-white transition-all"><Trash2 className="w-4 h-4"/></button>
+                <div className="flex gap-1.5 lg:gap-2 lg:opacity-0 group-hover:opacity-100 transition-all">
+                   <button onClick={() => openEdit(d)} className="p-1.5 lg:p-3 bg-secondary rounded-lg lg:rounded-xl hover:bg-primary hover:text-white transition-all"><Pencil className="w-3 h-3 lg:w-4 lg:h-4"/></button>
+                   <button onClick={() => deleteItem(d.id)} className="p-1.5 lg:p-3 bg-destructive/5 text-destructive rounded-lg lg:rounded-xl hover:bg-destructive hover:text-white transition-all"><Trash2 className="w-3 h-3 lg:w-4 lg:h-4"/></button>
                 </div>
              </div>
              
-             <h3 className="text-xl font-black uppercase tracking-tight mb-2 line-clamp-2">{d.label}</h3>
+             <h3 className="text-xs lg:text-xl font-black uppercase tracking-tight mb-1 lg:mb-2 line-clamp-2 leading-tight">{d.label}</h3>
              
-             <div className="text-3xl font-black text-primary tracking-tighter mb-6">
+             <div className="text-lg lg:text-3xl font-black text-primary tracking-tighter mb-3 lg:mb-6">
                 {d.type === 'percentage' ? `${d.value}% OFF` : `-${formatCurrency(d.value)}`}
              </div>
 
-             <div className="space-y-3 pt-6 border-t border-black/5">
+              <div className="space-y-1.5 lg:space-y-3 pt-3 lg:pt-6 border-t border-black/5">
                 {d.specific_date ? (
-                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-orange-500 bg-orange-50 px-3 py-1.5 rounded-lg w-fit">
-                        <Calendar className="w-3 h-3"/> {new Date(d.specific_date).toLocaleDateString('vi-VN')}
+                    <div className="flex items-center gap-1.5 text-[7px] lg:text-xs font-black uppercase tracking-widest text-orange-500 bg-orange-50 px-2 lg:px-3 py-1 lg:py-1.5 rounded w-fit">
+                        <Calendar className="w-2.5 h-2.5 lg:w-3 lg:h-3"/> {new Date(d.specific_date).toLocaleDateString('vi-VN')}
                     </div>
                 ) : d.day_of_week !== null ? (
-                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-blue-500 bg-blue-50 px-3 py-1.5 rounded-lg w-fit">
-                        <Clock className="w-3 h-3"/> Hàng {DAYS[d.day_of_week]}
+                    <div className="flex items-center gap-1.5 text-[7px] lg:text-xs font-black uppercase tracking-widest text-blue-500 bg-blue-50 px-2 lg:px-3 py-1 lg:py-1.5 rounded w-fit">
+                        <Clock className="w-2.5 h-2.5 lg:w-3 lg:h-3"/> Hàng {DAYS[d.day_of_week]}
                     </div>
                 ) : (
                     <div className="text-[10px] font-black uppercase opacity-30">Áp dụng mọi ngày</div>

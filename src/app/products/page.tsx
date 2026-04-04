@@ -153,32 +153,32 @@ export default function ProductsPage() {
   const formatCurrency = (amount: number) => new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
 
   return (
-    <div className="p-6 h-full flex flex-col bg-muted/5">
-      <div className="flex justify-between items-center mb-8 px-2">
-        <div>
-          <h1 className="text-3xl font-black tracking-tighter uppercase mb-1">QUẢN LÝ SẢN PHẨM</h1>
-          <div className="flex gap-2">
-            <button onClick={() => setActiveTab("products")} className={`px-5 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === "products" ? "bg-primary text-white shadow-md" : "bg-white text-muted-foreground hover:bg-muted"}`}>Thức uống</button>
-            <button onClick={() => setActiveTab("toppings")} className={`px-5 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === "toppings" ? "bg-primary text-white shadow-md" : "bg-white text-muted-foreground hover:bg-muted"}`}>Toppings</button>
+    <div className="p-2 md:p-6 h-full flex flex-col bg-muted/5">
+      <div className="flex justify-between items-center mb-3">
+        <div className="flex items-center gap-3">
+          <h1 className="text-sm md:text-3xl font-black tracking-tighter uppercase">SẢN PHẨM</h1>
+          <div className="flex gap-1">
+            <button onClick={() => setActiveTab("products")} className={`px-2 py-0.5 rounded-md font-black text-[7px] md:text-[10px] uppercase tracking-widest transition-all ${activeTab === "products" ? "bg-primary text-white shadow-md" : "bg-white text-muted-foreground hover:bg-muted"}`}>Món</button>
+            <button onClick={() => setActiveTab("toppings")} className={`px-2 py-0.5 rounded-md font-black text-[7px] md:text-[10px] uppercase tracking-widest transition-all ${activeTab === "toppings" ? "bg-primary text-white shadow-md" : "bg-white text-muted-foreground hover:bg-muted"}`}>Topping</button>
           </div>
         </div>
         <button
           onClick={activeTab === "products" ? openAddProduct : openAddTopping}
-          className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-black uppercase text-[10px] tracking-widest shadow-xl transition-all active:scale-95"
+          className="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 font-black uppercase text-[8px] md:text-xs tracking-widest shadow-md transition-all active:scale-95"
         >
-          <Plus className="w-4 h-4" />
-          Thêm {activeTab === "products" ? "món" : "topping"}
+          <Plus className="w-3 h-3 md:w-4 md:h-4" />
+          THÊM
         </button>
       </div>
 
-      <div className="flex-1 overflow-auto bg-white border-2 border-white rounded-[2.5rem] shadow-xl">
+      <div className="flex-1 overflow-auto bg-white border border-black/5 rounded-xl lg:rounded-[2.5rem] shadow-sm">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b bg-muted/10">
-              <th className="p-6 font-black text-muted-foreground uppercase text-[9px] tracking-widest">{activeTab === "products" ? "Sản phẩm" : "Tên Topping"}</th>
-              <th className="p-6 font-black text-muted-foreground uppercase text-[9px] tracking-widest">{activeTab === "products" ? "Phân loại" : "Đơn giá"}</th>
-              {activeTab === "products" && <th className="p-6 font-black text-muted-foreground uppercase text-[9px] tracking-widest">Size & Giá</th>}
-              <th className="p-6 font-black text-muted-foreground uppercase text-[9px] tracking-widest text-right">Thao tác</th>
+              <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Sản phẩm" : "Tên Topping"}</th>
+              <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Phân loại" : "Đơn giá"}</th>
+              {activeTab === "products" && <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">Size & Giá</th>}
+              <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest text-right">Thao tác</th>
             </tr>
           </thead>
           <tbody>

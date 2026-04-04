@@ -28,6 +28,7 @@ export type PaymentMethod = 'tiền mặt' | 'chuyển khoản';
 export type Order = {
   id: string;
   total_amount: number;
+  total_cost: number;
   status: OrderStatus;
   payment_method: PaymentMethod;
   is_paid: boolean;
@@ -53,8 +54,9 @@ export type OrderItem = {
   toppings: string[];
   unit_price: number;
   total_price: number;
+  total_cost: number;
   note?: string;
-  status: OrderStatus; // Added item status
+  status: OrderStatus;
   created_at: string;
 };
 
@@ -81,4 +83,34 @@ export type Discount = {
   min_order_value: number | null;
   is_active: boolean;
   created_at: string;
+};
+
+export type Ingredient = {
+  id: string;
+  name: string;
+  unit: string;
+  stock_quantity: number;
+  unit_cost: number;
+  created_at: string;
+};
+
+export type InventoryLog = {
+  id: string;
+  ingredient_id: string;
+  type: 'import' | 'export' | 'sale' | 'adjustment';
+  quantity: number;
+  cost_per_unit_at_time: number;
+  note: string | null;
+  created_at: string;
+};
+
+export type Recipe = {
+  id: string;
+  target_type: 'product' | 'topping' | 'milk';
+  target_id: string;
+  target_size: string | null;
+  ingredient_id: string;
+  quantity_required: number;
+  created_at: string;
+  ingredients?: Ingredient; // Relational
 };
