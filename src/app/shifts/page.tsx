@@ -64,11 +64,14 @@ export default function ShiftsPage() {
       const regsData = await regsRes.json();
       const lockedData = await lockedRes.json();
       
-      setShifts(shiftsData || []);
-      setRegistrations(regsData || []);
-      setLockedWeeks(lockedData || []);
+      setShifts(Array.isArray(shiftsData) ? shiftsData : []);
+      setRegistrations(Array.isArray(regsData) ? regsData : []);
+      setLockedWeeks(Array.isArray(lockedData) ? lockedData : []);
     } catch (error) {
       console.error(error);
+      setShifts([]);
+      setRegistrations([]);
+      setLockedWeeks([]);
     } finally {
       setLoading(false);
     }
@@ -78,7 +81,7 @@ export default function ShiftsPage() {
     try {
       const usersRes = await fetch('/api/users');
       const usersData = await usersRes.json();
-      setUsers(usersData || []);
+      setUsers(Array.isArray(usersData) ? usersData : []);
 
       if (user) {
         const swapsRes = await fetch(`/api/shift-swaps?target_id=${user.id}`);
@@ -88,14 +91,19 @@ export default function ShiftsPage() {
         const mySwapsRes = await fetch(`/api/shift-swaps?requestor_id=${user.id}`);
         const mySwapsData = await mySwapsRes.json();
         
+        const safeSwaps = Array.isArray(swapsData) ? swapsData : [];
+        const safeMySwaps = Array.isArray(mySwapsData) ? mySwapsData : [];
+        
         // Combine swaps and remove duplicates
-        const allSwaps = [...swapsData, ...mySwapsData].filter(
+        const allSwaps = [...safeSwaps, ...safeMySwaps].filter(
           (value, index, self) => self.findIndex(s => s.id === value.id) === index
         );
         setSwaps(allSwaps);
       }
     } catch (error) {
       console.error(error);
+      setUsers([]);
+      setSwaps([]);
     }
   };
 
