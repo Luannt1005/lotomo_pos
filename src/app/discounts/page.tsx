@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X, Check, Tag, Calendar, Clock } from "lucide-react";
 import { Discount } from "@/types/database";
+import { useAuthStore } from "@/store/auth";
 
 export default function DiscountsPage() {
+  const { role } = useAuthStore();
+  const isAdmin = role === 'admin';
   const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,9 +81,11 @@ export default function DiscountsPage() {
           <h1 className="text-sm md:text-4xl font-black tracking-tighter uppercase">GIẢM GIÁ</h1>
           <p className="text-muted-foreground font-bold text-[7px] uppercase tracking-widest opacity-50 hidden md:block">Tự động ưu đãi</p>
         </div>
-        <button onClick={openAdd} className="bg-primary text-white px-3 md:px-8 py-1.5 md:py-4 rounded-lg md:rounded-2xl flex items-center gap-2 font-black uppercase text-[8px] md:text-xs tracking-widest shadow-md">
-          <Plus className="w-3 h-3 md:w-5 md:h-5" /> THÊM
-        </button>
+        {isAdmin && (
+          <button onClick={openAdd} className="bg-primary text-white px-3 md:px-8 py-1.5 md:py-4 rounded-lg md:rounded-2xl flex items-center gap-2 font-black uppercase text-[8px] md:text-xs tracking-widest shadow-md">
+            <Plus className="w-3 h-3 md:w-5 md:h-5" /> THÊM
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pb-10">
@@ -94,10 +99,12 @@ export default function DiscountsPage() {
                 <div className={`p-2 lg:p-4 rounded-xl ${d.is_active ? "bg-primary text-white shadow-lg" : "bg-muted text-muted-foreground"}`}>
                    <Tag className="w-4 h-4 lg:w-6 lg:h-6" />
                 </div>
-                <div className="flex gap-1.5 lg:gap-2 lg:opacity-0 group-hover:opacity-100 transition-all">
-                   <button onClick={() => openEdit(d)} className="p-1.5 lg:p-3 bg-secondary rounded-lg lg:rounded-xl hover:bg-primary hover:text-white transition-all"><Pencil className="w-3 h-3 lg:w-4 lg:h-4"/></button>
-                   <button onClick={() => deleteItem(d.id)} className="p-1.5 lg:p-3 bg-destructive/5 text-destructive rounded-lg lg:rounded-xl hover:bg-destructive hover:text-white transition-all"><Trash2 className="w-3 h-3 lg:w-4 lg:h-4"/></button>
-                </div>
+                {isAdmin && (
+                  <div className="flex gap-1.5 lg:gap-2 lg:opacity-0 group-hover:opacity-100 transition-all">
+                     <button onClick={() => openEdit(d)} className="p-1.5 lg:p-3 bg-secondary rounded-lg lg:rounded-xl hover:bg-primary hover:text-white transition-all"><Pencil className="w-3 h-3 lg:w-4 lg:h-4"/></button>
+                     <button onClick={() => deleteItem(d.id)} className="p-1.5 lg:p-3 bg-destructive/5 text-destructive rounded-lg lg:rounded-xl hover:bg-destructive hover:text-white transition-all"><Trash2 className="w-3 h-3 lg:w-4 lg:h-4"/></button>
+                  </div>
+                )}
              </div>
              
              <h3 className="text-xs lg:text-xl font-black uppercase tracking-tight mb-1 lg:mb-2 line-clamp-2 leading-tight">{d.label}</h3>

@@ -102,6 +102,7 @@ export type InventoryLog = {
   cost_per_unit_at_time: number;
   note: string | null;
   created_at: string;
+  ingredients?: { id: string; name: string; unit: string };
 };
 
 export type Recipe = {

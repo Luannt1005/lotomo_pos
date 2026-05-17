@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X, Check, Coffee } from "lucide-react";
 import { Product, Category, Size, Topping } from "@/types/database";
+import { useAuthStore } from "@/store/auth";
 
 export default function ProductsPage() {
+  const { role } = useAuthStore();
+  const isAdmin = role === 'admin';
   const [activeTab, setActiveTab] = useState<"products" | "toppings">("products");
   const [products, setProducts] = useState<Product[]>([]);
   const [allToppings, setAllToppings] = useState<Topping[]>([]);
@@ -162,13 +165,15 @@ export default function ProductsPage() {
             <button onClick={() => setActiveTab("toppings")} className={`px-2 py-0.5 rounded-md font-black text-[7px] md:text-[10px] uppercase tracking-widest transition-all ${activeTab === "toppings" ? "bg-primary text-white shadow-md" : "bg-white text-muted-foreground hover:bg-muted"}`}>Topping</button>
           </div>
         </div>
-        <button
-          onClick={activeTab === "products" ? openAddProduct : openAddTopping}
-          className="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 font-black uppercase text-[8px] md:text-xs tracking-widest shadow-md transition-all active:scale-95"
-        >
-          <Plus className="w-3 h-3 md:w-4 md:h-4" />
-          THÊM
-        </button>
+        {isAdmin && (
+          <button
+            onClick={activeTab === "products" ? openAddProduct : openAddTopping}
+            className="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 font-black uppercase text-[8px] md:text-xs tracking-widest shadow-md transition-all active:scale-95"
+          >
+            <Plus className="w-3 h-3 md:w-4 md:h-4" />
+            THÊM
+          </button>
+        )}
       </div>
 
       <div className="flex-1 overflow-auto bg-white border border-black/5 rounded-xl lg:rounded-[2.5rem] shadow-sm">
@@ -178,7 +183,7 @@ export default function ProductsPage() {
               <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Sản phẩm" : "Tên Topping"}</th>
               <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Phân loại" : "Đơn giá"}</th>
               {activeTab === "products" && <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">Size & Giá</th>}
-              <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest text-right">Thao tác</th>
+              {isAdmin && <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest text-right">Thao tác</th>}
             </tr>
           </thead>
           <tbody>
@@ -211,16 +216,18 @@ export default function ProductsPage() {
                       </div>
                     </td>
                   )}
-                  <td className="p-6 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => activeTab === "products" ? openEditProduct(item) : openEditTopping(item)} className="p-3 bg-secondary text-secondary-foreground hover:bg-primary hover:text-white rounded-xl transition-all shadow-md active:scale-95">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => activeTab === "products" ? deleteProduct(item.id) : deleteTopping(item.id)} className="p-3 bg-destructive/5 text-destructive hover:bg-destructive hover:text-white rounded-xl transition-all shadow-md active:scale-95">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+                  {isAdmin && (
+                    <td className="p-6 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => activeTab === "products" ? openEditProduct(item) : openEditTopping(item)} className="p-3 bg-secondary text-secondary-foreground hover:bg-primary hover:text-white rounded-xl transition-all shadow-md active:scale-95">
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => activeTab === "products" ? deleteProduct(item.id) : deleteTopping(item.id)} className="p-3 bg-destructive/5 text-destructive hover:bg-destructive hover:text-white rounded-xl transition-all shadow-md active:scale-95">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))
             )}
