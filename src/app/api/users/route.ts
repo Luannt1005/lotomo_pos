@@ -9,7 +9,7 @@ export async function GET() {
     id: u.id,
     email: u.email,
     role: u.user_metadata?.role || 'staff',
-    username: u.user_metadata?.username || u.email?.split('@')[0] || 'Staff'
+    username: u.user_metadata?.display_name || u.user_metadata?.username || u.email?.split('@')[0] || 'Staff'
   }));
   
   return NextResponse.json(formattedUsers);

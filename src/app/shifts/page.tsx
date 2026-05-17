@@ -174,7 +174,7 @@ export default function ShiftsPage() {
       body: JSON.stringify({
         shift_id: shiftId,
         user_id: user.id,
-        user_email: user.email?.split('@')[0] || 'Staff',
+        user_email: user.user_metadata?.display_name || user.email?.split('@')[0] || 'Staff',
         date: dateStr
       })
     });
@@ -227,7 +227,7 @@ export default function ShiftsPage() {
 
     const body = {
       requestor_id: user.id,
-      requestor_email: user.email?.split('@')[0] || 'Staff',
+      requestor_email: user.user_metadata?.display_name || user.email?.split('@')[0] || 'Staff',
       requestor_reg_id: swapSourceReg.id,
       target_id: swapTargetUserId,
       target_email: targetUser.username,

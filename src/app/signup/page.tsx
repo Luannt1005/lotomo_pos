@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Coffee } from 'lucide-react';
 
 export default function SignupPage() {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -36,6 +37,7 @@ export default function SignupPage() {
       options: {
         data: {
           role: userRole,
+          display_name: fullName,
         }
       }
     });
@@ -66,6 +68,17 @@ export default function SignupPage() {
         )}
 
         <form onSubmit={handleSignup} className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Họ và tên nhân viên</label>
+            <input
+              type="text"
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full px-4 py-2 bg-background border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50"
+              placeholder="Nguyễn Văn A"
+            />
+          </div>
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">Tài khoản (hoặc Email)</label>
             <input
