@@ -107,6 +107,7 @@ export default function ShiftsPage() {
     }
   };
 
+  const isTodayDate = (date: Date) => format(date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
   const currentWeekStr = format(currentWeekStart, 'yyyy-MM-dd');
   const isWeekLocked = lockedWeeks.some(lw => lw.week_start === currentWeekStr);
 
@@ -315,7 +316,7 @@ export default function ShiftsPage() {
                 <div key={swap.id} className="bg-card p-4 rounded-xl border border-border flex flex-col justify-between gap-4">
                   <div className="text-xs space-y-1">
                     <div>
-                      <span className="font-bold text-foreground">@{swap.requestor_email}</span> muốn hoán đổi ca làm với bạn:
+                      <span className="font-bold text-foreground">{swap.requestor_email}</span> muốn hoán đổi ca làm với bạn:
                     </div>
                     <div className="text-primary font-medium mt-1">
                       Ca của họ: {reqShift?.name} ({reqReg ? format(parseISO(reqReg.date), 'dd/MM') : ''})
@@ -413,30 +414,42 @@ export default function ShiftsPage() {
       </div>
 
       {/* Roster Grid Table */}
-      <div className="bg-card rounded-2xl border border-border overflow-hidden overflow-x-auto">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-secondary/50 text-muted-foreground">
+      <div className="bg-card rounded-2xl border border-border overflow-hidden overflow-x-auto shadow-sm">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead className="bg-secondary/40 border-b border-border text-muted-foreground">
             <tr>
-              <th className="p-4 font-medium min-w-[170px]">Ca Làm</th>
-              {weekDays.map(date => (
-                <th key={date.toString()} className="p-4 font-medium min-w-[150px] text-center border-l border-border/50">
-                  <div className="text-xs">{format(date, 'EEEE', { locale: vi })}</div>
-                  <div className="text-foreground text-base mt-1">{format(date, 'dd/MM')}</div>
-                </th>
-              ))}
+              <th className="p-4 font-bold text-foreground text-xs uppercase tracking-wider min-w-[170px] bg-secondary/10">Ca Làm</th>
+              {weekDays.map(date => {
+                const today = isTodayDate(date);
+                return (
+                  <th 
+                    key={date.toString()} 
+                    className={`p-4 font-bold min-w-[150px] text-center border-l border-border/40 transition-colors ${
+                      today ? "bg-primary/[0.04] text-primary" : "text-muted-foreground"
+                    }`}
+                  >
+                    <div className={`text-[10px] uppercase tracking-widest font-extrabold ${today ? "text-primary/70" : "text-muted-foreground/60"}`}>
+                      {format(date, 'EEEE', { locale: vi })}
+                    </div>
+                    <div className={`text-base mt-0.5 font-black ${today ? "text-primary" : "text-foreground"}`}>
+                      {format(date, 'dd/MM')}
+                    </div>
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {shifts.map(shift => (
-              <tr key={shift.id}>
+              <tr key={shift.id} className="hover:bg-muted/[0.02] transition-colors">
                 {/* Shift Details Cell */}
-                <td className="p-4 bg-secondary/20">
-                  <div className="font-bold text-foreground">{shift.name}</div>
-                  <div className="text-muted-foreground text-xs mt-0.5">
+                <td className="p-4 bg-secondary/15 border-b border-border/50">
+                  <div className="font-extrabold text-foreground text-sm uppercase tracking-tight">{shift.name}</div>
+                  <div className="text-muted-foreground text-xs font-semibold mt-1 bg-background py-0.5 px-1.5 rounded-md border border-border/40 inline-block">
                     {shift.start_time.substring(0, 5)} - {shift.end_time.substring(0, 5)}
                   </div>
-                  <div className="text-xs text-primary mt-2 flex items-center gap-1">
-                    <Users className="w-3.5 h-3.5" /> Tối đa {shift.max_staff}
+                  <div className="text-[10px] font-bold text-primary mt-2 flex items-center gap-1 opacity-85">
+                    <Users className="w-3 h-3" /> Tối đa {shift.max_staff}
                   </div>
                 </td>
                 
@@ -447,16 +460,25 @@ export default function ShiftsPage() {
                   const isFull = dayRegs.length >= shift.max_staff;
                   const myReg = dayRegs.find(r => r.user_id === user?.id);
                   const isFuture = isAfter(startOfDay(date), startOfDay(new Date()));
+                  const today = isTodayDate(date);
 
                   return (
-                    <td key={date.toString()} className="p-2 text-center border-l border-border/50 align-top">
-                      <div className="space-y-2">
+                    <td 
+                      key={date.toString()} 
+                      className={`p-2.5 text-center border-l border-b border-border/40 align-top transition-colors ${
+                        today ? "bg-primary/[0.01]" : ""
+                      }`}
+                    >
+                      <div className="space-y-1.5">
                         {/* List registered staff */}
                         {dayRegs.map(reg => (
-                          <div key={reg.id} className="bg-primary/10 text-primary text-xs py-1 px-2 rounded-md flex justify-between items-center group">
-                            <span className="truncate">@{reg.user_email}</span>
+                          <div 
+                            key={reg.id} 
+                            className="relative flex items-center justify-between py-1.5 px-2 bg-background border border-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-lg text-xs font-semibold text-foreground/85 hover:border-primary/30 transition-all group"
+                          >
+                            <span className="truncate pr-1">{reg.user_email}</span>
                             
-                            <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="flex gap-0.5 shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                               {/* Swap button for staff's own future shifts */}
                               {user && reg.user_id === user.id && isFuture && (
                                 <button
@@ -467,9 +489,9 @@ export default function ShiftsPage() {
                                     setShowSwapModal(true);
                                   }}
                                   title="Hoán ca"
-                                  className="text-primary hover:bg-primary/20 p-1 rounded"
+                                  className="text-primary hover:bg-primary/10 p-1 rounded-md transition-colors"
                                 >
-                                  <ArrowLeftRight className="w-3 h-3" />
+                                  <ArrowLeftRight className="w-3.5 h-3.5" />
                                 </button>
                               )}
                               
@@ -477,9 +499,9 @@ export default function ShiftsPage() {
                               {((role === 'admin') || (myReg && myReg.id === reg.id)) && (!isWeekLocked || role === 'admin') && (
                                 <button
                                   onClick={() => handleUnregister(reg.id)}
-                                  className="text-destructive hover:bg-destructive/20 p-1 rounded"
+                                  className="text-destructive hover:bg-destructive/10 p-1 rounded-md transition-colors"
                                 >
-                                  <Trash2 className="w-3 h-3" />
+                                  <Trash2 className="w-3.5 h-3.5" />
                                 </button>
                               )}
                             </div>
@@ -490,20 +512,20 @@ export default function ShiftsPage() {
                         {role !== 'admin' && !myReg && !isFull && !isWeekLocked && (
                           <button
                             onClick={() => handleRegister(shift.id, date)}
-                            className="w-full py-1.5 border border-dashed border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground rounded-md text-xs transition-colors"
+                            className="w-full py-1.5 border border-dashed border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs font-bold transition-all"
                           >
                             Đăng ký
                           </button>
                         )}
 
                         {role !== 'admin' && !myReg && isFull && !isWeekLocked && (
-                          <div className="text-xs text-muted-foreground bg-secondary/50 py-1.5 rounded-md">
-                            Đã đủ người
+                          <div className="text-[10px] text-muted-foreground/60 bg-secondary/30 py-1.5 rounded-lg font-medium">
+                            Đủ người
                           </div>
                         )}
 
                         {role !== 'admin' && isWeekLocked && !myReg && (
-                          <div className="text-xs text-muted-foreground bg-secondary/30 py-1.5 rounded-md flex items-center justify-center gap-1">
+                          <div className="text-[10px] text-muted-foreground/40 bg-secondary/10 py-1.5 rounded-lg flex items-center justify-center gap-1 font-medium">
                             <Lock className="w-3 h-3" /> Khóa
                           </div>
                         )}
@@ -517,12 +539,12 @@ export default function ShiftsPage() {
                                 e.target.value = "";
                               }
                             }}
-                            className="w-full px-2 py-1.5 border border-dashed border-primary/50 text-primary hover:bg-primary/5 rounded-md text-xs bg-background cursor-pointer outline-none transition-colors"
+                            className="w-full px-2 py-1.5 border border-dashed border-primary/30 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs bg-background cursor-pointer outline-none transition-all text-center font-bold"
                             defaultValue=""
                           >
                             <option value="" disabled>+ Thêm NV</option>
                             {users.map(u => (
-                              <option key={u.id} value={u.id}>@{u.username}</option>
+                              <option key={u.id} value={u.id}>{u.username}</option>
                             ))}
                           </select>
                         )}
@@ -557,7 +579,7 @@ export default function ShiftsPage() {
               return (
                 <div key={swap.id} className="flex justify-between items-center text-xs bg-secondary/30 p-3 rounded-xl border border-border/50">
                   <div>
-                    Yêu cầu hoán ca <span className="font-semibold text-primary">{reqShift?.name} ({reqReg ? format(parseISO(reqReg.date), 'dd/MM') : ''})</span> sang cho <span className="font-semibold">@{swap.target_email}</span>
+                    Yêu cầu hoán ca <span className="font-semibold text-primary">{reqShift?.name} ({reqReg ? format(parseISO(reqReg.date), 'dd/MM') : ''})</span> sang cho <span className="font-semibold">{swap.target_email}</span>
                     <div className="text-[10px] text-muted-foreground mt-0.5">
                       {tarReg ? `Lấy ca: ${tarShift?.name} (${format(parseISO(tarReg.date), 'dd/MM')})` : 'Hình thức: Nhờ làm hộ'}
                     </div>
@@ -605,7 +627,7 @@ export default function ShiftsPage() {
               >
                 <option value="" disabled>-- Chọn Nhân Viên --</option>
                 {users.filter(u => u.id !== user?.id).map(u => (
-                  <option key={u.id} value={u.id}>@{u.username}</option>
+                  <option key={u.id} value={u.id}>{u.username}</option>
                 ))}
               </select>
             </div>
