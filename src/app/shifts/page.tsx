@@ -501,42 +501,22 @@ export default function ShiftsPage() {
                         )}
 
                         {/* Admin Dropdown Assignment (Always enabled for Admin) */}
-                        {role === 'admin' && (
-                          <div className="relative">
-                            {activeAssignCell?.shiftId === shift.id && activeAssignCell?.dateStr === dateStr ? (
-                              <div className="absolute top-0 left-0 right-0 bg-card border border-border shadow-md rounded-lg p-1.5 z-10 space-y-1.5">
-                                <select
-                                  onChange={(e) => {
-                                    if (e.target.value) {
-                                      handleAdminAssign(shift.id, dateStr, e.target.value);
-                                    }
-                                  }}
-                                  className="w-full px-2 py-1 border border-border rounded text-xs bg-background"
-                                  defaultValue=""
-                                >
-                                  <option value="" disabled>-- Chọn NV --</option>
-                                  {users.map(u => (
-                                    <option key={u.id} value={u.id}>@{u.username}</option>
-                                  ))}
-                                </select>
-                                <button
-                                  onClick={() => setActiveAssignCell(null)}
-                                  className="w-full py-0.5 text-[10px] bg-secondary text-muted-foreground rounded"
-                                >
-                                  Đóng
-                                </button>
-                              </div>
-                            ) : (
-                              !isFull && (
-                                <button
-                                  onClick={() => setActiveAssignCell({ shiftId: shift.id, dateStr })}
-                                  className="w-full py-1 border border-dashed border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-md text-xs transition-colors flex items-center justify-center gap-1"
-                                >
-                                  <Plus className="w-3.5 h-3.5" /> Gán NV
-                                </button>
-                              )
-                            )}
-                          </div>
+                        {role === 'admin' && !isFull && (
+                          <select
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                handleAdminAssign(shift.id, dateStr, e.target.value);
+                                e.target.value = "";
+                              }
+                            }}
+                            className="w-full px-2 py-1.5 border border-dashed border-primary/50 text-primary hover:bg-primary/5 rounded-md text-xs bg-background cursor-pointer outline-none transition-colors"
+                            defaultValue=""
+                          >
+                            <option value="" disabled>+ Thêm NV</option>
+                            {users.map(u => (
+                              <option key={u.id} value={u.id}>@{u.username}</option>
+                            ))}
+                          </select>
                         )}
                       </div>
                     </td>
