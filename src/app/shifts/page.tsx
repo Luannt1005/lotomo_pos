@@ -14,6 +14,37 @@ interface FormattedUser {
   username: string;
 }
 
+const getShiftBadgeStyle = (shiftName: string, index: number) => {
+  const name = shiftName.toLowerCase();
+  if (name.includes("sáng") || name.includes("morning")) {
+    return {
+      bg: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+      border: "border-l-4 border-l-amber-500",
+      dot: "bg-amber-500"
+    };
+  }
+  if (name.includes("chiều") || name.includes("afternoon")) {
+    return {
+      bg: "bg-sky-500/10 text-sky-600 border-sky-500/20",
+      border: "border-l-4 border-l-sky-500",
+      dot: "bg-sky-500"
+    };
+  }
+  if (name.includes("tối") || name.includes("night") || name.includes("khuya")) {
+    return {
+      bg: "bg-indigo-500/10 text-indigo-600 border-indigo-500/20",
+      border: "border-l-4 border-l-indigo-500",
+      dot: "bg-indigo-500"
+    };
+  }
+  const colors = [
+    { bg: "bg-primary/10 text-primary border-primary/20", border: "border-l-4 border-l-primary", dot: "bg-primary" },
+    { bg: "bg-rose-500/10 text-rose-600 border-rose-500/20", border: "border-l-4 border-l-rose-500", dot: "bg-rose-500" },
+    { bg: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20", border: "border-l-4 border-l-emerald-500", dot: "bg-emerald-500" },
+  ];
+  return colors[index % colors.length];
+};
+
 export default function ShiftsPage() {
   const { role, user } = useAuthStore();
   const [shifts, setShifts] = useState<Shift[]>([]);
@@ -440,108 +471,123 @@ export default function ShiftsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {shifts.map(shift => (
-              <tr key={shift.id} className="hover:bg-muted/[0.02] transition-colors">
-                {/* Shift Details Cell */}
-                <td className="p-4 bg-secondary/15 border-b border-border/50">
-                  <div className="font-extrabold text-foreground text-sm uppercase tracking-tight">{shift.name}</div>
-                  <div className="text-muted-foreground text-xs font-semibold mt-1 bg-background py-0.5 px-1.5 rounded-md border border-border/40 inline-block">
-                    {shift.start_time.substring(0, 5)} - {shift.end_time.substring(0, 5)}
-                  </div>
-                  <div className="text-[10px] font-bold text-primary mt-2 flex items-center gap-1 opacity-85">
-                    <Users className="w-3 h-3" /> Tối đa {shift.max_staff}
-                  </div>
-                </td>
-                
-                {/* Roster day cell for this shift */}
-                {weekDays.map(date => {
-                  const dateStr = format(date, 'yyyy-MM-dd');
-                  const dayRegs = registrations.filter(r => r.shift_id === shift.id && r.date === dateStr);
-                  const isFull = dayRegs.length >= shift.max_staff;
-                  const myReg = dayRegs.find(r => r.user_id === user?.id);
-                  const isFuture = isAfter(startOfDay(date), startOfDay(new Date()));
-                  const today = isTodayDate(date);
+            {shifts.map((shift, idx) => {
+              const shiftStyle = getShiftBadgeStyle(shift.name, idx);
+              return (
+                <tr key={shift.id} className="hover:bg-muted/[0.02] transition-colors">
+                  {/* Shift Details Cell */}
+                  <td className={`p-4 bg-secondary/15 border-b border-border/50 ${shiftStyle.border}`}>
+                    <div className="font-extrabold text-foreground text-sm uppercase tracking-tight flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full ${shiftStyle.dot}`} />
+                      {shift.name}
+                    </div>
+                    <div className="text-muted-foreground text-xs font-semibold mt-1.5 bg-background py-0.5 px-1.5 rounded-md border border-border/40 inline-block shadow-[0_1px_1px_rgba(0,0,0,0.02)]">
+                      {shift.start_time.substring(0, 5)} - {shift.end_time.substring(0, 5)}
+                    </div>
+                    <div className="text-[10px] font-bold text-primary mt-2 flex items-center gap-1 opacity-85">
+                      <Users className="w-3 h-3" /> Tối đa {shift.max_staff}
+                    </div>
+                  </td>
+                  
+                  {/* Roster day cell for this shift */}
+                  {weekDays.map(date => {
+                    const dateStr = format(date, 'yyyy-MM-dd');
+                    const dayRegs = registrations.filter(r => r.shift_id === shift.id && r.date === dateStr);
+                    const isFull = dayRegs.length >= shift.max_staff;
+                    const myReg = dayRegs.find(r => r.user_id === user?.id);
+                    const isFuture = isAfter(startOfDay(date), startOfDay(new Date()));
+                    const today = isTodayDate(date);
 
-                  return (
-                    <td 
-                      key={date.toString()} 
-                      className={`p-2.5 text-center border-l border-b border-border/40 align-top transition-colors ${
-                        today ? "bg-primary/[0.01]" : ""
-                      }`}
-                    >
-                      <div className="space-y-1.5">
-                        {/* List registered staff */}
-                        {dayRegs.map(reg => (
-                          <div 
-                            key={reg.id} 
-                            className="relative flex items-center justify-between py-1.5 px-2 bg-background border border-border shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-lg text-xs font-semibold text-foreground/85 hover:border-primary/30 transition-all group"
-                          >
-                            <span className="truncate pr-1">{reg.user_email}</span>
-                            
-                            <div className="flex gap-0.5 shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                              {/* Swap button for staff's own future shifts */}
-                              {user && reg.user_id === user.id && isFuture && (
-                                <button
-                                  onClick={() => {
-                                    setSwapSourceReg({ id: reg.id, dateStr, shiftName: shift.name });
-                                    setSwapTargetUserId("");
-                                    setSwapTargetRegId("");
-                                    setShowSwapModal(true);
-                                  }}
-                                  title="Hoán ca"
-                                  className="text-primary hover:bg-primary/10 p-1 rounded-md transition-colors"
-                                >
-                                  <ArrowLeftRight className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                              
-                              {/* Remove registration button */}
-                              {((role === 'admin') || (myReg && myReg.id === reg.id)) && (!isWeekLocked || role === 'admin') && (
-                                <button
-                                  onClick={() => handleUnregister(reg.id)}
-                                  className="text-destructive hover:bg-destructive/10 p-1 rounded-md transition-colors"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              )}
+                    return (
+                      <td 
+                        key={date.toString()} 
+                        className={`p-2.5 text-center border-l border-b border-border/40 align-top transition-colors ${
+                          today ? "bg-primary/[0.01]" : ""
+                        }`}
+                      >
+                        <div className="space-y-1.5">
+                          {/* List registered staff */}
+                          {dayRegs.map(reg => {
+                            const isMe = reg.user_id === user?.id;
+                            return (
+                              <div 
+                                key={reg.id} 
+                                className={`relative flex items-center justify-between py-1.5 px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-lg text-xs font-semibold transition-all group ${
+                                  isMe 
+                                    ? "bg-primary/10 border border-primary/50 text-primary font-bold shadow-[0_1px_3px_rgba(var(--primary),0.1)]" 
+                                    : "bg-background border border-border text-foreground/85 hover:border-primary/30"
+                                }`}
+                              >
+                                <span className="truncate pr-1 flex items-center gap-1.5">
+                                  {isMe && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
+                                  {reg.user_email}
+                                </span>
+                                
+                                <div className="flex gap-0.5 shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                  {/* Swap button for staff's own future shifts */}
+                                  {user && reg.user_id === user.id && isFuture && (
+                                    <button
+                                      onClick={() => {
+                                        setSwapSourceReg({ id: reg.id, dateStr, shiftName: shift.name });
+                                        setSwapTargetUserId("");
+                                        setSwapTargetRegId("");
+                                        setShowSwapModal(true);
+                                      }}
+                                      title="Hoán ca"
+                                      className="text-primary hover:bg-primary/10 p-1 rounded-md transition-colors"
+                                    >
+                                      <ArrowLeftRight className="w-3.5 h-3.5" />
+                                    </button>
+                                  )}
+                                  
+                                  {/* Remove registration button */}
+                                  {((role === 'admin') || (myReg && myReg.id === reg.id)) && (!isWeekLocked || role === 'admin') && (
+                                    <button
+                                      onClick={() => handleUnregister(reg.id)}
+                                      className="text-destructive hover:bg-destructive/10 p-1 rounded-md transition-colors"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                          
+                          {/* Registration Button (For Staff) */}
+                          {role !== 'admin' && !myReg && !isFull && !isWeekLocked && (
+                            <button
+                              onClick={() => handleRegister(shift.id, date)}
+                              className="w-full py-1.5 border border-dashed border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs font-bold transition-all"
+                            >
+                              Đăng ký
+                            </button>
+                          )}
+
+                          {role !== 'admin' && !myReg && isFull && !isWeekLocked && (
+                            <div className="text-[10px] text-muted-foreground/60 bg-secondary/30 py-1.5 rounded-lg font-medium">
+                              Đủ người
                             </div>
-                          </div>
-                        ))}
-                        
-                        {/* Registration Button (For Staff) */}
-                        {role !== 'admin' && !myReg && !isFull && !isWeekLocked && (
-                          <button
-                            onClick={() => handleRegister(shift.id, date)}
-                            className="w-full py-1.5 border border-dashed border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs font-bold transition-all"
-                          >
-                            Đăng ký
-                          </button>
-                        )}
+                          )}
 
-                        {role !== 'admin' && !myReg && isFull && !isWeekLocked && (
-                          <div className="text-[10px] text-muted-foreground/60 bg-secondary/30 py-1.5 rounded-lg font-medium">
-                            Đủ người
-                          </div>
-                        )}
+                          {role !== 'admin' && isWeekLocked && !myReg && (
+                            <div className="text-[10px] text-muted-foreground/40 bg-secondary/10 py-1.5 rounded-lg flex items-center justify-center gap-1 font-medium">
+                              <Lock className="w-3 h-3" /> Khóa
+                            </div>
+                          )}
 
-                        {role !== 'admin' && isWeekLocked && !myReg && (
-                          <div className="text-[10px] text-muted-foreground/40 bg-secondary/10 py-1.5 rounded-lg flex items-center justify-center gap-1 font-medium">
-                            <Lock className="w-3 h-3" /> Khóa
-                          </div>
-                        )}
-
-                        {/* Admin Dropdown Assignment (Always enabled for Admin) */}
-                        {role === 'admin' && !isFull && (
-                          <select
-                            onChange={(e) => {
-                              if (e.target.value) {
-                                handleAdminAssign(shift.id, dateStr, e.target.value);
-                                e.target.value = "";
-                              }
-                            }}
-                            className="w-full px-2 py-1.5 border border-dashed border-primary/30 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs bg-background cursor-pointer outline-none transition-all text-center font-bold"
-                            defaultValue=""
-                          >
+                          {/* Admin Dropdown Assignment (Always enabled for Admin) */}
+                          {role === 'admin' && !isFull && (
+                            <select
+                              onChange={(e) => {
+                                if (e.target.value) {
+                                  handleAdminAssign(shift.id, dateStr, e.target.value);
+                                  e.target.value = "";
+                                }
+                              }}
+                              className="w-full px-2 py-1.5 border border-dashed border-primary/30 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs bg-background cursor-pointer outline-none transition-all text-center font-bold"
+                              defaultValue=""
+                            >
                             <option value="" disabled>+ Thêm NV</option>
                             {users.map(u => (
                               <option key={u.id} value={u.id}>{u.username}</option>
@@ -553,7 +599,8 @@ export default function ShiftsPage() {
                   );
                 })}
               </tr>
-            ))}
+            );
+          })}
             {shifts.length === 0 && (
               <tr>
                 <td colSpan={8} className="p-8 text-center text-muted-foreground">
