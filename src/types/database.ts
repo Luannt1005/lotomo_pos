@@ -115,3 +115,39 @@ export type Recipe = {
   created_at: string;
   ingredients?: Ingredient; // Relational
 };
+
+export type Shift = {
+  id: string;
+  name: string;
+  start_time: string; // e.g., '08:00'
+  end_time: string;   // e.g., '12:00'
+  max_staff: number;
+  created_at: string;
+};
+
+export type ShiftRegistration = {
+  id: string;
+  shift_id: string;
+  user_id: string;
+  user_email: string;
+  date: string; // YYYY-MM-DD
+  created_at: string;
+};
+
+export type LockedWeek = {
+  week_start: string; // YYYY-MM-DD
+  locked_by: string;
+  created_at: string;
+};
+
+export type ShiftSwap = {
+  id: string;
+  requestor_id: string;
+  requestor_email: string;
+  requestor_reg_id: string;
+  target_id: string;
+  target_email: string;
+  target_reg_id: string | null;
+  status: 'pending' | 'accepted' | 'rejected';
+  created_at: string;
+};

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Coffee, ListOrdered, LayoutDashboard, Tag, Package, BarChart3, LogOut } from "lucide-react";
+import { Coffee, ListOrdered, LayoutDashboard, Tag, Package, BarChart3, LogOut, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
 import { supabase } from "@/lib/supabase";
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { name: "POS", href: "/", icon: LayoutDashboard },
   { name: "Sản phẩm", href: "/products", icon: Coffee },
   { name: "Kho hàng", href: "/inventory", icon: Package },
+  { name: "Lịch làm", href: "/shifts", icon: CalendarDays },
   { name: "Đơn hàng", href: "/orders", icon: ListOrdered },
   { name: "Khuyến mãi", href: "/discounts", icon: Tag },
   { name: "Báo cáo", href: "/reports", icon: BarChart3, adminOnly: true },
