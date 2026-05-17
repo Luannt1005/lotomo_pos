@@ -39,8 +39,10 @@ const getShiftBadgeStyle = (shiftName: string, index: number) => {
   }
   const colors = [
     { bg: "bg-primary/10 text-primary border-primary/20", border: "border-l-4 border-l-primary", dot: "bg-primary" },
-    { bg: "bg-rose-500/10 text-rose-600 border-rose-500/20", border: "border-l-4 border-l-rose-500", dot: "bg-rose-500" },
+    { bg: "bg-blue-500/10 text-blue-600 border-blue-500/20", border: "border-l-4 border-l-blue-500", dot: "bg-blue-500" },
     { bg: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20", border: "border-l-4 border-l-emerald-500", dot: "bg-emerald-500" },
+    { bg: "bg-indigo-500/10 text-indigo-600 border-indigo-500/20", border: "border-l-4 border-l-indigo-500", dot: "bg-indigo-500" },
+    { bg: "bg-purple-500/10 text-purple-600 border-purple-500/20", border: "border-l-4 border-l-purple-500", dot: "bg-purple-500" },
   ];
   return colors[index % colors.length];
 };
@@ -95,7 +97,10 @@ export default function ShiftsPage() {
       const regsData = await regsRes.json();
       const lockedData = await lockedRes.json();
       
-      setShifts(Array.isArray(shiftsData) ? shiftsData : []);
+      const sortedShifts = Array.isArray(shiftsData) 
+        ? [...shiftsData].sort((a, b) => a.start_time.localeCompare(b.start_time)) 
+        : [];
+      setShifts(sortedShifts);
       setRegistrations(Array.isArray(regsData) ? regsData : []);
       setLockedWeeks(Array.isArray(lockedData) ? lockedData : []);
     } catch (error) {
@@ -512,13 +517,13 @@ export default function ShiftsPage() {
                             return (
                               <div 
                                 key={reg.id} 
-                                className={`relative flex items-center justify-between py-1.5 px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-lg text-xs font-semibold transition-all group ${
+                                className={`relative flex items-center justify-between py-1.5 px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-lg text-xs transition-all group ${
                                   isMe 
-                                    ? "bg-primary/10 border border-primary/50 text-primary font-bold shadow-[0_1px_3px_rgba(var(--primary),0.1)]" 
-                                    : "bg-background border border-border text-foreground/85 hover:border-primary/30"
+                                    ? "bg-primary/10 border border-primary/50 text-primary font-black shadow-[0_1px_3px_rgba(var(--primary),0.1)]" 
+                                    : "bg-background border border-border text-foreground font-black hover:border-primary/30"
                                 }`}
                               >
-                                <span className="truncate pr-1 flex items-center gap-1.5">
+                                <span className="truncate pr-1 flex items-center gap-1.5 font-bold">
                                   {isMe && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
                                   {reg.user_email}
                                 </span>
@@ -562,12 +567,6 @@ export default function ShiftsPage() {
                             >
                               Đăng ký
                             </button>
-                          )}
-
-                          {role !== 'admin' && !myReg && isFull && !isWeekLocked && (
-                            <div className="text-[10px] text-muted-foreground/60 bg-secondary/30 py-1.5 rounded-lg font-medium">
-                              Đủ người
-                            </div>
                           )}
 
                           {role !== 'admin' && isWeekLocked && !myReg && (
