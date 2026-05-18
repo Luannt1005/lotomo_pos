@@ -105,8 +105,12 @@ export default function InventoryPage() {
     e.preventDefault();
     if (!editingItem) return;
     
+    const parsedQty = parseFloat(restockQuantity);
+    const qtyVal = isNaN(parsedQty) ? 0 : parsedQty;
+    const roundedQty = Math.round(qtyVal * 10) / 10;
+    
     const payload = { 
-        quantity: parseInt(restockQuantity) || 0,
+        quantity: roundedQty,
         total_cost: parseInt(restockTotalCost) || 0
     };
 
@@ -127,25 +131,35 @@ export default function InventoryPage() {
   const openDailyCheck = () => {
     setDailyCheckItems(ingredients.map(i => ({
       id: i.id,
-      actual_quantity: i.stock_quantity,
+      actual_quantity: i.stock_quantity === 0 ? "" : i.stock_quantity,
       old_quantity: i.stock_quantity,
       cost_per_unit_at_time: i.unit_cost
-    })));
+    } as any)));
     setIsDailyCheckModalOpen(true);
   };
 
   const handleDailyCheckChange = (id: string, newQty: string) => {
     setDailyCheckItems(prev => prev.map(item => 
-      item.id === id ? { ...item, actual_quantity: parseInt(newQty) || 0 } : item
+      item.id === id ? { ...item, actual_quantity: newQty as any } : item
     ));
   };
 
   const saveDailyCheck = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formattedItems = dailyCheckItems.map(item => {
+      const parsedQty = parseFloat(item.actual_quantity as any);
+      const qtyVal = isNaN(parsedQty) ? 0 : parsedQty;
+      const roundedQty = Math.round(qtyVal * 10) / 10;
+      return {
+        ...item,
+        actual_quantity: roundedQty
+      };
+    });
+
     try {
       const res = await fetch("/api/ingredients/daily-check", {
         method: "POST",
-        body: JSON.stringify({ items: dailyCheckItems }),
+        body: JSON.stringify({ items: formattedItems }),
         headers: { "Content-Type": "application/json" }
       });
       if (res.ok) {
@@ -266,11 +280,11 @@ export default function InventoryPage() {
             <form onSubmit={saveRestock} className="space-y-4">
               <div>
                 <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-60 block mb-1.5">Số lượng nhập (Đơn vị: {editingItem.unit})</label>
-                <input required type="number" min="1" value={restockQuantity} onChange={e => setRestockQuantity(e.target.value)} className="w-full bg-background border border-border rounded-xl px-3 py-2.5 md:px-4 md:py-3 font-semibold text-xs md:text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="VD: 1000" />
+                <input required type="number" step="0.1" min="0.1" value={restockQuantity === "0" ? "" : restockQuantity} onChange={e => setRestockQuantity(e.target.value)} className="w-full bg-background border border-border rounded-xl px-3 py-2.5 md:px-4 md:py-3 font-semibold text-xs md:text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="VD: 1000" />
               </div>
               <div>
                 <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-60 block mb-1.5">Tổng tiền thanh toán (VNĐ)</label>
-                <input required type="number" min="0" value={restockTotalCost} onChange={e => setRestockTotalCost(e.target.value)} className="w-full bg-background border border-border rounded-xl px-3 py-2.5 md:px-4 md:py-3 font-semibold text-xs md:text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="VD: 500000" />
+                <input required type="number" min="0" value={restockTotalCost === "0" ? "" : restockTotalCost} onChange={e => setRestockTotalCost(e.target.value)} className="w-full bg-background border border-border rounded-xl px-3 py-2.5 md:px-4 md:py-3 font-semibold text-xs md:text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="VD: 500000" />
                 <p className="text-[8px] md:text-[10px] opacity-55 mt-1.5 font-medium">Hệ thống sẽ tự động chia đều để tính ra giá vốn gốc.</p>
               </div>
               <div className="flex gap-3 pt-4">
@@ -314,10 +328,11 @@ export default function InventoryPage() {
                         <div className="relative">
                           <input 
                             type="number" 
+                            step="0.1"
                             min="0"
                             value={checkItem?.actual_quantity ?? ""}
                             onChange={e => handleDailyCheckChange(item.id, e.target.value)}
-                            className={`w-20 md:w-24 bg-muted/30 border rounded-lg px-2.5 py-1.5 md:py-2 font-black text-right text-xs md:text-sm outline-none transition-all ${isLow ? 'border-red-500/40 text-red-600 focus:ring-1 focus:ring-red-500' : 'border-border focus:ring-1 focus:ring-primary'}`}
+                            className={`w-20 md:w-24 bg-muted/30 border rounded-lg px-2.5 py-1.5 md:py-2 font-black text-right text-xs md:text-sm outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isLow ? 'border-red-500/40 text-red-600 focus:ring-1 focus:ring-red-500' : 'border-border focus:ring-1 focus:ring-primary'}`}
                           />
                           <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-black opacity-30 pointer-events-none uppercase">{item.unit}</span>
                         </div>
