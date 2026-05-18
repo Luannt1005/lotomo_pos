@@ -303,63 +303,59 @@ export default function POSPage() {
                  <button onClick={() => setSelectedProduct(null)} className="w-8 h-8 bg-muted hover:bg-destructive hover:text-white rounded-lg flex items-center justify-center transition-all font-black text-xs">X</button>
               </div>
 
-              <div className="flex-1 p-3 lg:p-6 space-y-3.5 lg:space-y-6 overflow-y-auto no-scrollbar">
-                 {/* Row 1: Size & Milk (Milk is only shown for Matcha) */}
-                 <div className="grid grid-cols-2 gap-3 lg:gap-4">
-                   <div className="space-y-1">
-                      <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40">Size</label>
-                      <div className="grid grid-cols-3 gap-1 lg:gap-2">
-                          {selectedProduct.sizes.map(s => (
-                              <button key={s.size} onClick={() => setSize(s.size)} className={`py-1.5 lg:py-2 rounded-lg border-2 font-black transition-all text-[8px] lg:text-[10px] uppercase ${size === s.size ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s.size}</button>
-                          ))}
-                      </div>
-                   </div>
-
-                   {selectedProduct.category === 'matcha' ? (
-                     <div className="space-y-1 animate-in slide-in-from-left-2">
-                        <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40">Sữa (+5K)</label>
-                        <div className="grid grid-cols-3 gap-1 lg:gap-2">
-                            {(['sữa tươi', 'sữa Oat', 'sữa Meiji'] as MilkType[]).map(m => (
-                                <button key={m} onClick={() => setMilk(m)} className={`py-1.5 lg:py-2 rounded-lg border-2 font-black uppercase text-[7px] lg:text-[10px] tracking-tighter transition-all ${milk === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
-                                  {m === 'sữa tươi' ? 'Tươi' : m === 'sữa Oat' ? 'Oat' : 'Meiji'}
-                                </button>
-                            ))}
-                        </div>
-                     </div>
-                   ) : (
-                     <div />
-                   )}
+              <div className="flex-1 px-3 py-2 lg:p-6 space-y-2 lg:space-y-4 overflow-y-auto no-scrollbar">
+                 {/* Row 1: Size */}
+                 <div className="flex items-center gap-3">
+                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Size</label>
+                    <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
+                        {selectedProduct.sizes.map(s => (
+                            <button key={s.size} onClick={() => setSize(s.size)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black transition-all text-[8px] lg:text-[10px] uppercase ${size === s.size ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s.size}</button>
+                        ))}
+                    </div>
                  </div>
 
-                 {/* Row 2: Sugar & Ice */}
-                 <div className="grid grid-cols-2 gap-3 lg:gap-4">
-                   <div className="space-y-1">
-                      <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40">Đường</label>
-                      <div className="grid grid-cols-3 gap-1 lg:gap-2">
-                          {(['0%', '50%', '100%'] as SugarLevel[]).map(s => (
-                              <button key={s} onClick={() => setSugar(s)} className={`py-1.5 lg:py-2 rounded-lg border-2 font-black uppercase text-[8px] lg:text-[10px] tracking-widest transition-all ${sugar === s ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s}</button>
-                          ))}
-                      </div>
-                   </div>
+                 {/* Row 2: Đường */}
+                 <div className="flex items-center gap-3">
+                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Đường</label>
+                    <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
+                        {(['0%', '50%', '100%'] as SugarLevel[]).map(s => (
+                            <button key={s} onClick={() => setSugar(s)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black uppercase text-[8px] lg:text-[10px] tracking-widest transition-all ${sugar === s ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s}</button>
+                        ))}
+                    </div>
+                 </div>
 
-                   <div className="space-y-1">
-                      <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40">Đá</label>
-                      <div className="grid grid-cols-3 gap-1 lg:gap-2">
-                          {(['không đá', 'ít đá', 'bình thường'] as IceLevel[]).map(i => (
-                              <button key={i} onClick={() => setIce(i)} className={`py-1.5 lg:py-2 rounded-lg border-2 font-black uppercase text-[7px] lg:text-[10px] tracking-tighter transition-all ${ice === i ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
-                                {i === 'không đá' ? 'Không' : i === 'ít đá' ? 'Ít' : 'Thường'}
+                 {/* Row 3: Đá */}
+                 <div className="flex items-center gap-3">
+                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Đá</label>
+                    <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
+                        {(['không đá', 'ít đá', 'bình thường'] as IceLevel[]).map(i => (
+                            <button key={i} onClick={() => setIce(i)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black uppercase text-[7px] lg:text-[10px] tracking-tighter transition-all ${ice === i ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
+                              {i === 'không đá' ? 'Không' : i === 'ít đá' ? 'Ít' : 'Thường'}
+                            </button>
+                        ))}
+                    </div>
+                 </div>
+
+                 {/* Row 4: Sữa (Optional) */}
+                 {selectedProduct.category === 'matcha' && (
+                  <div className="flex items-center gap-3 animate-in slide-in-from-left-2">
+                      <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Sữa (+5K)</label>
+                      <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
+                          {(['sữa tươi', 'sữa Oat', 'sữa Meiji'] as MilkType[]).map(m => (
+                              <button key={m} onClick={() => setMilk(m)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black uppercase text-[7px] lg:text-[10px] tracking-tighter transition-all ${milk === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
+                                {m === 'sữa tươi' ? 'Tươi' : m === 'sữa Oat' ? 'Oat' : 'Meiji'}
                               </button>
                           ))}
                       </div>
-                   </div>
-                 </div>
+                  </div>
+                 )}
 
-                 {/* Row 3: Toppings */}
-                 <div className="space-y-1.5">
+                 {/* Toppings Section */}
+                 <div className="space-y-1">
                     <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40">Toppings</label>
-                    <div className="grid grid-cols-2 gap-1 lg:gap-2 max-h-[110px] lg:max-h-[140px] overflow-y-auto no-scrollbar pr-1 bg-[#f8f9fa] p-1.5 lg:p-2 rounded-xl border border-black/5">
+                    <div className="grid grid-cols-2 gap-1 lg:gap-2 max-h-[90px] lg:max-h-[120px] overflow-y-auto no-scrollbar pr-1 bg-[#f8f9fa] p-1.5 lg:p-2 rounded-xl border border-black/5">
                         {allToppings.map(t => (
-                            <button key={t.id} onClick={() => toggleTopping(t.name)} className={`p-1.5 lg:p-3 rounded-lg lg:rounded-xl border-2 flex justify-between items-center transition-all ${selectedToppings.includes(t.name) ? "bg-primary/5 border-primary text-primary shadow-sm" : "bg-white border-transparent text-muted-foreground opacity-70"}`}>
+                            <button key={t.id} onClick={() => toggleTopping(t.name)} className={`p-1.5 lg:p-2 rounded-lg lg:rounded-xl border-2 flex justify-between items-center transition-all ${selectedToppings.includes(t.name) ? "bg-primary/5 border-primary text-primary shadow-sm" : "bg-white border-transparent text-muted-foreground opacity-70"}`}>
                                 <span className="font-black uppercase text-[7px] lg:text-[9px] tracking-tight line-clamp-1">{t.name}</span>
                                 <Check className={`w-2.5 h-2.5 ${selectedToppings.includes(t.name) ? "opacity-100" : "opacity-0"}`} />
                             </button>
@@ -367,9 +363,9 @@ export default function POSPage() {
                     </div>
                  </div>
 
-                 {/* Row 4: Note */}
-                 <div className="space-y-1.5">
-                    <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full bg-[#f8f9fa] border-2 border-transparent focus:border-primary/20 rounded-xl p-2 outline-none font-bold text-[10px] lg:text-xs h-10 lg:h-14 resize-none" placeholder="Ghi chú..."></textarea>
+                 {/* Note */}
+                 <div className="space-y-1">
+                    <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full bg-[#f8f9fa] border-2 border-transparent focus:border-primary/20 rounded-xl p-1.5 lg:p-2 outline-none font-bold text-[10px] lg:text-xs h-8 lg:h-12 resize-none" placeholder="Ghi chú..."></textarea>
                  </div>
               </div>
 
