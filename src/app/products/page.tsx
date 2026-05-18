@@ -180,10 +180,10 @@ export default function ProductsPage() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b bg-muted/10">
-              <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Sản phẩm" : "Tên Topping"}</th>
-              <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Phân loại" : "Đơn giá"}</th>
-              {activeTab === "products" && <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">Size & Giá</th>}
-              {isAdmin && <th className="p-3 lg:p-6 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest text-right">Thao tác</th>}
+              <th className="p-2.5 md:p-4 lg:p-5 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Sản phẩm" : "Tên Topping"}</th>
+              <th className="p-2.5 md:p-4 lg:p-5 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">{activeTab === "products" ? "Phân loại" : "Đơn giá"}</th>
+              {activeTab === "products" && <th className="p-2.5 md:p-4 lg:p-5 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest">Size & Giá</th>}
+              {isAdmin && <th className="p-2.5 md:p-4 lg:p-5 font-black text-muted-foreground uppercase text-[8px] lg:text-[9px] tracking-widest text-right">Thao tác</th>}
             </tr>
           </thead>
           <tbody>
@@ -194,22 +194,22 @@ export default function ProductsPage() {
             ) : (
               (activeTab === "products" ? products : allToppings).map((item: any) => (
                 <tr key={item.id} className="border-b last:border-0 hover:bg-primary/5 transition-all group">
-                  <td className="p-6">
-                    <div className="flex items-center gap-4">
+                  <td className="p-2.5 md:p-4 lg:p-5">
+                    <div className="flex items-center gap-2 md:gap-3">
                       {activeTab === "products" && (
-                        item.image_url ? <img src={item.image_url} className="w-12 h-12 rounded-xl object-cover border-2 shadow-sm" /> : <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-primary/10 border-2"><Coffee className="w-6 h-6"/></div>
+                        item.image_url ? <img src={item.image_url} className="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover border shadow-sm shrink-0" /> : <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-muted flex items-center justify-center text-primary/10 border shrink-0"><Coffee className="w-4 h-4 md:w-5 md:h-5"/></div>
                       )}
-                      <span className="font-black text-lg tracking-tight uppercase">{item.name}</span>
+                      <span className="font-black text-xs md:text-sm tracking-tight uppercase">{item.name}</span>
                     </div>
                   </td>
-                  <td className="p-6 capitalize font-black text-[9px] tracking-widest text-muted-foreground">
+                  <td className="p-2.5 md:p-4 lg:p-5 capitalize font-black text-[8px] md:text-[10px] tracking-widest text-muted-foreground">
                     {activeTab === "products" ? item.category : formatCurrency(item.price)}
                   </td>
                   {activeTab === "products" && (
-                    <td className="p-6">
-                       <div className="flex flex-wrap gap-1.5">
+                    <td className="p-2.5 md:p-4 lg:p-5">
+                       <div className="flex flex-wrap gap-1">
                         {item.sizes.map((s: any, idx: number) => (
-                          <div key={idx} className="bg-primary/5 text-primary px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-tight">
+                          <div key={idx} className="bg-primary/5 text-primary px-1.5 py-0.5 rounded-md text-[7px] md:text-[9px] font-black uppercase tracking-tight whitespace-nowrap">
                             {s.size}: {formatCurrency(s.price)}
                           </div>
                         ))}
@@ -217,13 +217,13 @@ export default function ProductsPage() {
                     </td>
                   )}
                   {isAdmin && (
-                    <td className="p-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => activeTab === "products" ? openEditProduct(item) : openEditTopping(item)} className="p-3 bg-secondary text-secondary-foreground hover:bg-primary hover:text-white rounded-xl transition-all shadow-md active:scale-95">
-                          <Pencil className="w-4 h-4" />
+                    <td className="p-2.5 md:p-4 lg:p-5 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button onClick={() => activeTab === "products" ? openEditProduct(item) : openEditTopping(item)} className="p-1.5 md:p-2.5 bg-secondary text-secondary-foreground hover:bg-primary hover:text-white rounded-lg transition-all shadow-sm active:scale-95">
+                          <Pencil className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => activeTab === "products" ? deleteProduct(item.id) : deleteTopping(item.id)} className="p-3 bg-destructive/5 text-destructive hover:bg-destructive hover:text-white rounded-xl transition-all shadow-md active:scale-95">
-                          <Trash2 className="w-4 h-4" />
+                        <button onClick={() => activeTab === "products" ? deleteProduct(item.id) : deleteTopping(item.id)} className="p-1.5 md:p-2.5 bg-destructive/5 text-destructive hover:bg-destructive hover:text-white rounded-lg transition-all shadow-sm active:scale-95">
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
