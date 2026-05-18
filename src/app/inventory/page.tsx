@@ -209,31 +209,31 @@ export default function InventoryPage() {
           <table className="w-full text-left border-collapse table-auto text-xs md:text-sm">
             <thead>
               <tr className="border-b bg-muted/30 text-muted-foreground">
-                <th className="px-3.5 py-3 md:px-6 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-wider opacity-60">Tên Nguyên Liệu</th>
-                <th className="px-3.5 py-3 md:px-6 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-wider opacity-60">Tồn Kho</th>
-                <th className="px-2 py-3 md:px-6 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-wider opacity-60">ĐVT</th>
-                <th className="px-3.5 py-3 md:px-6 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-wider opacity-60">Giá Vốn</th>
-                {isAdmin && <th className="px-3.5 py-3 md:px-6 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-wider opacity-60 text-right">Thao Tác</th>}
+                <th className="p-2.5 md:p-4 lg:p-5 text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60">Tên Nguyên Liệu</th>
+                <th className="p-2.5 md:p-4 lg:p-5 text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60">Tồn Kho</th>
+                <th className="p-2.5 md:p-4 lg:p-5 text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60">ĐVT</th>
+                <th className="p-2.5 md:p-4 lg:p-5 text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60">Giá Vốn</th>
+                {isAdmin && <th className="p-2.5 md:p-4 lg:p-5 text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 text-right">Thao Tác</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {ingredients.map((item) => (
                 <tr key={item.id} className="hover:bg-muted/10 transition-colors">
-                  <td className="px-3.5 py-3 md:px-6 md:py-4 font-black uppercase tracking-tight text-xs md:text-sm">{item.name}</td>
-                  <td className="px-3.5 py-3 md:px-6 md:py-4 font-bold text-primary">{new Intl.NumberFormat("vi-VN").format(item.stock_quantity)}</td>
-                  <td className="px-2 py-3 md:px-6 md:py-4 font-bold opacity-70 uppercase text-[10px] md:text-xs">{item.unit}</td>
-                  <td className="px-3.5 py-3 md:px-6 md:py-4 font-bold text-foreground/80">{formatCurrency(item.unit_cost)}</td>
+                  <td className="p-2.5 md:p-4 lg:p-5 font-black uppercase tracking-tight text-xs md:text-sm">{item.name}</td>
+                  <td className="p-2.5 md:p-4 lg:p-5 font-extrabold text-[10px] md:text-xs lg:text-sm text-primary">{new Intl.NumberFormat("vi-VN").format(item.stock_quantity)}</td>
+                  <td className="p-2.5 md:p-4 lg:p-5 font-black opacity-75 uppercase text-[9px] md:text-[10px]">{item.unit}</td>
+                  <td className="p-2.5 md:p-4 lg:p-5 font-bold text-[10px] md:text-xs lg:text-sm text-foreground/80">{formatCurrency(item.unit_cost)}</td>
                   {isAdmin && (
-                    <td className="px-3.5 py-2 md:px-6 md:py-4 text-right">
-                      <div className="flex justify-end items-center gap-1 md:gap-2">
-                        <button onClick={() => openRestock(item)} className="p-1.5 md:p-2 border rounded-xl hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all text-primary border-primary/20" title="Nhập kho">
-                          <Package className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    <td className="p-2.5 md:p-4 lg:p-5 text-right">
+                      <div className="flex justify-end items-center gap-1 md:gap-1.5">
+                        <button onClick={() => openRestock(item)} className="p-1.5 md:p-2 border border-primary/20 rounded-lg hover:bg-primary hover:text-white transition-all text-primary" title="Nhập kho">
+                          <Package className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => openEdit(item)} className="p-1.5 md:p-2 border border-border rounded-xl hover:bg-secondary transition-all text-muted-foreground">
-                          <Pencil className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                        <button onClick={() => openEdit(item)} className="p-1.5 md:p-2 border border-border rounded-lg hover:bg-secondary transition-all text-muted-foreground">
+                          <Pencil className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => deleteIngredient(item.id)} className="p-1.5 md:p-2 border border-destructive/20 rounded-xl hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all text-destructive">
-                          <Trash2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                        <button onClick={() => deleteIngredient(item.id)} className="p-1.5 md:p-2 border border-destructive/20 rounded-lg hover:bg-destructive hover:text-white hover:border-destructive transition-all text-destructive">
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
