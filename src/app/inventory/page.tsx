@@ -325,17 +325,15 @@ export default function InventoryPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <div className="relative">
-                          <input 
-                            type="number" 
-                            step="0.1"
-                            min="0"
-                            value={checkItem?.actual_quantity ?? ""}
-                            onChange={e => handleDailyCheckChange(item.id, e.target.value)}
-                            className={`w-20 md:w-24 bg-muted/30 border rounded-lg px-2.5 py-1.5 md:py-2 font-black text-right text-xs md:text-sm outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isLow ? 'border-red-500/40 text-red-600 focus:ring-1 focus:ring-red-500' : 'border-border focus:ring-1 focus:ring-primary'}`}
-                          />
-                          <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-black opacity-30 pointer-events-none uppercase">{item.unit}</span>
-                        </div>
+                        <input 
+                          type="number" 
+                          step="0.1"
+                          min="0"
+                          value={checkItem?.actual_quantity ?? ""}
+                          onChange={e => handleDailyCheckChange(item.id, e.target.value)}
+                          className={`w-20 md:w-24 bg-muted/30 border rounded-lg px-2.5 py-1.5 md:py-2 font-black text-right text-xs md:text-sm outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isLow ? 'border-red-500/40 text-red-600 focus:ring-1 focus:ring-red-500' : 'border-border focus:ring-1 focus:ring-primary'}`}
+                        />
+                        <span className="text-[10px] md:text-xs font-black text-muted-foreground/80 uppercase min-w-[32px] shrink-0 text-left">{item.unit}</span>
                       </div>
                     </div>
                   );
