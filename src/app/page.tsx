@@ -166,7 +166,7 @@ export default function POSPage() {
           </div>
         )}
         <div className="p-3 lg:p-6 bg-white/50 backdrop-blur-xl border-b flex gap-2 lg:gap-3 overflow-x-auto no-scrollbar scroll-smooth">
-          {["all", "matcha", "trà sữa", "trà trái cây"].map((cat) => (
+          {["all", "matcha", "trà sữa", "trà"].map((cat) => (
             <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-4 lg:px-10 py-2 lg:py-4 rounded-xl lg:rounded-[2rem] font-black text-[9px] lg:text-xs uppercase tracking-widest transition-all duration-500 border-2 shrink-0 ${activeCategory === cat ? "bg-primary text-white border-primary shadow-lg lg:shadow-2xl scale-105" : "bg-white text-muted-foreground border-transparent hover:border-black/5"}`}>{cat}</button>
           ))}
         </div>

@@ -254,7 +254,7 @@ export default function ProductsPage() {
                    <div className="space-y-2">
                       <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Phân loại</label>
                       <div className="flex gap-1.5">
-                        {["matcha", "trà sữa", "trà trái cây"].map(cat => (
+                        {["matcha", "trà sữa", "trà"].map(cat => (
                             <button key={cat} type="button" onClick={() => setCategory(cat as any)} className={`flex-1 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border-2 transition-all ${category === cat ? "bg-primary text-white border-primary shadow-lg" : "bg-muted text-muted-foreground border-transparent hover:border-primary/10"}`}>{cat}</button>
                         ))}
                       </div>

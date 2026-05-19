@@ -1,4 +1,4 @@
-export type Category = 'matcha' | 'trà sữa' | 'trà trái cây';
+export type Category = 'matcha' | 'trà sữa' | 'trà';
 
 export type Topping = {
   id: string;

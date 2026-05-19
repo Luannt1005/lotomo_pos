@@ -5,7 +5,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE public.products (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name TEXT NOT NULL,
-    category TEXT NOT NULL CHECK (category IN ('matcha', 'trà sữa', 'cà phê')),
+    category TEXT NOT NULL CHECK (category IN ('matcha', 'trà sữa', 'trà')),
     sizes JSONB NOT NULL DEFAULT '[]'::JSONB,
     image_url TEXT,
     is_available BOOLEAN NOT NULL DEFAULT true,
