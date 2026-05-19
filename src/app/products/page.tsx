@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, X, Check, Coffee } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Check, Coffee, Upload, Loader2, Image as ImageIcon } from "lucide-react";
 import { Product, Category, Size, Topping } from "@/types/database";
 import { useAuthStore } from "@/store/auth";
+import { supabase } from "@/lib/supabase";
 
 export default function ProductsPage() {
   const { role } = useAuthStore();
@@ -28,6 +29,7 @@ export default function ProductsPage() {
   });
   const [imageUrl, setImageUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   // Topping Form
   const [toppingName, setToppingName] = useState("");
@@ -51,6 +53,46 @@ export default function ProductsPage() {
       console.error(e);
     }
     setLoading(false);
+  };
+  
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    
+    // Check file size (e.g. limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Kích thước file quá lớn (tối đa 5MB)");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const filePath = `products/${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from('CheckIn_CheckOut')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('CheckIn_CheckOut')
+        .getPublicUrl(filePath);
+
+      setImageUrl(publicUrl);
+    } catch (err: any) {
+      console.error("Error uploading image:", err);
+      alert("Lỗi tải ảnh lên: " + (err.message || "Không rõ nguyên nhân"));
+    } finally {
+      setUploading(false);
+    }
   };
 
   const openAddProduct = () => {
@@ -273,10 +315,73 @@ export default function ProductsPage() {
                         ))}
                       </div>
                    </div>
-                   <div className="space-y-2">
-                      <label className="text-[9px] font-black uppercase tracking-widest opacity-40">URL Hình ảnh</label>
-                      <input value={imageUrl} onChange={e => setImageUrl(e.target.value)} className="w-full bg-muted/20 focus:bg-white border-2 border-transparent focus:border-primary/20 rounded-2xl px-5 py-3 outline-none font-bold text-xs italic" placeholder="https://..." />
-                   </div>
+                    <div className="space-y-2">
+                       <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Hình ảnh sản phẩm</label>
+                       <div className="flex flex-col sm:flex-row gap-4 items-center bg-muted/15 p-4 rounded-2xl border border-dashed border-black/10">
+                          {/* Image Preview */}
+                          <div className="relative w-24 h-24 rounded-2xl bg-muted flex items-center justify-center overflow-hidden border shrink-0">
+                             {imageUrl ? (
+                                <>
+                                   <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                                   <button 
+                                      type="button" 
+                                      onClick={() => setImageUrl("")} 
+                                      className="absolute top-1 right-1 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-lg flex items-center justify-center shadow-md active:scale-90 transition-all font-black text-xs"
+                                      title="Xóa ảnh"
+                                   >
+                                      <X className="w-3.5 h-3.5" />
+                                   </button>
+                                </>
+                             ) : (
+                                <ImageIcon className="w-8 h-8 text-muted-foreground/30" />
+                             )}
+                          </div>
+
+                          {/* Upload controls */}
+                          <div className="flex-1 w-full space-y-2">
+                             <div className="relative">
+                                <input 
+                                   type="file" 
+                                   accept="image/*" 
+                                   onChange={handleImageUpload} 
+                                   disabled={uploading}
+                                   className="hidden" 
+                                   id="product-image-upload" 
+                                />
+                                <label 
+                                   htmlFor="product-image-upload"
+                                   className={`flex items-center justify-center gap-2 w-full py-3 px-4 border-2 border-dashed rounded-xl cursor-pointer font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
+                                      uploading 
+                                         ? "bg-muted border-muted-foreground/20 text-muted-foreground pointer-events-none" 
+                                         : "bg-white border-primary/30 text-primary hover:bg-primary/5 hover:border-primary shadow-sm"
+                                   }`}
+                                >
+                                   {uploading ? (
+                                      <>
+                                         <Loader2 className="w-4 h-4 animate-spin" />
+                                         Đang tải lên...
+                                      </>
+                                   ) : (
+                                      <>
+                                         <Upload className="w-4 h-4" />
+                                         Tải ảnh lên (Max 5MB)
+                                      </>
+                                   )}
+                                </label>
+                             </div>
+                             
+                             <div className="flex items-center gap-2">
+                                <span className="text-[8px] font-bold uppercase opacity-30 tracking-widest shrink-0">Hoặc URL:</span>
+                                <input 
+                                   value={imageUrl} 
+                                   onChange={e => setImageUrl(e.target.value)} 
+                                   className="flex-1 bg-white focus:bg-white border border-black/10 focus:border-primary/20 rounded-lg px-2.5 py-1 outline-none font-medium text-[10px] text-muted-foreground truncate" 
+                                   placeholder="https://..." 
+                                />
+                             </div>
+                          </div>
+                       </div>
+                    </div>
                 </div>
                 <div className="pt-4 flex justify-end gap-3">
                     <button type="button" onClick={() => setIsProductModalOpen(false)} className="px-8 py-3 bg-muted rounded-xl font-black uppercase text-[10px] tracking-widest">Huỷ</button>
