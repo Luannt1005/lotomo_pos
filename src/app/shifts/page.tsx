@@ -117,6 +117,14 @@ export default function ShiftsPage() {
     try {
       const usersRes = await fetch('/api/users');
       const usersData = await usersRes.json();
+      
+      if (usersData && usersData.error) {
+        console.error("Error fetching users:", usersData.error);
+        if (role === 'admin') {
+          alert(`LỖI HỆ THỐNG (ADMIN): Không thể tải danh sách nhân viên từ database. \n\nChi tiết: ${usersData.error}\n\nVui lòng kiểm tra lại cấu hình environment variables trên Vercel.`);
+        }
+      }
+      
       setUsers(Array.isArray(usersData) ? usersData : []);
 
       if (user) {
