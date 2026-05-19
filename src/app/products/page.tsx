@@ -59,7 +59,7 @@ export default function ProductsPage() {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
     
-    // Check file size (e.g. limit to 5MB)
+    // Check file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file quá lớn (tối đa 5MB)");
       return;
@@ -67,26 +67,20 @@ export default function ProductsPage() {
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `products/${fileName}`;
+      const formData = new FormData();
+      formData.append("file", file);
 
-      const { data, error } = await supabase.storage
-        .from('CheckIn_CheckOut')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-      if (error) {
-        throw error;
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Không thể upload ảnh lên server");
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('CheckIn_CheckOut')
-        .getPublicUrl(filePath);
-
-      setImageUrl(publicUrl);
+      setImageUrl(data.url);
     } catch (err: any) {
       console.error("Error uploading image:", err);
       alert("Lỗi tải ảnh lên: " + (err.message || "Không rõ nguyên nhân"));
