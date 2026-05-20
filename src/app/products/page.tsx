@@ -274,14 +274,14 @@ export default function ProductsPage() {
       {/* Product Modal */}
       {isProductModalOpen && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden border-2 border-white animate-in zoom-in-95">
-             <div className="p-6 border-b flex justify-between items-center bg-muted/10">
+          <div className="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden border-2 border-white animate-in zoom-in-95 max-h-[90vh] flex flex-col">
+             <div className="p-6 border-b flex justify-between items-center bg-muted/10 shrink-0">
                 <h2 className="text-2xl font-black tracking-tighter uppercase">{editingItem ? "Sửa món" : "Thêm món"}</h2>
                 <button onClick={() => setIsProductModalOpen(false)} className="w-10 h-10 bg-muted hover:bg-destructive hover:text-white rounded-xl flex items-center justify-center transition-all">
                     <X className="w-5 h-5" />
                 </button>
              </div>
-             <form onSubmit={saveProduct} className="p-8 space-y-6">
+             <form onSubmit={saveProduct} className="p-8 space-y-6 overflow-y-auto flex-1 flex flex-col justify-between">
                 <div className="grid grid-cols-1 gap-6">
                    <div className="space-y-2">
                       <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Tên món</label>
@@ -389,12 +389,12 @@ export default function ProductsPage() {
       {/* Topping Modal */}
       {isToppingModalOpen && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden border-2 border-white animate-in zoom-in-95">
-             <div className="p-6 border-b flex justify-between items-center bg-muted/10">
+          <div className="bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden border-2 border-white animate-in zoom-in-95 max-h-[90vh] flex flex-col">
+             <div className="p-6 border-b flex justify-between items-center bg-muted/10 shrink-0">
                 <h2 className="text-xl font-black tracking-tighter uppercase">{editingItem ? "Sửa Topping" : "Thêm Topping"}</h2>
                 <button onClick={() => setIsToppingModalOpen(false)} className="w-10 h-10 bg-muted hover:bg-destructive hover:text-white rounded-xl flex items-center justify-center transition-all"><X className="w-5 h-5"/></button>
              </div>
-             <form onSubmit={saveTopping} className="p-8 space-y-6">
+             <form onSubmit={saveTopping} className="p-8 space-y-6 overflow-y-auto flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Tên Topping</label>
                     <input required value={toppingName} onChange={e => setToppingName(e.target.value)} className="w-full bg-muted/20 focus:bg-white border-2 border-transparent focus:border-primary/20 rounded-2xl px-5 py-3 outline-none font-black text-lg tracking-tight text-primary" placeholder="VD: TRÂN CHÂU" />
