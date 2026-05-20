@@ -11,7 +11,7 @@ export default function POSPage() {
   const [allToppings, setAllToppings] = useState<Topping[]>([]);
   const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [activeCategory, setActiveCategory] = useState<string>("matcha");
   
   const { items, addItem, removeItem, updateQuantity, getTotal, clearCart } = useCartStore();
   
@@ -166,7 +166,7 @@ export default function POSPage() {
           </div>
         )}
         <div className="p-3 lg:p-6 bg-white/50 backdrop-blur-xl border-b flex gap-2 lg:gap-3 overflow-x-auto no-scrollbar scroll-smooth">
-          {["all", "matcha", "trà sữa", "trà"].map((cat) => (
+          {["matcha", "trà sữa", "trà"].map((cat) => (
             <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-4 lg:px-10 py-2 lg:py-4 rounded-xl lg:rounded-[2rem] font-black text-[9px] lg:text-xs uppercase tracking-widest transition-all duration-500 border-2 shrink-0 ${activeCategory === cat ? "bg-primary text-white border-primary shadow-lg lg:shadow-2xl scale-105" : "bg-white text-muted-foreground border-transparent hover:border-black/5"}`}>{cat}</button>
           ))}
         </div>
@@ -176,7 +176,7 @@ export default function POSPage() {
             <div className="flex flex-col items-center justify-center h-full gap-4 text-primary/30"><div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>
           ) : (
             <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 md:gap-4 lg:gap-6">
-              {products.filter(p => activeCategory === "all" || p.category === activeCategory).map((p) => (
+              {products.filter(p => p.category === activeCategory).map((p) => (
                 <div key={p.id} onClick={() => setSelectedProduct(p)} className="bg-white rounded-lg md:rounded-[2rem] lg:rounded-[2.5rem] p-1.5 md:p-4 lg:p-5 cursor-pointer hover:shadow-2xl transition-all duration-500 active:scale-95 flex flex-col items-center text-center shadow-sm border-2 border-transparent hover:border-primary/20">
                   <div className="w-full aspect-square mb-1 md:mb-3 lg:mb-4 rounded-md md:rounded-[1.5rem] lg:rounded-[2rem] bg-[#f1f3f5] flex items-center justify-center overflow-hidden"><Coffee className="w-4 h-4 md:w-10 md:h-10 lg:w-12 lg:h-12 text-primary/10" /></div>
                   <h3 className="font-black text-[7px] md:text-xs lg:text-sm uppercase tracking-tighter mb-0.5 lg:mb-2 line-clamp-2 leading-tight">{p.name}</h3>
