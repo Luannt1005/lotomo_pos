@@ -51,6 +51,8 @@ export default function ShiftsPage() {
   const { role, user } = useAuthStore();
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [registrations, setRegistrations] = useState<ShiftRegistration[]>([]);
+  const [localRegistrations, setLocalRegistrations] = useState<ShiftRegistration[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
   const [lockedWeeks, setLockedWeeks] = useState<LockedWeek[]>([]);
   const [swaps, setSwaps] = useState<ShiftSwap[]>([]);
   const [users, setUsers] = useState<FormattedUser[]>([]);
@@ -101,12 +103,15 @@ export default function ShiftsPage() {
         ? [...shiftsData].sort((a, b) => a.start_time.localeCompare(b.start_time)) 
         : [];
       setShifts(sortedShifts);
-      setRegistrations(Array.isArray(regsData) ? regsData : []);
+      const safeRegs = Array.isArray(regsData) ? regsData : [];
+      setRegistrations(safeRegs);
+      setLocalRegistrations(JSON.parse(JSON.stringify(safeRegs)));
       setLockedWeeks(Array.isArray(lockedData) ? lockedData : []);
     } catch (error) {
       console.error(error);
       setShifts([]);
       setRegistrations([]);
+      setLocalRegistrations([]);
       setLockedWeeks([]);
     } finally {
       setLoading(false);
@@ -212,8 +217,8 @@ export default function ShiftsPage() {
     fetchData();
   };
 
-  // Register for self
-  const handleRegister = async (shiftId: string, date: Date) => {
+  // Register for self (Local modification)
+  const handleRegister = (shiftId: string, date: Date) => {
     if (!user) return;
     if (isWeekLocked && role !== 'admin') {
       alert("Tuần làm việc này đã bị KHÓA. Bạn không thể tự ý đăng ký.");
@@ -221,53 +226,119 @@ export default function ShiftsPage() {
     }
 
     const dateStr = format(date, 'yyyy-MM-dd');
-    const res = await fetch('/api/shift-registrations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shift_id: shiftId,
-        user_id: user.id,
-        user_email: user.user_metadata?.display_name || user.email?.split('@')[0] || 'Staff',
-        date: dateStr
-      })
-    });
-    if (res.ok) {
-      fetchData();
-    } else {
-      alert("Lỗi hoặc đã đăng ký ca này!");
+    
+    // Check if already registered locally
+    const exists = localRegistrations.some(r => r.shift_id === shiftId && r.user_id === user.id && r.date === dateStr);
+    if (exists) {
+      alert("Bạn đã đăng ký ca này rồi!");
+      return;
     }
+
+    const tempReg: ShiftRegistration = {
+      id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+      shift_id: shiftId,
+      user_id: user.id,
+      user_email: user.user_metadata?.display_name || user.email?.split('@')[0] || 'Staff',
+      date: dateStr,
+      created_at: new Date().toISOString()
+    };
+
+    setLocalRegistrations(prev => [...prev, tempReg]);
   };
 
-  // Admin assigns staff via dropdown
-  const handleAdminAssign = async (shiftId: string, dateStr: string, targetUserId: string) => {
+  // Admin assigns staff via dropdown (Local modification)
+  const handleAdminAssign = (shiftId: string, dateStr: string, targetUserId: string) => {
     const selectedUser = users.find(u => u.id === targetUserId);
     if (!selectedUser) return;
 
-    const res = await fetch('/api/shift-registrations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        shift_id: shiftId,
-        user_id: selectedUser.id,
-        user_email: selectedUser.username,
-        date: dateStr
-      })
-    });
-    if (res.ok) {
-      setActiveAssignCell(null);
-      fetchData();
-    } else {
-      alert("Nhân viên này đã được đăng ký hoặc lỗi!");
+    // Check if already registered locally
+    const exists = localRegistrations.some(r => r.shift_id === shiftId && r.user_id === selectedUser.id && r.date === dateStr);
+    if (exists) {
+      alert("Nhân viên này đã được đăng ký ca này rồi!");
+      return;
     }
+
+    const tempReg: ShiftRegistration = {
+      id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+      shift_id: shiftId,
+      user_id: selectedUser.id,
+      user_email: selectedUser.username,
+      date: dateStr,
+      created_at: new Date().toISOString()
+    };
+
+    setLocalRegistrations(prev => [...prev, tempReg]);
+    setActiveAssignCell(null);
   };
 
-  const handleUnregister = async (regId: string) => {
+  // Unregister staff from a cell (Local modification)
+  const handleUnregister = (regId: string) => {
     if (isWeekLocked && role !== 'admin') {
       alert("Tuần làm việc này đã bị KHÓA. Bạn không thể tự hủy đăng ký.");
       return;
     }
-    await fetch(`/api/shift-registrations/${regId}`, { method: 'DELETE' });
-    fetchData();
+    setLocalRegistrations(prev => prev.filter(r => r.id !== regId));
+  };
+
+  // Batch Save all local changes to the Database
+  const handleSaveChanges = async () => {
+    setIsSaving(true);
+    try {
+      const addedRegs = localRegistrations.filter(lr => lr.id.startsWith("temp_"));
+      const deletedRegs = registrations.filter(r => !localRegistrations.some(lr => lr.id === r.id));
+
+      // Perform all deletions and additions
+      const deletePromises = deletedRegs.map(r => 
+        fetch(`/api/shift-registrations/${r.id}`, { method: 'DELETE' })
+      );
+
+      const addPromises = addedRegs.map(r => 
+        fetch('/api/shift-registrations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            shift_id: r.shift_id,
+            user_id: r.user_id,
+            user_email: r.user_email,
+            date: r.date
+          })
+        })
+      );
+
+      const results = await Promise.all([...deletePromises, ...addPromises]);
+      
+      const failed = results.filter(res => !res.ok);
+      if (failed.length > 0) {
+        alert(`Đã lưu xong, tuy nhiên có ${failed.length} yêu cầu đăng ký gặp lỗi.`);
+      } else {
+        alert("Lưu lịch làm việc thành công!");
+      }
+      
+      await fetchData();
+    } catch (error) {
+      console.error("Lỗi khi lưu lịch làm việc:", error);
+      alert("Đã xảy ra lỗi khi lưu lịch làm việc.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Reset all local changes
+  const handleResetChanges = () => {
+    if (confirm("Bạn có chắc chắn muốn hủy bỏ toàn bộ các thay đổi chưa lưu?")) {
+      setLocalRegistrations(JSON.parse(JSON.stringify(registrations)));
+    }
+  };
+
+  const handleWeekChange = (newWeekStart: Date) => {
+    const addedRegs = localRegistrations.filter(lr => lr.id.startsWith("temp_"));
+    const deletedRegs = registrations.filter(r => !localRegistrations.some(lr => lr.id === r.id));
+    const hasChanges = addedRegs.length > 0 || deletedRegs.length > 0;
+    
+    if (hasChanges && !confirm("Bạn có các thay đổi chưa được lưu trong tuần này. Nếu chuyển tuần, các thay đổi này sẽ bị mất. Bạn vẫn muốn tiếp tục?")) {
+      return;
+    }
+    setCurrentWeekStart(newWeekStart);
   };
 
   // Create swap request
@@ -334,10 +405,52 @@ export default function ShiftsPage() {
   const pendingSwapsForMe = swaps.filter(s => s.target_id === user?.id && s.status === 'pending');
   const mySentSwaps = swaps.filter(s => s.requestor_id === user?.id);
 
+  const addedRegs = localRegistrations.filter(lr => lr.id.startsWith("temp_"));
+  const deletedRegs = registrations.filter(r => !localRegistrations.some(lr => lr.id === r.id));
+  const hasChanges = addedRegs.length > 0 || deletedRegs.length > 0;
+
   if (loading && shifts.length === 0) return <div className="p-8">Đang tải lịch làm việc...</div>;
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
+      
+      {/* Save / Reset changes banner */}
+      {hasChanges && (
+        <div className="bg-amber-500/10 border-2 border-dashed border-amber-500/35 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 animate-in slide-in-from-top-4 duration-300">
+          <div className="flex items-center gap-2.5">
+             <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-600 font-black animate-pulse">!</div>
+             <div>
+                <h4 className="font-extrabold text-sm text-amber-800">Bạn có thay đổi chưa lưu!</h4>
+                <p className="text-xs text-amber-700/80">Nhấp "Lưu lịch làm" để cập nhật ca làm của nhân viên vào hệ thống.</p>
+             </div>
+          </div>
+          <div className="flex gap-2 w-full sm:w-auto">
+             <button 
+                onClick={handleResetChanges}
+                disabled={isSaving}
+                className="flex-1 sm:flex-none px-5 py-2.5 bg-muted text-muted-foreground font-black text-xs uppercase tracking-wider rounded-xl transition-all active:scale-95 disabled:opacity-40"
+             >
+                Hủy bỏ
+             </button>
+             <button 
+                onClick={handleSaveChanges}
+                disabled={isSaving}
+                className="flex-1 sm:flex-none px-7 py-2.5 bg-amber-500 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all active:scale-95 shadow-lg shadow-amber-500/20 flex items-center justify-center gap-1.5 disabled:opacity-40"
+             >
+                {isSaving ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Đang lưu...
+                  </>
+                ) : (
+                  <>
+                    Lưu lịch làm
+                  </>
+                )}
+             </button>
+          </div>
+        </div>
+      )}
       
       {/* Pending Swaps Alerts */}
       {pendingSwapsForMe.length > 0 && (
@@ -407,13 +520,13 @@ export default function ShiftsPage() {
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           {/* Week switching controls */}
           <div className="flex items-center bg-secondary rounded-xl p-1 justify-between flex-1 md:flex-none">
-            <button onClick={() => setCurrentWeekStart(subWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
+            <button onClick={() => handleWeekChange(subWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
               <ChevronLeft className="w-5 h-5" />
             </button>
             <span className="px-4 font-medium text-xs md:text-sm">
               {format(weekDays[0], 'dd/MM')} - {format(weekDays[6], 'dd/MM')}
             </span>
-            <button onClick={() => setCurrentWeekStart(addWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
+            <button onClick={() => handleWeekChange(addWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
@@ -505,7 +618,7 @@ export default function ShiftsPage() {
                   {/* Roster day cell for this shift */}
                   {weekDays.map(date => {
                     const dateStr = format(date, 'yyyy-MM-dd');
-                    const dayRegs = registrations.filter(r => r.shift_id === shift.id && r.date === dateStr);
+                    const dayRegs = localRegistrations.filter(r => r.shift_id === shift.id && r.date === dateStr);
                     const isFull = dayRegs.length >= shift.max_staff;
                     const myReg = dayRegs.find(r => r.user_id === user?.id);
                     const isFuture = isAfter(startOfDay(date), startOfDay(new Date()));
