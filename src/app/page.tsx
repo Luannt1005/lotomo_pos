@@ -290,46 +290,46 @@ export default function POSPage() {
 
       {/* Responsive Customization Dialog */}
       {selectedProduct && (
-        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-1 lg:p-4 animate-in fade-in">
-           <div className="bg-white w-full max-w-[420px] rounded-2xl lg:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[98vh] border-[1px] lg:border-[4px] border-white animate-in zoom-in-95 duration-500">
-              <div className="px-3 py-2 lg:px-6 lg:py-4 border-b flex justify-between items-center bg-[#f8f9fa]">
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 lg:p-4 animate-in fade-in">
+           <div className="bg-white w-full max-w-[460px] rounded-2xl lg:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[98vh] border-[1px] lg:border-[4px] border-white animate-in zoom-in-95 duration-500">
+              <div className="px-4 py-3 lg:px-6 lg:py-4 border-b flex justify-between items-center bg-[#f8f9fa]">
                  <div className="flex items-center gap-2">
-                    <Coffee className="w-4 h-4 text-primary"/>
+                    <Coffee className="w-5 h-5 text-primary"/>
                     <div>
-                        <h2 className="text-[14px] lg:text-lg font-black uppercase tracking-tight leading-none line-clamp-1">{selectedProduct.name}</h2>
-                        <span className="font-black text-primary text-[11px] lg:text-sm tracking-tighter">{formatCurrency(calculateUnitPrice())}</span>
+                        <h2 className="text-[16px] lg:text-xl font-black uppercase tracking-tight leading-none line-clamp-1">{selectedProduct.name}</h2>
+                        <span className="font-black text-primary text-xs lg:text-base tracking-tighter">{formatCurrency(calculateUnitPrice())}</span>
                     </div>
                  </div>
                  <button onClick={() => setSelectedProduct(null)} className="w-8 h-8 bg-muted hover:bg-destructive hover:text-white rounded-lg flex items-center justify-center transition-all font-black text-xs">X</button>
               </div>
 
-              <div className="flex-1 px-3 py-2 lg:p-6 space-y-2 lg:space-y-4 overflow-y-auto no-scrollbar">
+              <div className="flex-1 px-4 py-4 lg:p-7 space-y-4 lg:space-y-5 overflow-y-auto no-scrollbar">
                  {/* Row 1: Size */}
                  <div className="flex items-center gap-3">
-                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Size</label>
+                    <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Size</label>
                     <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
                         {selectedProduct.sizes.map(s => (
-                            <button key={s.size} onClick={() => setSize(s.size)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black transition-all text-[8px] lg:text-[10px] uppercase ${size === s.size ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s.size}</button>
+                            <button key={s.size} onClick={() => setSize(s.size)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black transition-all text-[11px] lg:text-xs uppercase ${size === s.size ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s.size}</button>
                         ))}
                     </div>
                  </div>
 
                  {/* Row 2: Đường */}
                  <div className="flex items-center gap-3">
-                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Đường</label>
+                    <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Đường</label>
                     <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
                         {(['0%', '50%', '100%'] as SugarLevel[]).map(s => (
-                            <button key={s} onClick={() => setSugar(s)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black uppercase text-[8px] lg:text-[10px] tracking-widest transition-all ${sugar === s ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s}</button>
+                            <button key={s} onClick={() => setSugar(s)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black uppercase text-[11px] lg:text-xs tracking-widest transition-all ${sugar === s ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>{s}</button>
                         ))}
                     </div>
                  </div>
 
                  {/* Row 3: Đá */}
                  <div className="flex items-center gap-3">
-                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Đá</label>
+                    <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Đá</label>
                     <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
                         {(['không đá', 'ít đá', 'bình thường'] as IceLevel[]).map(i => (
-                            <button key={i} onClick={() => setIce(i)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black uppercase text-[7px] lg:text-[10px] tracking-tighter transition-all ${ice === i ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
+                            <button key={i} onClick={() => setIce(i)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black uppercase text-[10px] lg:text-xs tracking-tight transition-all ${ice === i ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
                               {i === 'không đá' ? 'Không' : i === 'ít đá' ? 'Ít' : 'Thường'}
                             </button>
                         ))}
@@ -339,10 +339,10 @@ export default function POSPage() {
                  {/* Row 4: Sữa (Optional) */}
                  {selectedProduct.category === 'matcha' && (
                   <div className="flex items-center gap-3 animate-in slide-in-from-left-2">
-                      <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40 w-10 lg:w-12 shrink-0 text-left">Sữa (+5K)</label>
+                      <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Sữa (+5K)</label>
                       <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
                           {(['sữa tươi', 'sữa Oat', 'sữa Meiji'] as MilkType[]).map(m => (
-                              <button key={m} onClick={() => setMilk(m)} className={`py-1 lg:py-1.5 rounded-lg border-2 font-black uppercase text-[7px] lg:text-[10px] tracking-tighter transition-all ${milk === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
+                              <button key={m} onClick={() => setMilk(m)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black uppercase text-[10px] lg:text-xs tracking-tight transition-all ${milk === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
                                 {m === 'sữa tươi' ? 'Tươi' : m === 'sữa Oat' ? 'Oat' : 'Meiji'}
                               </button>
                           ))}
@@ -351,27 +351,27 @@ export default function POSPage() {
                  )}
 
                  {/* Toppings Section */}
-                 <div className="space-y-1">
-                    <label className="text-[7px] lg:text-[9px] font-black uppercase tracking-widest opacity-40">Toppings</label>
-                    <div className="grid grid-cols-2 gap-1 lg:gap-2 max-h-[90px] lg:max-h-[120px] overflow-y-auto no-scrollbar pr-1 bg-[#f8f9fa] p-1.5 lg:p-2 rounded-xl border border-black/5">
+                 <div className="space-y-2">
+                    <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40">Toppings</label>
+                    <div className="grid grid-cols-2 gap-2 max-h-[150px] lg:max-h-[200px] overflow-y-auto no-scrollbar pr-1 bg-[#f8f9fa] p-2.5 rounded-2xl border border-black/5">
                         {allToppings.map(t => (
-                            <button key={t.id} onClick={() => toggleTopping(t.name)} className={`p-1.5 lg:p-2 rounded-lg lg:rounded-xl border-2 flex justify-between items-center transition-all ${selectedToppings.includes(t.name) ? "bg-primary/5 border-primary text-primary shadow-sm" : "bg-white border-transparent text-muted-foreground opacity-70"}`}>
-                                <span className="font-black uppercase text-[7px] lg:text-[9px] tracking-tight line-clamp-1">{t.name}</span>
-                                <Check className={`w-2.5 h-2.5 ${selectedToppings.includes(t.name) ? "opacity-100" : "opacity-0"}`} />
+                            <button key={t.id} onClick={() => toggleTopping(t.name)} className={`p-2.5 rounded-xl border-2 flex justify-between items-center transition-all ${selectedToppings.includes(t.name) ? "bg-primary/5 border-primary text-primary shadow-sm" : "bg-white border-transparent text-muted-foreground opacity-70"}`}>
+                                <span className="font-black uppercase text-[9px] lg:text-[11px] tracking-tight line-clamp-1">{t.name}</span>
+                                <Check className={`w-3.5 h-3.5 ${selectedToppings.includes(t.name) ? "opacity-100" : "opacity-0"}`} />
                             </button>
                         ))}
                     </div>
                  </div>
 
                  {/* Note */}
-                 <div className="space-y-1">
-                    <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full bg-[#f8f9fa] border-2 border-transparent focus:border-primary/20 rounded-xl p-1.5 lg:p-2 outline-none font-bold text-[10px] lg:text-xs h-8 lg:h-12 resize-none" placeholder="Ghi chú..."></textarea>
+                 <div className="space-y-2">
+                    <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full bg-[#f8f9fa] border-2 border-transparent focus:border-primary/20 rounded-2xl p-3 outline-none font-bold text-xs lg:text-sm h-14 lg:h-20 resize-none" placeholder="Ghi chú..."></textarea>
                  </div>
               </div>
 
-              <div className="p-3 lg:p-6 border-t bg-[#f8f9fa] flex items-center justify-between">
-                  <div className="flex flex-col leading-none"><span className="text-[7px] font-black opacity-30 uppercase tracking-widest">Tạm tính</span><span className="text-sm lg:text-3xl font-black text-primary tracking-tighter">{formatCurrency(calculateUnitPrice())}</span></div>
-                  <button onClick={handleAddToCart} className="px-5 lg:px-10 py-2.5 lg:py-4 bg-primary text-white rounded-xl font-black uppercase text-[10px] lg:text-xs tracking-widest shadow-xl active:scale-95 transition-all">THÊM MÓN</button>
+              <div className="p-4 lg:p-6 border-t bg-[#f8f9fa] flex items-center justify-between">
+                  <div className="flex flex-col leading-none"><span className="text-[9px] font-black opacity-30 uppercase tracking-widest">Tạm tính</span><span className="text-base lg:text-3xl font-black text-primary tracking-tighter">{formatCurrency(calculateUnitPrice())}</span></div>
+                  <button onClick={handleAddToCart} className="px-6 lg:px-10 py-3.5 lg:py-4 bg-primary text-white rounded-xl font-black uppercase text-[11px] lg:text-xs tracking-widest shadow-xl active:scale-95 transition-all">THÊM MÓN</button>
               </div>
            </div>
         </div>
