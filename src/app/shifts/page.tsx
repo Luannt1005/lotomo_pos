@@ -414,43 +414,6 @@ export default function ShiftsPage() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
       
-      {/* Save / Reset changes banner */}
-      {hasChanges && (
-        <div className="bg-amber-500/10 border-2 border-dashed border-amber-500/35 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 animate-in slide-in-from-top-4 duration-300">
-          <div className="flex items-center gap-2.5">
-             <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-600 font-black animate-pulse">!</div>
-             <div>
-                <h4 className="font-extrabold text-sm text-amber-800">Bạn có thay đổi chưa lưu!</h4>
-                <p className="text-xs text-amber-700/80">Nhấp "Lưu lịch làm" để cập nhật ca làm của nhân viên vào hệ thống.</p>
-             </div>
-          </div>
-          <div className="flex gap-2 w-full sm:w-auto">
-             <button 
-                onClick={handleResetChanges}
-                disabled={isSaving}
-                className="flex-1 sm:flex-none px-5 py-2.5 bg-muted text-muted-foreground font-black text-xs uppercase tracking-wider rounded-xl transition-all active:scale-95 disabled:opacity-40"
-             >
-                Hủy bỏ
-             </button>
-             <button 
-                onClick={handleSaveChanges}
-                disabled={isSaving}
-                className="flex-1 sm:flex-none px-7 py-2.5 bg-amber-500 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all active:scale-95 shadow-lg shadow-amber-500/20 flex items-center justify-center gap-1.5 disabled:opacity-40"
-             >
-                {isSaving ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Đang lưu...
-                  </>
-                ) : (
-                  <>
-                    Lưu lịch làm
-                  </>
-                )}
-             </button>
-          </div>
-        </div>
-      )}
       
       {/* Pending Swaps Alerts */}
       {pendingSwapsForMe.length > 0 && (
@@ -518,6 +481,34 @@ export default function ShiftsPage() {
         </div>
         
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Save / Reset changes buttons if changed */}
+          {hasChanges && (
+            <div className="flex items-center gap-1.5 animate-in fade-in duration-200">
+              <button 
+                onClick={handleResetChanges}
+                disabled={isSaving}
+                className="px-3 py-1.5 bg-secondary hover:bg-destructive/10 hover:text-destructive text-muted-foreground font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all active:scale-95 disabled:opacity-40"
+              >
+                Hủy
+              </button>
+              <button 
+                onClick={handleSaveChanges}
+                disabled={isSaving}
+                className="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all active:scale-95 shadow-sm flex items-center justify-center gap-1 disabled:opacity-40"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Lưu...
+                  </>
+                ) : (
+                  <>
+                    Lưu ca
+                  </>
+                )}
+              </button>
+            </div>
+          )}
           {/* Week switching controls */}
           <div className="flex items-center bg-secondary rounded-xl p-1 justify-between flex-1 md:flex-none">
             <button onClick={() => handleWeekChange(subWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
