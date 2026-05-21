@@ -10,10 +10,10 @@ import { useRouter } from "next/navigation";
 
 const NAV_ITEMS = [
   { name: "POS", href: "/", icon: LayoutDashboard },
+  { name: "Đơn hàng", href: "/orders", icon: ListOrdered },
   { name: "Sản phẩm", href: "/products", icon: Coffee },
   { name: "Kho hàng", href: "/inventory", icon: Package },
   { name: "Lịch làm", href: "/shifts", icon: CalendarDays },
-  { name: "Đơn hàng", href: "/orders", icon: ListOrdered },
   { name: "Khuyến mãi", href: "/discounts", icon: Tag },
   { name: "Báo cáo", href: "/reports", icon: BarChart3, adminOnly: true },
 ];

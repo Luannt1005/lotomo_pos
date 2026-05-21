@@ -160,9 +160,15 @@ export default function ManageOrdersPage() {
                                 </h4>
                                 <p className="text-[6px] lg:text-[8px] font-black opacity-30 mt-0.5 tracking-widest leading-tight">
                                     {item.size}
+                                    {item.milk && ` • ${item.milk}`}
                                     {item.sugar !== "100%" && ` • ${item.sugar} đ`}
                                     {item.ice !== "bình thường" && ` • ${item.ice} đá`}
                                  </p>
+                                {item.toppings && item.toppings.length > 0 && (
+                                   <div className="mt-1 text-[6px] lg:text-[8px] font-black text-primary/80 uppercase bg-primary/5 border border-primary/10 px-1.5 py-0.5 rounded inline-block tracking-tight">
+                                      + {item.toppings.join(", ")}
+                                   </div>
+                                )}
                                 {item.note && <div className="mt-1 text-[6px] lg:text-[8px] text-yellow-800 font-bold bg-yellow-50 px-1.5 py-0.5 rounded-md border border-yellow-100 italic line-clamp-1">Note: {item.note}</div>}
                              </div>
                           </div>
@@ -196,18 +202,36 @@ export default function ManageOrdersPage() {
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-300">
            <div className="bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 border-4 border-white">
               <div className="p-6 border-b flex justify-between items-center bg-muted/10">
-                 <h2 className="text-xl font-black uppercase tracking-tighter">ORDER DETAILS</h2>
+                 <h2 className="text-xl font-black uppercase tracking-tighter">Chi tiết đơn</h2>
                  <button onClick={() => setSelectedOrder(null)} className="w-10 h-10 bg-muted hover:bg-destructive hover:text-white rounded-xl flex items-center justify-center transition-all font-bold">X</button>
               </div>
               <div className="p-6 space-y-4">
-                 <div className="space-y-4">
+                 <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-1 no-scrollbar">
                     {selectedOrder.order_items.map(item => (
-                       <div key={item.id} className="flex justify-between items-center text-sm">
-                          <div>
-                             <span className="font-black opacity-30 mr-2">{item.quantity}x</span>
-                             <span className="font-black uppercase">{item.products?.name}</span>
+                       <div key={item.id} className="flex justify-between items-start text-sm border-b border-black/5 pb-2 last:border-b-0 last:pb-0">
+                          <div className="flex-1">
+                             <div>
+                                <span className="font-black opacity-30 mr-2">{item.quantity}x</span>
+                                <span className="font-black uppercase">{item.products?.name}</span>
+                             </div>
+                             <div className="text-[8px] font-black opacity-45 uppercase tracking-wider mt-0.5 flex flex-wrap gap-1 items-center">
+                                <span>{item.size}</span>
+                                {item.milk && <span>• {item.milk}</span>}
+                                {item.sugar !== "100%" && <span>• {item.sugar} đường</span>}
+                                {item.ice !== "bình thường" && <span>• {item.ice}</span>}
+                             </div>
+                             {item.toppings && item.toppings.length > 0 && (
+                                <div className="text-[8px] font-black text-primary uppercase tracking-tight mt-1">
+                                   + {item.toppings.join(", ")}
+                                </div>
+                             )}
+                             {item.note && (
+                                <div className="text-[8px] text-yellow-800 font-bold bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-100 italic mt-1 inline-block">
+                                   Ghi chú: {item.note}
+                                </div>
+                             )}
                           </div>
-                          <span className="font-black">{formatCurrency(item.total_price)}</span>
+                          <span className="font-black whitespace-nowrap ml-2">{formatCurrency(item.total_price)}</span>
                        </div>
                     ))}
                  </div>
