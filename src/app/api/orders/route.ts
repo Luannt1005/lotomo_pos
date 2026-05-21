@@ -4,6 +4,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get("date");
+  const startDateStr = searchParams.get("start_date");
+  const endDateStr = searchParams.get("end_date");
 
   let query = supabaseAdmin
     .from("orders")
@@ -12,13 +14,22 @@ export async function GET(request: Request) {
       order_items (
         *,
         products (
-          name
+          name,
+          category
         )
       )
     `)
     .order("created_at", { ascending: false });
 
-  if (date) {
+  if (startDateStr && endDateStr) {
+    const start = new Date(startDateStr);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(endDateStr);
+    end.setHours(23, 59, 59, 999);
+    query = query
+      .gte("created_at", start.toISOString())
+      .lte("created_at", end.toISOString());
+  } else if (date) {
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(date);
