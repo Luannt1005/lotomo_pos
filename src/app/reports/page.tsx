@@ -152,7 +152,29 @@ export default function ReportsPage() {
     L: 0,
   };
 
+  let cashRevenue = 0;
+  let cashOrders = 0;
+  let transferRevenue = 0;
+  let transferOrders = 0;
+
+  const productSales: { 
+    [key: string]: { 
+      name: string; 
+      category: string; 
+      quantity: number; 
+      revenue: number; 
+    } 
+  } = {};
+
   orders.forEach(o => {
+    if (o.payment_method === "tiền mặt") {
+      cashRevenue += o.total_amount;
+      cashOrders++;
+    } else if (o.payment_method === "chuyển khoản") {
+      transferRevenue += o.total_amount;
+      transferOrders++;
+    }
+
     o.order_items?.forEach(item => {
       totalItemsSold += item.quantity;
       const cat = (item.products?.category || "khác").toLowerCase();
@@ -167,8 +189,28 @@ export default function ReportsPage() {
         sizeCount[sz] += item.quantity;
         sizeRevenue[sz] += revenue;
       }
+
+      const pId = item.product_id;
+      if (pId) {
+        const pName = item.products?.name || "Sản phẩm không rõ";
+        const pCat = item.products?.category || "khác";
+        if (!productSales[pId]) {
+          productSales[pId] = {
+            name: pName,
+            category: pCat,
+            quantity: 0,
+            revenue: 0,
+          };
+        }
+        productSales[pId].quantity += item.quantity;
+        productSales[pId].revenue += revenue;
+      }
     });
   });
+
+  const topProducts = Object.values(productSales)
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 5);
 
   // --- DAILY TREND DATA ---
   const dateList: string[] = [];
@@ -749,6 +791,114 @@ export default function ReportsPage() {
                       </div>
                     );
                   })
+                )}
+              </div>
+            </div>
+
+            {/* 5. Payment Method Distribution */}
+            <div className="bg-white p-4 lg:p-6 rounded-[2rem] border border-black/5 shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 className="text-xs lg:text-sm font-black uppercase tracking-wider text-foreground">Phương Thức Thanh Toán</h3>
+                <p className="text-[10px] text-muted-foreground">Tỷ lệ doanh thu Tiền mặt và Chuyển khoản.</p>
+              </div>
+
+              <div className="space-y-4 my-6 flex-1 flex flex-col justify-center">
+                {totalOrders === 0 ? (
+                  <div className="text-[10px] uppercase font-black opacity-20 py-20 text-center">Không có dữ liệu</div>
+                ) : (
+                  <>
+                    {/* Cash */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-end text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-black text-sm text-foreground">Tiền mặt</span>
+                          <span className="text-[9px] font-black text-muted-foreground">({cashOrders} đơn)</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-black text-foreground">{formatCurrency(cashRevenue)}</span>
+                          <span className="text-[9px] text-muted-foreground font-black ml-1.5">
+                            ({totalRevenue > 0 ? ((cashRevenue / totalRevenue) * 100).toFixed(1) : 0}%)
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-emerald-500 rounded-full transition-all duration-1000" 
+                          style={{ width: `${totalRevenue > 0 ? (cashRevenue / totalRevenue) * 100 : 0}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Bank Transfer */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-end text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-black text-sm text-foreground">Chuyển khoản</span>
+                          <span className="text-[9px] font-black text-muted-foreground">({transferOrders} đơn)</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-black text-foreground">{formatCurrency(transferRevenue)}</span>
+                          <span className="text-[9px] text-muted-foreground font-black ml-1.5">
+                            ({totalRevenue > 0 ? ((transferRevenue / totalRevenue) * 100).toFixed(1) : 0}%)
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-blue-500 rounded-full transition-all duration-1000" 
+                          style={{ width: `${totalRevenue > 0 ? (transferRevenue / totalRevenue) * 100 : 0}%` }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* 6. Top Selling Products */}
+            <div className="bg-white p-4 lg:p-6 rounded-[2rem] border border-black/5 shadow-sm lg:col-span-2 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xs lg:text-sm font-black uppercase tracking-wider text-foreground">Sản Phẩm Bán Chạy Nhất</h3>
+                <p className="text-[10px] text-muted-foreground">Top 5 sản phẩm đạt doanh số cao nhất trong kỳ.</p>
+              </div>
+
+              <div className="mt-6 flex-1">
+                {topProducts.length === 0 ? (
+                  <div className="text-[10px] uppercase font-black opacity-20 py-20 text-center">Không có dữ liệu</div>
+                ) : (
+                  <div className="overflow-x-auto no-scrollbar">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-black/5 text-[9px] font-black text-muted-foreground uppercase tracking-wider">
+                          <th className="py-3">Tên sản phẩm</th>
+                          <th className="py-3">Danh mục</th>
+                          <th className="py-3 text-right">Số lượng bán</th>
+                          <th className="py-3 text-right">Doanh thu</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {topProducts.map((p, idx) => (
+                          <tr key={idx} className="border-b border-black/5 last:border-0 hover:bg-muted/10 transition-colors">
+                            <td className="py-3.5 font-black uppercase flex items-center gap-2">
+                              <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[9px] font-black">
+                                {idx + 1}
+                              </span>
+                              {p.name}
+                            </td>
+                            <td className="py-3.5 font-bold uppercase text-muted-foreground/80 text-[10px]">
+                              {p.category}
+                            </td>
+                            <td className="py-3.5 font-black text-right text-foreground">
+                              {p.quantity} ly
+                            </td>
+                            <td className="py-3.5 font-black text-right text-primary">
+                              {formatCurrency(p.revenue)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
             </div>
