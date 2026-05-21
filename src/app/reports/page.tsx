@@ -141,6 +141,16 @@ export default function ReportsPage() {
     trà: 0,
     khác: 0,
   };
+  const sizeCount: { [key: string]: number } = {
+    S: 0,
+    M: 0,
+    L: 0,
+  };
+  const sizeRevenue: { [key: string]: number } = {
+    S: 0,
+    M: 0,
+    L: 0,
+  };
 
   orders.forEach(o => {
     o.order_items?.forEach(item => {
@@ -151,6 +161,12 @@ export default function ReportsPage() {
       const mappedCat = categoryRevenue[cat] !== undefined ? cat : "khác";
       categoryRevenue[mappedCat] += revenue;
       categoryItemsCount[mappedCat] += item.quantity;
+
+      const sz = (item.size || "M").toUpperCase();
+      if (sizeCount[sz] !== undefined) {
+        sizeCount[sz] += item.quantity;
+        sizeRevenue[sz] += revenue;
+      }
     });
   });
 
@@ -520,8 +536,8 @@ export default function ReportsPage() {
                             const radius = 45;
                             const circ = 2 * Math.PI * radius; // ~282.74
                             const strokeDash = percent * circ;
-                            const strokeOffset = circ - (strokeDash) + (accumulatedPercent * circ);
-                            accumulatedPercent -= percent;
+                            const strokeOffset = -accumulatedPercent * circ;
+                            accumulatedPercent += percent;
 
                             return (
                               <circle
@@ -578,7 +594,7 @@ export default function ReportsPage() {
             </div>
 
             {/* 3. Bar Chart: Hourly Sales Distribution */}
-            <div className="bg-white p-4 lg:p-6 rounded-[2rem] border border-black/5 shadow-sm lg:col-span-3">
+            <div className="bg-white p-4 lg:p-6 rounded-[2rem] border border-black/5 shadow-sm lg:col-span-2">
               <div>
                 <h3 className="text-xs lg:text-sm font-black uppercase tracking-wider text-foreground">Giờ Bán Hàng Cao Điểm</h3>
                 <p className="text-[10px] text-muted-foreground">Phân bổ tần suất giao dịch và số đơn hàng theo các khung giờ.</p>
@@ -686,6 +702,53 @@ export default function ReportsPage() {
                       </div>
                     )}
                   </div>
+                )}
+              </div>
+            </div>
+
+            {/* 4. Size Distribution Progress Bars */}
+            <div className="bg-white p-4 lg:p-6 rounded-[2rem] border border-black/5 shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 className="text-xs lg:text-sm font-black uppercase tracking-wider text-foreground">Phân Bổ Kích Cỡ Ly</h3>
+                <p className="text-[10px] text-muted-foreground">Tỷ lệ ly cỡ S, M, L được bán ra trong kỳ.</p>
+              </div>
+
+              <div className="space-y-4 my-6 flex-1 flex flex-col justify-center">
+                {totalItemsSold === 0 ? (
+                  <div className="text-[10px] uppercase font-black opacity-20 py-20 text-center">Không có dữ liệu</div>
+                ) : (
+                  (["S", "M", "L"] as const).map((sz) => {
+                    const count = sizeCount[sz] || 0;
+                    const rev = sizeRevenue[sz] || 0;
+                    const percentCount = totalItemsSold > 0 ? (count / totalItemsSold) * 100 : 0;
+                    
+                    const colorMap = {
+                      S: "bg-indigo-500",
+                      M: "bg-amber-500",
+                      L: "bg-emerald-500"
+                    };
+
+                    return (
+                      <div key={sz} className="space-y-1">
+                        <div className="flex justify-between items-end text-xs">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-black text-sm text-foreground">Ly {sz}</span>
+                            <span className="text-[9px] font-black text-muted-foreground">({count} ly)</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="font-black text-foreground">{formatCurrency(rev)}</span>
+                            <span className="text-[9px] text-muted-foreground font-black ml-1.5">({percentCount.toFixed(1)}%)</span>
+                          </div>
+                        </div>
+                        <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full ${colorMap[sz]} rounded-full transition-all duration-1000`} 
+                            style={{ width: `${percentCount}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>
