@@ -1,0 +1,318 @@
+{
+  "timestamp": "2026-06-04T13:37:04.109Z",
+  "url": "https://api.grab.com/food/merchant/v3/orders/001684346983-C76ZEZAANYCVLA",
+  "payload": {
+    "order": {
+      "orderID": "001684346983-C76ZEZAANYCVLA",
+      "driver": {
+        "name": "Đinh Tuấn Kiệt",
+        "mobileNumber": "",
+        "latitude": 0,
+        "longitude": 0,
+        "location": null,
+        "avatar": "https://s3-ap-southeast-1.amazonaws.com/myteksi/grab-id/profile_pic/1/-1/GFVgMTw-MBn1UTvUdLM0Nklfp20=_2024/06/11_.jpg"
+      },
+      "eater": {
+        "name": "***",
+        "mobileNumber": "",
+        "comment": "Gặp mặt ở sảnh",
+        "address": null
+      },
+      "itemInfo": {
+        "count": 2,
+        "items": [
+          {
+            "name": "Matcha Latte",
+            "quantity": 2,
+            "fare": {
+              "currencySymbol": "₫",
+              "priceDisplay": "60.000",
+              "originalItemPriceDisplay": "60.000",
+              "beforeAdjustedPriceDisplay": "60.000",
+              "priceFloat": 30000,
+              "priceInMin": 30000
+            },
+            "comment": "",
+            "modifierGroups": [
+              {
+                "modifierGroupID": "VNMOG2026040914102739048",
+                "modifierGroupName": "Kích cỡ",
+                "modifiers": [
+                  {
+                    "modifierID": "VNMOD20260409141027019371",
+                    "modifierName": "M",
+                    "priceDisplay": "0",
+                    "quantity": 1,
+                    "revampedPriceDisplay": "0",
+                    "editedStatus": 0
+                  }
+                ]
+              },
+              {
+                "modifierGroupID": "VNMOG2026040914154383647",
+                "modifierGroupName": "Mức đá",
+                "modifiers": [
+                  {
+                    "modifierID": "VNMOD20260409141543034217",
+                    "modifierName": "Có đá",
+                    "priceDisplay": "0",
+                    "quantity": 1,
+                    "revampedPriceDisplay": "0",
+                    "editedStatus": 0
+                  }
+                ]
+              },
+              {
+                "modifierGroupID": "VNMOG2026040914173195468",
+                "modifierGroupName": "Độ ngọt",
+                "modifiers": [
+                  {
+                    "modifierID": "VNMOD20260409141731021946",
+                    "modifierName": "Bình thường",
+                    "priceDisplay": "0",
+                    "quantity": 1,
+                    "revampedPriceDisplay": "0",
+                    "editedStatus": 0
+                  }
+                ]
+              },
+              {
+                "modifierGroupID": "VNMOG2026040914211505596",
+                "modifierGroupName": "Loại sữa",
+                "modifiers": [
+                  {
+                    "modifierID": "VNMOD20260409142115018485",
+                    "modifierName": "Sữa tươi",
+                    "priceDisplay": "0",
+                    "quantity": 1,
+                    "revampedPriceDisplay": "0",
+                    "editedStatus": 0
+                  }
+                ]
+              }
+            ],
+            "discountInfo": null,
+            "itemID": "VNITE20260408022707016374",
+            "editedStatus": 0,
+            "weight": null,
+            "itemCode": "",
+            "specialItemType": "",
+            "soldByWeight": false,
+            "outOfStockInstruction": null,
+            "parentID": "",
+            "parentName": "",
+            "skuID": "",
+            "isAddedAsReplacement": false,
+            "image": "https://food-cms.grab.com/item/VNITE20260408022707016374/photos/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.jpg",
+            "itemKey": "VNITE20260408022707016374-1b8b86f5999d4bd7b37a59f9cc37599c",
+            "barcode": "",
+            "originalItem": null,
+            "outOfStockInstructionV2": {
+              "title": "REMOVE",
+              "replacementItems": null
+            },
+            "originalFare": null,
+            "isUneditable": false,
+            "itemTags": null,
+            "memberPriceInfo": null
+          }
+        ],
+        "merchantItems": null
+      },
+      "fare": {
+        "currencySymbol": "₫",
+        "totalInCent": 0,
+        "adjustmentByDriverInCent": 0,
+        "totalDisplay": "36.000",
+        "subTotalDisplay": "60.000",
+        "taxDisplay": "0",
+        "adjustmentByDriverDisplay": "",
+        "promotionDisplay": "29.000",
+        "deliveryFeeDisplay": "12.000",
+        "passengerTotalDisplay": "43.000",
+        "totalDiscountAmountDisplay": "24.000",
+        "reducedPriceDisplay": "47.000",
+        "revampedSubtotalDisplay": "60.000",
+        "cancelledDisplay": "0",
+        "taxRate": "0.0000",
+        "merchantChargeDisplay": "",
+        "isIncludeMerchantChargeTax": false,
+        "subtotalIncludeMerchantCharge": "60.000",
+        "chargeFeeDescription": {
+          "en": "Restaurant packaging charge",
+          "id": "Biaya kemasan resto",
+          "ms": "Caj pembungkusan dari restoran",
+          "th": "ค่าบรรจุภัณฑ",
+          "vi": "Phí đồ gói mang về",
+          "zh": "商家包装费"
+        },
+        "smallOrderFeeDisplay": "0",
+        "serviceChargeFeeDisplay": "",
+        "serviceChargeFeeDescription": {
+          "en": "Service charge",
+          "id": "Biaya layanan",
+          "km": "ការគិតថ្លៃលើសេវាកម្ម",
+          "ms": "Caj Perkhidmatan",
+          "my": "ဝန်ဆောင်စရိတ်",
+          "th": "ค่าบริการ",
+          "vi": "Phí dịch vụ",
+          "zh": "服务费",
+          "zh-hant-tw": "服務費用"
+        },
+        "daxPayMexFareDisplay": "0",
+        "mexCommissionDisplay": "8.834",
+        "onBehalfWithholdTaxDisplay": "0",
+        "mexVatAmountDisplay": "1.080",
+        "mexPitAmountDisplay": "540",
+        "originalPriceInMin": 60000
+      },
+      "times": {
+        "createdAt": "2026-05-24T12:30:00Z",
+        "deliveredAt": "2026-05-24T12:42:43Z",
+        "completedAt": "2026-05-24T12:49:41Z",
+        "expiredAt": "2026-05-24T12:35:08Z",
+        "acceptedAt": "2026-05-24T12:30:12Z",
+        "cancelledAt": null,
+        "readyAt": "2026-05-24T12:39:05Z",
+        "displayedAt": "2026-05-24T12:30:12Z",
+        "driverArriveRestoAt": null,
+        "preparationCompletedAt": "2026-05-24T12:42:43Z"
+      },
+      "state": "COMPLETED",
+      "merchant": {
+        "ID": "5-C74ZCVDGJ6D2GJ"
+      },
+      "deliveryTaskpoolStatus": "COMPLETED",
+      "preparationTaskpoolStatus": "COMPLETED",
+      "cancelCode": 0,
+      "displayID": "GF-970",
+      "bookingCode": "A-9CMXIHRGWQSGAV",
+      "paymentMethod": "Cashless",
+      "acceptedViaCall": false,
+      "acceptedViaAA": true,
+      "acknowledgedForAA": false,
+      "qsrModelType": 0,
+      "hasPromo": true,
+      "receiptAdditionalInfo": {
+        "supportFeatureFlags": {
+          "showCashToCollect": false
+        },
+        "printedCount": 2
+      },
+      "allowComplete": false,
+      "isTakeawayOrder": false,
+      "orderLevelDiscounts": [
+        {
+          "discountType": "order",
+          "discountName": "QUANNGON2L1XSDKAXV",
+          "discountAmountDisplay": "15.000",
+          "discountAmountValueInMin": 15000,
+          "isNewPromotion": false
+        },
+        {
+          "discountType": "order",
+          "discountName": "BOSSCHFH1XVCXJG",
+          "discountAmountDisplay": "9.000",
+          "discountAmountValueInMin": 9000,
+          "isNewPromotion": false
+        }
+      ],
+      "flags": {
+        "showReceiptEaterAddress": false,
+        "showForceCompleteButton": false,
+        "hideOrderDriverInfo": false,
+        "isPrintOrderRevampReceipt": true,
+        "isGrabInitiatedSplitOrder": false,
+        "isAdsMarketingAttributed": false,
+        "isPaxNewCustomer": true,
+        "isPayOnCollect": false,
+        "merchantFeatureFlags": 0,
+        "isOPTPhase5Enabled": true,
+        "isManualAcceptMode": false,
+        "isM41Order": false,
+        "isTH5050Order": false
+      },
+      "scheduledOrderInfo": null,
+      "isLargeOrder": false,
+      "isEditable": false,
+      "isOrderEdited": false,
+      "isOrderWithFriends": false,
+      "uneditableReason": 10,
+      "cutlery": 2,
+      "cancelBy": "",
+      "cancelRole": "",
+      "leadsGenData": {
+        "isDeliverByMex": false,
+        "isOrderValueLow": false,
+        "deliveryFee": "",
+        "timeLeftToEnableCompleteButton": 0,
+        "geAllocationStatus": 0,
+        "grabExpressDriver": null,
+        "paxDistanceToMex": 966
+      },
+      "isBusyModeOrder": false,
+      "busyModeOrderPickupTime": "2026-05-24T12:30:00.971462855Z",
+      "busyModeApproach": 0,
+      "payMerchant": false,
+      "cancelledMsg": "",
+      "orderFlags": 4035792627008801000,
+      "orderStatsFlags": 4129,
+      "receiptFlags": 0,
+      "dineInInfo": null,
+      "chatroomInfo": {
+        "roomID": "e78e27869c8b20cc45ae90a97c686e49",
+        "status": 0
+      },
+      "membershipID": "",
+      "mcorInfo": null,
+      "mexReimbursementInfo": null,
+      "displayHighlights": {
+        "highlightItemCount": false,
+        "missingItemIDs": null,
+        "highMIWIRisk": false,
+        "highMIWIRiskItemIDs": []
+      },
+      "giftInfo": null,
+      "orderBookings": null,
+      "incidents": {
+        "hasError": false,
+        "data": []
+      },
+      "voucherInfo": null,
+      "stampInfo": {
+        "userConsentMsg": ""
+      },
+      "mexOPT": {
+        "submittedOPTFromMex": 492,
+        "sourceOPT": 0,
+        "isPreparationTaskDelayed": true,
+        "isReadyButtonAbused": true,
+        "actualOPT": null,
+        "estimatedOPTDoneAt": "2026-05-24T12:38:24.423772713Z",
+        "remainEditableOPTInSec": 0,
+        "configuration": {
+          "timeAdjustment": {
+            "minimumOPT": 1,
+            "maximumOPT": 60,
+            "maximumAdditionOPT": 20,
+            "maximumSubtractionOPT": 59
+          },
+          "step": 1,
+          "timerDuration": 2,
+          "editOPTWindowInSec": 60,
+          "editableOPTWindowInSec": 180
+        },
+        "preparationTaskDelayedByMin": 4
+      },
+      "replacementInfo": null,
+      "isEditableByPax": false,
+      "preparationTaskID": "",
+      "orderChangeLog": null,
+      "isEditableByPaxV2": false,
+      "reservationDeposit": null,
+      "orderReadyPhotoDetail": null,
+      "th5050OrderDetail": null,
+      "upcomingData": null
+    }
+  }
+}

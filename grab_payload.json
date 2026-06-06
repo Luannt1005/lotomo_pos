@@ -1,0 +1,3032 @@
+[
+  {
+    "timestamp": "2026-06-04T13:36:50.121Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v1/reports/daily-pagination?states=&startTime=2026-06-04T00%3A00%3A00%2B07%3A00&endTime=2026-06-04T23%3A59%3A59%2B07%3A00&pageIndex=0&pageSize=50",
+    "payload": {
+      "hasMore": false,
+      "pageIndex": 0,
+      "pageEndTime": "2026-06-04T23:59:59+07:00",
+      "statements": [],
+      "pageSize": 50
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:36:50.143Z",
+    "url": "https://api.grab.com/food/merchant/v1/merchant-report-summary?startDate=2026-06-04",
+    "payload": {
+      "currency": {
+        "code": "VND",
+        "symbol": "₫",
+        "exponent": "0",
+        "exponentUnit": 0
+      },
+      "totalEarningsInMinorUnit": 0,
+      "totalEarningDisplay": "0",
+      "revenueInMinorUnit": 0,
+      "revenueDisplay": "0",
+      "completedOrders": 0,
+      "cancelledOrders": 0
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:36:56.837Z",
+    "url": "https://api.grab.com/food/merchant/v1/merchant-report-summary?startDate=2026-05-25",
+    "payload": {
+      "currency": {
+        "code": "VND",
+        "symbol": "₫",
+        "exponent": "0",
+        "exponentUnit": 0
+      },
+      "totalEarningsInMinorUnit": -65340,
+      "totalEarningDisplay": "-65.340",
+      "revenueInMinorUnit": 0,
+      "revenueDisplay": "0",
+      "completedOrders": 0,
+      "cancelledOrders": 0
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:36:56.857Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v1/reports/daily-pagination?states=&startTime=2026-05-25T00%3A00%3A00%2B07%3A00&endTime=2026-05-25T23%3A59%3A59%2B07%3A00&pageIndex=0&pageSize=50",
+    "payload": {
+      "hasMore": false,
+      "pageIndex": 0,
+      "pageEndTime": "2026-05-25T23:59:59+07:00",
+      "statements": [],
+      "pageSize": 50
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:00.658Z",
+    "url": "https://api.grab.com/food/merchant/v1/merchant-report-summary?startDate=2026-05-24",
+    "payload": {
+      "currency": {
+        "code": "VND",
+        "symbol": "₫",
+        "exponent": "0",
+        "exponentUnit": 0
+      },
+      "totalEarningsInMinorUnit": 156116,
+      "totalEarningDisplay": "156.116",
+      "revenueInMinorUnit": 220000,
+      "revenueDisplay": "220.000",
+      "completedOrders": 5,
+      "cancelledOrders": 0
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:00.682Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v1/reports/daily-pagination?states=&startTime=2026-05-24T00%3A00%3A00%2B07%3A00&endTime=2026-05-24T23%3A59%3A59%2B07%3A00&pageIndex=0&pageSize=50",
+    "payload": {
+      "hasMore": false,
+      "pageIndex": 0,
+      "pageEndTime": "2026-05-24T23:59:59+07:00",
+      "statements": [
+        {
+          "ID": "001370018498-C76ZE6ACEKM1VE",
+          "currency": {
+            "code": "VND",
+            "symbol": "₫",
+            "exponent": "0",
+            "exponentUnit": 0
+          },
+          "orderEarningsInMinorUnit": 55000,
+          "deliveryStatus": "COMPLETED",
+          "createdAt": "2026-05-24T12:50:10Z",
+          "bookingCode": "A-9CM3D7BWX4HUAV",
+          "priceDisplay": "55.000",
+          "updatedAt": "2026-05-24T13:15:57.469621Z",
+          "displayID": "GF-124",
+          "isAcceptedByAA": true,
+          "hasPromo": true,
+          "isTakeawayOrder": false,
+          "isScheduledOrder": false,
+          "isLargeOrder": false,
+          "cancelledOriginalPriceDisplay": "55.000",
+          "cancelRole": "",
+          "isOrderEdited": false,
+          "payMerchant": false,
+          "orderFlags": 4035788216077388000,
+          "preparationTaskID": "001370018498-C76ZE6ACEKM1VE-PREP-C76ZE6ADEVM1VE",
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPreparationTaskDelayed": false,
+          "preparationTaskDelayedByMin": 0,
+          "compensationStatus": 0,
+          "cancelledAt": null,
+          "isTH5050Order": false,
+          "chatroomInfo": {
+            "roomID": "",
+            "status": 0
+          }
+        },
+        {
+          "ID": "001684346983-C76ZEZAANYCVLA",
+          "currency": {
+            "code": "VND",
+            "symbol": "₫",
+            "exponent": "0",
+            "exponentUnit": 0
+          },
+          "orderEarningsInMinorUnit": 36000,
+          "deliveryStatus": "COMPLETED",
+          "createdAt": "2026-05-24T12:30:08Z",
+          "bookingCode": "A-9CMXIHRGWQSGAV",
+          "priceDisplay": "36.000",
+          "updatedAt": "2026-05-24T12:49:41.904691Z",
+          "displayID": "GF-970",
+          "isAcceptedByAA": true,
+          "hasPromo": true,
+          "isTakeawayOrder": false,
+          "isScheduledOrder": false,
+          "isLargeOrder": false,
+          "cancelledOriginalPriceDisplay": "36.000",
+          "cancelRole": "",
+          "isOrderEdited": false,
+          "payMerchant": false,
+          "orderFlags": 4035792614123899000,
+          "preparationTaskID": "001684346983-C76ZEZAANYCVLA-PREP-C76ZEZABN8CVLA",
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPreparationTaskDelayed": true,
+          "preparationTaskDelayedByMin": 4,
+          "compensationStatus": 0,
+          "cancelledAt": null,
+          "isTH5050Order": false,
+          "chatroomInfo": {
+            "roomID": "",
+            "status": 0
+          }
+        },
+        {
+          "ID": "001517783433-C76ZEYMVWEUWR2",
+          "currency": {
+            "code": "VND",
+            "symbol": "₫",
+            "exponent": "0",
+            "exponentUnit": 0
+          },
+          "orderEarningsInMinorUnit": 46000,
+          "deliveryStatus": "COMPLETED",
+          "createdAt": "2026-05-24T12:26:21Z",
+          "bookingCode": "A-9CMX7E4GWMSAAV",
+          "priceDisplay": "46.000",
+          "updatedAt": "2026-05-24T12:50:30.643498Z",
+          "displayID": "GF-685",
+          "isAcceptedByAA": true,
+          "hasPromo": true,
+          "isTakeawayOrder": false,
+          "isScheduledOrder": false,
+          "isLargeOrder": false,
+          "cancelledOriginalPriceDisplay": "46.000",
+          "cancelRole": "",
+          "isOrderEdited": false,
+          "payMerchant": false,
+          "orderFlags": 4035792614128093000,
+          "preparationTaskID": "001517783433-C76ZEYMVWEUWR2-PREP-C76ZEYMXAFUWR2",
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPreparationTaskDelayed": false,
+          "preparationTaskDelayedByMin": 0,
+          "compensationStatus": 0,
+          "cancelledAt": null,
+          "isTH5050Order": false,
+          "chatroomInfo": {
+            "roomID": "",
+            "status": 0
+          }
+        },
+        {
+          "ID": "001691740638-C76ZEPD2NACKCX",
+          "currency": {
+            "code": "VND",
+            "symbol": "₫",
+            "exponent": "0",
+            "exponentUnit": 0
+          },
+          "orderEarningsInMinorUnit": 50000,
+          "deliveryStatus": "COMPLETED",
+          "createdAt": "2026-05-24T11:51:26Z",
+          "bookingCode": "A-9CLUX5MWWOQXAV",
+          "priceDisplay": "50.000",
+          "updatedAt": "2026-05-24T12:07:23.492288Z",
+          "displayID": "GF-984",
+          "isAcceptedByAA": true,
+          "hasPromo": true,
+          "isTakeawayOrder": false,
+          "isScheduledOrder": false,
+          "isLargeOrder": false,
+          "cancelledOriginalPriceDisplay": "50.000",
+          "cancelRole": "",
+          "isOrderEdited": false,
+          "payMerchant": false,
+          "orderFlags": 4035792614128093000,
+          "preparationTaskID": "001691740638-C76ZEPD2NACKCX-PREP-C76ZEPD3NKCKCX",
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPreparationTaskDelayed": false,
+          "preparationTaskDelayedByMin": 0,
+          "compensationStatus": 0,
+          "cancelledAt": null,
+          "isTH5050Order": false,
+          "chatroomInfo": {
+            "roomID": "",
+            "status": 0
+          }
+        },
+        {
+          "ID": "00114425805-C76ZEE53KFLXL6",
+          "currency": {
+            "code": "VND",
+            "symbol": "₫",
+            "exponent": "0",
+            "exponentUnit": 0
+          },
+          "orderEarningsInMinorUnit": 33000,
+          "deliveryStatus": "COMPLETED",
+          "createdAt": "2026-05-24T11:16:27Z",
+          "bookingCode": "A-9CLQQLPWWF3HAV",
+          "priceDisplay": "33.000",
+          "updatedAt": "2026-05-24T11:40:21.199929Z",
+          "displayID": "GF-732",
+          "isAcceptedByAA": true,
+          "hasPromo": true,
+          "isTakeawayOrder": false,
+          "isScheduledOrder": false,
+          "isLargeOrder": false,
+          "cancelledOriginalPriceDisplay": "33.000",
+          "cancelRole": "",
+          "isOrderEdited": false,
+          "payMerchant": false,
+          "orderFlags": 4035792614124423000,
+          "preparationTaskID": "00114425805-C76ZEE53KFLXL6-PREP-C76ZEE6ALGLXL6",
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPreparationTaskDelayed": false,
+          "preparationTaskDelayedByMin": 0,
+          "compensationStatus": 0,
+          "cancelledAt": null,
+          "isTH5050Order": false,
+          "chatroomInfo": {
+            "roomID": "",
+            "status": 0
+          }
+        }
+      ],
+      "pageSize": 50
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:04.109Z",
+    "url": "https://api.grab.com/food/merchant/v3/orders/001684346983-C76ZEZAANYCVLA",
+    "payload": {
+      "order": {
+        "orderID": "001684346983-C76ZEZAANYCVLA",
+        "driver": {
+          "name": "Đinh Tuấn Kiệt",
+          "mobileNumber": "",
+          "latitude": 0,
+          "longitude": 0,
+          "location": null,
+          "avatar": "https://s3-ap-southeast-1.amazonaws.com/myteksi/grab-id/profile_pic/1/-1/GFVgMTw-MBn1UTvUdLM0Nklfp20=_2024/06/11_.jpg"
+        },
+        "eater": {
+          "name": "***",
+          "mobileNumber": "",
+          "comment": "Gặp mặt ở sảnh",
+          "address": null
+        },
+        "itemInfo": {
+          "count": 2,
+          "items": [
+            {
+              "name": "Matcha Latte",
+              "quantity": 2,
+              "fare": {
+                "currencySymbol": "₫",
+                "priceDisplay": "60.000",
+                "originalItemPriceDisplay": "60.000",
+                "beforeAdjustedPriceDisplay": "60.000",
+                "priceFloat": 30000,
+                "priceInMin": 30000
+              },
+              "comment": "",
+              "modifierGroups": [
+                {
+                  "modifierGroupID": "VNMOG2026040914102739048",
+                  "modifierGroupName": "Kích cỡ",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409141027019371",
+                      "modifierName": "M",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                },
+                {
+                  "modifierGroupID": "VNMOG2026040914154383647",
+                  "modifierGroupName": "Mức đá",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409141543034217",
+                      "modifierName": "Có đá",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                },
+                {
+                  "modifierGroupID": "VNMOG2026040914173195468",
+                  "modifierGroupName": "Độ ngọt",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409141731021946",
+                      "modifierName": "Bình thường",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                },
+                {
+                  "modifierGroupID": "VNMOG2026040914211505596",
+                  "modifierGroupName": "Loại sữa",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409142115018485",
+                      "modifierName": "Sữa tươi",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                }
+              ],
+              "discountInfo": null,
+              "itemID": "VNITE20260408022707016374",
+              "editedStatus": 0,
+              "weight": null,
+              "itemCode": "",
+              "specialItemType": "",
+              "soldByWeight": false,
+              "outOfStockInstruction": null,
+              "parentID": "",
+              "parentName": "",
+              "skuID": "",
+              "isAddedAsReplacement": false,
+              "image": "https://food-cms.grab.com/item/VNITE20260408022707016374/photos/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.jpg",
+              "itemKey": "VNITE20260408022707016374-1b8b86f5999d4bd7b37a59f9cc37599c",
+              "barcode": "",
+              "originalItem": null,
+              "outOfStockInstructionV2": {
+                "title": "REMOVE",
+                "replacementItems": null
+              },
+              "originalFare": null,
+              "isUneditable": false,
+              "itemTags": null,
+              "memberPriceInfo": null
+            }
+          ],
+          "merchantItems": null
+        },
+        "fare": {
+          "currencySymbol": "₫",
+          "totalInCent": 0,
+          "adjustmentByDriverInCent": 0,
+          "totalDisplay": "36.000",
+          "subTotalDisplay": "60.000",
+          "taxDisplay": "0",
+          "adjustmentByDriverDisplay": "",
+          "promotionDisplay": "29.000",
+          "deliveryFeeDisplay": "12.000",
+          "passengerTotalDisplay": "43.000",
+          "totalDiscountAmountDisplay": "24.000",
+          "reducedPriceDisplay": "47.000",
+          "revampedSubtotalDisplay": "60.000",
+          "cancelledDisplay": "0",
+          "taxRate": "0.0000",
+          "merchantChargeDisplay": "",
+          "isIncludeMerchantChargeTax": false,
+          "subtotalIncludeMerchantCharge": "60.000",
+          "chargeFeeDescription": {
+            "en": "Restaurant packaging charge",
+            "id": "Biaya kemasan resto",
+            "ms": "Caj pembungkusan dari restoran",
+            "th": "ค่าบรรจุภัณฑ",
+            "vi": "Phí đồ gói mang về",
+            "zh": "商家包装费"
+          },
+          "smallOrderFeeDisplay": "0",
+          "serviceChargeFeeDisplay": "",
+          "serviceChargeFeeDescription": {
+            "en": "Service charge",
+            "id": "Biaya layanan",
+            "km": "ការគិតថ្លៃលើសេវាកម្ម",
+            "ms": "Caj Perkhidmatan",
+            "my": "ဝန်ဆောင်စရိတ်",
+            "th": "ค่าบริการ",
+            "vi": "Phí dịch vụ",
+            "zh": "服务费",
+            "zh-hant-tw": "服務費用"
+          },
+          "daxPayMexFareDisplay": "0",
+          "mexCommissionDisplay": "8.834",
+          "onBehalfWithholdTaxDisplay": "0",
+          "mexVatAmountDisplay": "1.080",
+          "mexPitAmountDisplay": "540",
+          "originalPriceInMin": 60000
+        },
+        "times": {
+          "createdAt": "2026-05-24T12:30:00Z",
+          "deliveredAt": "2026-05-24T12:42:43Z",
+          "completedAt": "2026-05-24T12:49:41Z",
+          "expiredAt": "2026-05-24T12:35:08Z",
+          "acceptedAt": "2026-05-24T12:30:12Z",
+          "cancelledAt": null,
+          "readyAt": "2026-05-24T12:39:05Z",
+          "displayedAt": "2026-05-24T12:30:12Z",
+          "driverArriveRestoAt": null,
+          "preparationCompletedAt": "2026-05-24T12:42:43Z"
+        },
+        "state": "COMPLETED",
+        "merchant": {
+          "ID": "5-C74ZCVDGJ6D2GJ"
+        },
+        "deliveryTaskpoolStatus": "COMPLETED",
+        "preparationTaskpoolStatus": "COMPLETED",
+        "cancelCode": 0,
+        "displayID": "GF-970",
+        "bookingCode": "A-9CMXIHRGWQSGAV",
+        "paymentMethod": "Cashless",
+        "acceptedViaCall": false,
+        "acceptedViaAA": true,
+        "acknowledgedForAA": false,
+        "qsrModelType": 0,
+        "hasPromo": true,
+        "receiptAdditionalInfo": {
+          "supportFeatureFlags": {
+            "showCashToCollect": false
+          },
+          "printedCount": 2
+        },
+        "allowComplete": false,
+        "isTakeawayOrder": false,
+        "orderLevelDiscounts": [
+          {
+            "discountType": "order",
+            "discountName": "QUANNGON2L1XSDKAXV",
+            "discountAmountDisplay": "15.000",
+            "discountAmountValueInMin": 15000,
+            "isNewPromotion": false
+          },
+          {
+            "discountType": "order",
+            "discountName": "BOSSCHFH1XVCXJG",
+            "discountAmountDisplay": "9.000",
+            "discountAmountValueInMin": 9000,
+            "isNewPromotion": false
+          }
+        ],
+        "flags": {
+          "showReceiptEaterAddress": false,
+          "showForceCompleteButton": false,
+          "hideOrderDriverInfo": false,
+          "isPrintOrderRevampReceipt": true,
+          "isGrabInitiatedSplitOrder": false,
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPayOnCollect": false,
+          "merchantFeatureFlags": 0,
+          "isOPTPhase5Enabled": true,
+          "isManualAcceptMode": false,
+          "isM41Order": false,
+          "isTH5050Order": false
+        },
+        "scheduledOrderInfo": null,
+        "isLargeOrder": false,
+        "isEditable": false,
+        "isOrderEdited": false,
+        "isOrderWithFriends": false,
+        "uneditableReason": 10,
+        "cutlery": 2,
+        "cancelBy": "",
+        "cancelRole": "",
+        "leadsGenData": {
+          "isDeliverByMex": false,
+          "isOrderValueLow": false,
+          "deliveryFee": "",
+          "timeLeftToEnableCompleteButton": 0,
+          "geAllocationStatus": 0,
+          "grabExpressDriver": null,
+          "paxDistanceToMex": 966
+        },
+        "isBusyModeOrder": false,
+        "busyModeOrderPickupTime": "2026-05-24T12:30:00.971462855Z",
+        "busyModeApproach": 0,
+        "payMerchant": false,
+        "cancelledMsg": "",
+        "orderFlags": 4035792627008801000,
+        "orderStatsFlags": 4129,
+        "receiptFlags": 0,
+        "dineInInfo": null,
+        "chatroomInfo": {
+          "roomID": "e78e27869c8b20cc45ae90a97c686e49",
+          "status": 0
+        },
+        "membershipID": "",
+        "mcorInfo": null,
+        "mexReimbursementInfo": null,
+        "displayHighlights": {
+          "highlightItemCount": false,
+          "missingItemIDs": null,
+          "highMIWIRisk": false,
+          "highMIWIRiskItemIDs": []
+        },
+        "giftInfo": null,
+        "orderBookings": null,
+        "incidents": {
+          "hasError": false,
+          "data": []
+        },
+        "voucherInfo": null,
+        "stampInfo": {
+          "userConsentMsg": ""
+        },
+        "mexOPT": {
+          "submittedOPTFromMex": 492,
+          "sourceOPT": 0,
+          "isPreparationTaskDelayed": true,
+          "isReadyButtonAbused": true,
+          "actualOPT": null,
+          "estimatedOPTDoneAt": "2026-05-24T12:38:24.423772713Z",
+          "remainEditableOPTInSec": 0,
+          "configuration": {
+            "timeAdjustment": {
+              "minimumOPT": 1,
+              "maximumOPT": 60,
+              "maximumAdditionOPT": 20,
+              "maximumSubtractionOPT": 59
+            },
+            "step": 1,
+            "timerDuration": 2,
+            "editOPTWindowInSec": 60,
+            "editableOPTWindowInSec": 180
+          },
+          "preparationTaskDelayedByMin": 4
+        },
+        "replacementInfo": null,
+        "isEditableByPax": false,
+        "preparationTaskID": "",
+        "orderChangeLog": null,
+        "isEditableByPaxV2": false,
+        "reservationDeposit": null,
+        "orderReadyPhotoDetail": null,
+        "th5050OrderDetail": null,
+        "upcomingData": null
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:48.465Z",
+    "url": "https://api.grab.com/food/merchant/v3/open-status",
+    "payload": {
+      "isOpen": true,
+      "closeReason": 0,
+      "isInSpecialOpeningHourRange": false,
+      "meta": {
+        "pauseEndingTime": null,
+        "reopeningTime": null,
+        "isPausedByCapacityReached": false,
+        "currentBusyModePrepTime": 0,
+        "isMexBusyModeAutoChanged": false,
+        "busyModeStartTime": "0001-01-01T00:00:00Z",
+        "pauseDayCount": 0,
+        "openUntil": "2026-06-04T21:00:00+07:00",
+        "closedUntil": null,
+        "isOpen24Hours": false
+      },
+      "isMexInBusyMode": false,
+      "needDailyCheckIn": false,
+      "checkInMessage": {
+        "title": "",
+        "message": "",
+        "bottomMessage": ""
+      },
+      "upcomingFestive": null,
+      "manualAcceptMode": {
+        "maChangeType": 0,
+        "content": "",
+        "skipTempPauseStatus": false
+      },
+      "statusDisplayInfo": {
+        "statusLabel": "Open",
+        "statusColor": "#00B14F",
+        "backgroundColor": "#00B14F",
+        "textColor": "#FFFFFF",
+        "subTextColor": "#D9FCDE",
+        "statusContent": "Đang mở cửa"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:48.911Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=PreparingV2&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:37:38.092602117Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:49.030Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Upcoming&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:37:38.094692659Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:37:49.144Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Ready&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:37:38.095539666Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:38:48.460Z",
+    "url": "https://api.grab.com/food/merchant/v3/open-status",
+    "payload": {
+      "isOpen": true,
+      "closeReason": 0,
+      "isInSpecialOpeningHourRange": false,
+      "meta": {
+        "pauseEndingTime": null,
+        "reopeningTime": null,
+        "isPausedByCapacityReached": false,
+        "currentBusyModePrepTime": 0,
+        "isMexBusyModeAutoChanged": false,
+        "busyModeStartTime": "0001-01-01T00:00:00Z",
+        "pauseDayCount": 0,
+        "openUntil": "2026-06-04T21:00:00+07:00",
+        "closedUntil": null,
+        "isOpen24Hours": false
+      },
+      "isMexInBusyMode": false,
+      "needDailyCheckIn": false,
+      "checkInMessage": {
+        "title": "",
+        "message": "",
+        "bottomMessage": ""
+      },
+      "upcomingFestive": null,
+      "manualAcceptMode": {
+        "maChangeType": 0,
+        "content": "",
+        "skipTempPauseStatus": false
+      },
+      "statusDisplayInfo": {
+        "statusLabel": "Open",
+        "statusColor": "#00B14F",
+        "backgroundColor": "#00B14F",
+        "textColor": "#FFFFFF",
+        "subTextColor": "#D9FCDE",
+        "statusContent": "Đang mở cửa"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:38:48.794Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=PreparingV2&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:38:37.837421802Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:38:48.809Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Ready&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:38:37.836720517Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:38:48.821Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Upcoming&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:38:37.836142562Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:39:48.532Z",
+    "url": "https://api.grab.com/food/merchant/v3/open-status",
+    "payload": {
+      "isOpen": true,
+      "closeReason": 0,
+      "isInSpecialOpeningHourRange": false,
+      "meta": {
+        "pauseEndingTime": null,
+        "reopeningTime": null,
+        "isPausedByCapacityReached": false,
+        "currentBusyModePrepTime": 0,
+        "isMexBusyModeAutoChanged": false,
+        "busyModeStartTime": "0001-01-01T00:00:00Z",
+        "pauseDayCount": 0,
+        "openUntil": "2026-06-04T21:00:00+07:00",
+        "closedUntil": null,
+        "isOpen24Hours": false
+      },
+      "isMexInBusyMode": false,
+      "needDailyCheckIn": false,
+      "checkInMessage": {
+        "title": "",
+        "message": "",
+        "bottomMessage": ""
+      },
+      "upcomingFestive": null,
+      "manualAcceptMode": {
+        "maChangeType": 0,
+        "content": "",
+        "skipTempPauseStatus": false
+      },
+      "statusDisplayInfo": {
+        "statusLabel": "Open",
+        "statusColor": "#00B14F",
+        "backgroundColor": "#00B14F",
+        "textColor": "#FFFFFF",
+        "subTextColor": "#D9FCDE",
+        "statusContent": "Đang mở cửa"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:39:48.996Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Upcoming&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:39:37.946524251Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:39:49.013Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=PreparingV2&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:39:37.953583768Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:39:49.027Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Ready&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:39:37.954127492Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:47.945Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {}
+  },
+  {
+    "timestamp": "2026-06-04T13:40:47.965Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {}
+  },
+  {
+    "timestamp": "2026-06-04T13:40:47.983Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": true,
+      "resolvedBy": "rollout",
+      "resolvedWith": "portalEnableHideItem",
+      "variantID": "8719e8fbb27d4019ab726aa784594121"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.001Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {}
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.018Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": "[\"Nhat Tin Logistics\"]",
+      "resolvedBy": "rollout",
+      "resolvedWith": "MexSupplierCourierList",
+      "variantID": "27c347e78b074a5ca76eaa9e316e7b02"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.043Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {}
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.124Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": true,
+      "resolvedBy": "rollout",
+      "resolvedWith": "portalEnableEcommerceProductMerchantBulkUploadKey",
+      "variantID": "5c14abe675174c1f930d0a1e64831578"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.140Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": 50,
+      "resolvedBy": "rollout",
+      "resolvedWith": "linkStoreMaxLimit",
+      "variantID": "a3f73e7814b049aab79fd2e80bf67545"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.156Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": false,
+      "resolvedBy": "rollout",
+      "resolvedWith": "enablePortalTrackError",
+      "variantID": "bd2ead2e173d4e1ba79ea8d1c5689315"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.172Z",
+    "url": "https://merchant.grab.com/troy/user-profile/v1/merchant-selector",
+    "payload": {
+      "merchants": [
+        {
+          "id": "VNMG20260408022106013118",
+          "display_name": "Lơ Tơ Mơ Matcha and Teabar",
+          "type": "MLM",
+          "has_no_linked_store": false
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.234Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": false,
+      "resolvedBy": "rollout",
+      "resolvedWith": "portalEnableHermesConnection",
+      "variantID": "14d3debf453a46d68743b9e204c37885"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.271Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {}
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.310Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": false,
+      "resolvedBy": "rollout",
+      "resolvedWith": "portalEnableDownloadMpaTransaction",
+      "variantID": "db137ad979394f5386fd821f20c2aa96"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.356Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": "{\"calculationFactor\":100,\"defaultLimit\":10,\"defaultLimitMultipleAsync\":50,\"enableMarkOrdersSync\":true,\"enableMultipleAsync\":false}",
+      "resolvedBy": "rollout",
+      "resolvedWith": "markOrdersReadyConfig",
+      "variantID": "5986c1e721ae476386700be35977a3ab"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.413Z",
+    "url": "https://portal.grab.com/foodtroy/v1/VN/merchant-groups/catalog-stores?offset=0&limit=100",
+    "payload": {
+      "merchants": [
+        {
+          "merchantID": "5-C74ZCVDGJ6D2GJ",
+          "merchantName": "Lơ Tơ Mơ Matcha and Teabar",
+          "city": "Ho Chi Minh",
+          "address": "42, Đường Số 6, Linh Chiểu, Thành Phố Thủ Đức",
+          "modelType": "Integrated",
+          "status": "Yes",
+          "menuDisplayOption": "CATEGORY",
+          "timezone": "Asia/Ho_Chi_Minh",
+          "deliverOption": "ONLY_DELIVERY"
+        }
+      ],
+      "metadata": {
+        "limit": 100
+      },
+      "merchantGroupID": "VNMG20260408022106013118"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.429Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": false,
+      "resolvedBy": "rollout",
+      "resolvedWith": "enableMexSupplier",
+      "variantID": "8d92829bf54646fe9835d98c3ae6ce2a"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.477Z",
+    "url": "https://api.grab.com/food/merchant/v3/orders/001684346983-C76ZEZAANYCVLA",
+    "payload": {
+      "order": {
+        "orderID": "001684346983-C76ZEZAANYCVLA",
+        "driver": {
+          "name": "Đinh Tuấn Kiệt",
+          "mobileNumber": "",
+          "latitude": 0,
+          "longitude": 0,
+          "location": null,
+          "avatar": "https://s3-ap-southeast-1.amazonaws.com/myteksi/grab-id/profile_pic/1/-1/GFVgMTw-MBn1UTvUdLM0Nklfp20=_2024/06/11_.jpg"
+        },
+        "eater": {
+          "name": "***",
+          "mobileNumber": "",
+          "comment": "Gặp mặt ở sảnh",
+          "address": null
+        },
+        "itemInfo": {
+          "count": 2,
+          "items": [
+            {
+              "name": "Matcha Latte",
+              "quantity": 2,
+              "fare": {
+                "currencySymbol": "₫",
+                "priceDisplay": "60.000",
+                "originalItemPriceDisplay": "60.000",
+                "beforeAdjustedPriceDisplay": "60.000",
+                "priceFloat": 30000,
+                "priceInMin": 30000
+              },
+              "comment": "",
+              "modifierGroups": [
+                {
+                  "modifierGroupID": "VNMOG2026040914102739048",
+                  "modifierGroupName": "Kích cỡ",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409141027019371",
+                      "modifierName": "M",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                },
+                {
+                  "modifierGroupID": "VNMOG2026040914154383647",
+                  "modifierGroupName": "Mức đá",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409141543034217",
+                      "modifierName": "Có đá",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                },
+                {
+                  "modifierGroupID": "VNMOG2026040914173195468",
+                  "modifierGroupName": "Độ ngọt",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409141731021946",
+                      "modifierName": "Bình thường",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                },
+                {
+                  "modifierGroupID": "VNMOG2026040914211505596",
+                  "modifierGroupName": "Loại sữa",
+                  "modifiers": [
+                    {
+                      "modifierID": "VNMOD20260409142115018485",
+                      "modifierName": "Sữa tươi",
+                      "priceDisplay": "0",
+                      "quantity": 1,
+                      "revampedPriceDisplay": "0",
+                      "editedStatus": 0
+                    }
+                  ]
+                }
+              ],
+              "discountInfo": null,
+              "itemID": "VNITE20260408022707016374",
+              "editedStatus": 0,
+              "weight": null,
+              "itemCode": "",
+              "specialItemType": "",
+              "soldByWeight": false,
+              "outOfStockInstruction": null,
+              "parentID": "",
+              "parentName": "",
+              "skuID": "",
+              "isAddedAsReplacement": false,
+              "image": "https://food-cms.grab.com/item/VNITE20260408022707016374/photos/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.jpg",
+              "itemKey": "VNITE20260408022707016374-1b8b86f5999d4bd7b37a59f9cc37599c",
+              "barcode": "",
+              "originalItem": null,
+              "outOfStockInstructionV2": {
+                "title": "REMOVE",
+                "replacementItems": null
+              },
+              "originalFare": null,
+              "isUneditable": false,
+              "itemTags": null,
+              "memberPriceInfo": null
+            }
+          ],
+          "merchantItems": null
+        },
+        "fare": {
+          "currencySymbol": "₫",
+          "totalInCent": 0,
+          "adjustmentByDriverInCent": 0,
+          "totalDisplay": "36.000",
+          "subTotalDisplay": "60.000",
+          "taxDisplay": "0",
+          "adjustmentByDriverDisplay": "",
+          "promotionDisplay": "29.000",
+          "deliveryFeeDisplay": "12.000",
+          "passengerTotalDisplay": "43.000",
+          "totalDiscountAmountDisplay": "24.000",
+          "reducedPriceDisplay": "47.000",
+          "revampedSubtotalDisplay": "60.000",
+          "cancelledDisplay": "0",
+          "taxRate": "0.0000",
+          "merchantChargeDisplay": "",
+          "isIncludeMerchantChargeTax": false,
+          "subtotalIncludeMerchantCharge": "60.000",
+          "chargeFeeDescription": {
+            "en": "Restaurant packaging charge",
+            "id": "Biaya kemasan resto",
+            "ms": "Caj pembungkusan dari restoran",
+            "th": "ค่าบรรจุภัณฑ",
+            "vi": "Phí đồ gói mang về",
+            "zh": "商家包装费"
+          },
+          "smallOrderFeeDisplay": "0",
+          "serviceChargeFeeDisplay": "",
+          "serviceChargeFeeDescription": {
+            "en": "Service charge",
+            "id": "Biaya layanan",
+            "km": "ការគិតថ្លៃលើសេវាកម្ម",
+            "ms": "Caj Perkhidmatan",
+            "my": "ဝန်ဆောင်စရိတ်",
+            "th": "ค่าบริการ",
+            "vi": "Phí dịch vụ",
+            "zh": "服务费",
+            "zh-hant-tw": "服務費用"
+          },
+          "daxPayMexFareDisplay": "0",
+          "mexCommissionDisplay": "8.834",
+          "onBehalfWithholdTaxDisplay": "0",
+          "mexVatAmountDisplay": "1.080",
+          "mexPitAmountDisplay": "540",
+          "originalPriceInMin": 60000
+        },
+        "times": {
+          "createdAt": "2026-05-24T12:30:00Z",
+          "deliveredAt": "2026-05-24T12:42:43Z",
+          "completedAt": "2026-05-24T12:49:41Z",
+          "expiredAt": "2026-05-24T12:35:08Z",
+          "acceptedAt": "2026-05-24T12:30:12Z",
+          "cancelledAt": null,
+          "readyAt": "2026-05-24T12:39:05Z",
+          "displayedAt": "2026-05-24T12:30:12Z",
+          "driverArriveRestoAt": null,
+          "preparationCompletedAt": "2026-05-24T12:42:43Z"
+        },
+        "state": "COMPLETED",
+        "merchant": {
+          "ID": "5-C74ZCVDGJ6D2GJ"
+        },
+        "deliveryTaskpoolStatus": "COMPLETED",
+        "preparationTaskpoolStatus": "COMPLETED",
+        "cancelCode": 0,
+        "displayID": "GF-970",
+        "bookingCode": "A-9CMXIHRGWQSGAV",
+        "paymentMethod": "Cashless",
+        "acceptedViaCall": false,
+        "acceptedViaAA": true,
+        "acknowledgedForAA": false,
+        "qsrModelType": 0,
+        "hasPromo": true,
+        "receiptAdditionalInfo": {
+          "supportFeatureFlags": {
+            "showCashToCollect": false
+          },
+          "printedCount": 2
+        },
+        "allowComplete": false,
+        "isTakeawayOrder": false,
+        "orderLevelDiscounts": [
+          {
+            "discountType": "order",
+            "discountName": "QUANNGON2L1XSDKAXV",
+            "discountAmountDisplay": "15.000",
+            "discountAmountValueInMin": 15000,
+            "isNewPromotion": false
+          },
+          {
+            "discountType": "order",
+            "discountName": "BOSSCHFH1XVCXJG",
+            "discountAmountDisplay": "9.000",
+            "discountAmountValueInMin": 9000,
+            "isNewPromotion": false
+          }
+        ],
+        "flags": {
+          "showReceiptEaterAddress": false,
+          "showForceCompleteButton": false,
+          "hideOrderDriverInfo": false,
+          "isPrintOrderRevampReceipt": true,
+          "isGrabInitiatedSplitOrder": false,
+          "isAdsMarketingAttributed": false,
+          "isPaxNewCustomer": true,
+          "isPayOnCollect": false,
+          "merchantFeatureFlags": 0,
+          "isOPTPhase5Enabled": true,
+          "isManualAcceptMode": false,
+          "isM41Order": false,
+          "isTH5050Order": false
+        },
+        "scheduledOrderInfo": null,
+        "isLargeOrder": false,
+        "isEditable": false,
+        "isOrderEdited": false,
+        "isOrderWithFriends": false,
+        "uneditableReason": 10,
+        "cutlery": 2,
+        "cancelBy": "",
+        "cancelRole": "",
+        "leadsGenData": {
+          "isDeliverByMex": false,
+          "isOrderValueLow": false,
+          "deliveryFee": "",
+          "timeLeftToEnableCompleteButton": 0,
+          "geAllocationStatus": 0,
+          "grabExpressDriver": null,
+          "paxDistanceToMex": 966
+        },
+        "isBusyModeOrder": false,
+        "busyModeOrderPickupTime": "2026-05-24T12:30:00.971462855Z",
+        "busyModeApproach": 0,
+        "payMerchant": false,
+        "cancelledMsg": "",
+        "orderFlags": 4035792627008801000,
+        "orderStatsFlags": 4129,
+        "receiptFlags": 0,
+        "dineInInfo": null,
+        "chatroomInfo": {
+          "roomID": "e78e27869c8b20cc45ae90a97c686e49",
+          "status": 0
+        },
+        "membershipID": "",
+        "mcorInfo": null,
+        "mexReimbursementInfo": null,
+        "displayHighlights": {
+          "highlightItemCount": false,
+          "missingItemIDs": null,
+          "highMIWIRisk": false,
+          "highMIWIRiskItemIDs": []
+        },
+        "giftInfo": null,
+        "orderBookings": null,
+        "incidents": {
+          "hasError": false,
+          "data": []
+        },
+        "voucherInfo": null,
+        "stampInfo": {
+          "userConsentMsg": ""
+        },
+        "mexOPT": {
+          "submittedOPTFromMex": 492,
+          "sourceOPT": 0,
+          "isPreparationTaskDelayed": true,
+          "isReadyButtonAbused": true,
+          "actualOPT": null,
+          "estimatedOPTDoneAt": "2026-05-24T12:38:24.423772713Z",
+          "remainEditableOPTInSec": 0,
+          "configuration": {
+            "timeAdjustment": {
+              "minimumOPT": 1,
+              "maximumOPT": 60,
+              "maximumAdditionOPT": 20,
+              "maximumSubtractionOPT": 59
+            },
+            "step": 1,
+            "timerDuration": 2,
+            "editOPTWindowInSec": 60,
+            "editableOPTWindowInSec": 180
+          },
+          "preparationTaskDelayedByMin": 4
+        },
+        "replacementInfo": null,
+        "isEditableByPax": false,
+        "preparationTaskID": "",
+        "orderChangeLog": null,
+        "isEditableByPaxV2": false,
+        "reservationDeposit": null,
+        "orderReadyPhotoDetail": null,
+        "th5050OrderDetail": null,
+        "upcomingData": null
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.613Z",
+    "url": "https://api.grab.com/food/merchant/v3/open-status",
+    "payload": {
+      "isOpen": true,
+      "closeReason": 0,
+      "isInSpecialOpeningHourRange": false,
+      "meta": {
+        "pauseEndingTime": null,
+        "reopeningTime": null,
+        "isPausedByCapacityReached": false,
+        "currentBusyModePrepTime": 0,
+        "isMexBusyModeAutoChanged": false,
+        "busyModeStartTime": "0001-01-01T00:00:00Z",
+        "pauseDayCount": 0,
+        "openUntil": "2026-06-04T21:00:00+07:00",
+        "closedUntil": null,
+        "isOpen24Hours": false
+      },
+      "isMexInBusyMode": false,
+      "needDailyCheckIn": false,
+      "checkInMessage": {
+        "title": "",
+        "message": "",
+        "bottomMessage": ""
+      },
+      "upcomingFestive": null,
+      "manualAcceptMode": {
+        "maChangeType": 0,
+        "content": "",
+        "skipTempPauseStatus": false
+      },
+      "statusDisplayInfo": {
+        "statusLabel": "Open",
+        "statusColor": "#00B14F",
+        "backgroundColor": "#00B14F",
+        "textColor": "#FFFFFF",
+        "subTextColor": "#D9FCDE",
+        "statusContent": "Đang mở cửa"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.639Z",
+    "url": "https://api.grab.com/food/merchant/v2/merchants",
+    "payload": {
+      "merchant": {
+        "ID": "5-C74ZCVDGJ6D2GJ",
+        "name": "Lơ Tơ Mơ Matcha and Teabar",
+        "description": "",
+        "contractNumber": "84867517546",
+        "mobileNumber": "",
+        "tags": null,
+        "latitude": 10.853609085083008,
+        "longitude": 106.76966094970703,
+        "rating": 0,
+        "openingHours": [
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "21:00"
+              }
+            ]
+          },
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "20:00"
+              }
+            ]
+          },
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "21:00"
+              }
+            ]
+          },
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "21:00"
+              }
+            ]
+          },
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "21:00"
+              }
+            ]
+          },
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "21:00"
+              }
+            ]
+          },
+          {
+            "ranges": [
+              {
+                "start": "17:00",
+                "end": "21:00"
+              }
+            ]
+          }
+        ],
+        "countryID": 5,
+        "cityID": 9,
+        "timezone": "Asia/Ho_Chi_Minh",
+        "district": "Thành Phố Thủ Đức",
+        "address": "42, Đường Số 6, Linh Chiểu, Thành Phố Thủ Đức",
+        "tax": "0",
+        "businessType": 0,
+        "deliveryChargeInCents": 0,
+        "minConsumeFeeInCents": 0,
+        "halal": false,
+        "contractDate": null,
+        "expiredDate": null,
+        "status": "ACTIVE",
+        "isBookable": false,
+        "isSupportOnline": false,
+        "isAcceptSpecialOrderRequest": false,
+        "editorials": [],
+        "deliveryTime": 0,
+        "photo": "https://huawei-food-cms.grab.com/Merchants/5-C74ZCVDGJ6D2GJ/photos/fd92d095a3134894a6dcd290dd3fd86a_1775724856356040894.jpeg",
+        "backgroundImg": "",
+        "commission": 0,
+        "grabPayID": "",
+        "paymentType": 1,
+        "poiID": 0,
+        "webSite": "",
+        "isOpen": true,
+        "serviceTypeID": 1510,
+        "email": "lotomo.matcha@gmail.com",
+        "updatedAt": "2026-06-04T13:24:50Z",
+        "createdAt": "2026-04-08T02:21:06Z",
+        "closePeriodStart": null,
+        "closePeriodEnd": null,
+        "icon": "",
+        "timezoneOffsetInSec": 28800,
+        "model": "INTEGRATED",
+        "cePhone": "+842871098466",
+        "countryCode": "VN",
+        "autoAcceptGroup": "AutoAcceptGroupA",
+        "isAnalyticsDashboardEnabled": false,
+        "mlmPartner": 0,
+        "currency": {
+          "code": "VND",
+          "symbol": "₫",
+          "exponent": "0",
+          "exponentUnit": 0
+        },
+        "isMenuEditingEnabled": true,
+        "isPromoModuleEnabled": true,
+        "helpCenterUrl": {
+          "en-kh": "https://help.grab.com/merchant/en-kh/360001717951",
+          "en-my": "https://help.grab.com/merchant/en-my/360001717951",
+          "en-ph": "https://help.grab.com/merchant/en-ph/900006612563",
+          "en-sg": "https://help.grab.com/merchant/en-sg/360001717951",
+          "en-th": "https://help.grab.com/merchant/en-th/360001717951",
+          "id-id": "https://food-merchant-help.grab.com/hc/id",
+          "my-mm": "https://help.grab.com/merchant/my-mm",
+          "th-th": "https://help.grab.com/merchant/th-th/360001717951",
+          "vi-vn": "https://help.grab.com/merchant/vi-vn/360001717951"
+        },
+        "campaignHowItWorksUrl": {
+          "en-my": "https://grb.to/mex-promo-exid",
+          "en-ph": "https://grb.to/mex-promo-exid",
+          "en-sg": "https://grb.to/mex-promo-exid",
+          "en-th": "https://grb.to/mex-promo-exid",
+          "id-id": "https://grb.to/mex-promo-id",
+          "th-th": "https://help.grab.com/merchant/th-th/360040807092",
+          "vi-vn": "https://grb.to/mex-promo-exid"
+        },
+        "isLeadsGenHackSolutionEnabled": false,
+        "isPasscodeCreated": true,
+        "isPasscodeSkipped": false,
+        "isPasscodeEnabled": true,
+        "isPosIntegrationEnabled": false,
+        "isInboxEnabled": true,
+        "specialMerchantType": "",
+        "supportTakeaway": false,
+        "isMFCV2PartOneEnabled": true,
+        "isMFCV2PartTwoEnabled": true,
+        "isOrderLevelDiscountEnabled": true,
+        "isScheduledOrderEnabled": true,
+        "isTroyWhitelisted": false,
+        "isEnableTroy": true,
+        "grabPayGrabID": "8d32cb39-6e37-40a9-b193-c4bbcca84633",
+        "merchantFlag": {
+          "isSupportNewReceipt": true,
+          "isMexOptInCampaignEnabled": true,
+          "isBannerVisible": true,
+          "isTemperatureCardEnabled": true,
+          "isMSSEnabled": true,
+          "mssCampaignFeatureEnabled": {
+            "isAudienceEnabled": true,
+            "isDayOfWeekEnabled": true,
+            "isTimeOfDayEnabled": true,
+            "isKeywordsEnabled": true,
+            "isCampaignTypeBannerEnabled": true,
+            "isCampaignTypeSearchEnabled": true,
+            "isPromotionPriority": false
+          },
+          "isMexEditOrderEnabled": true,
+          "isTroyWholesaleEnabled": false,
+          "grabMartFeatureEnabled": {
+            "isGrabMartV2Enabled": false,
+            "isGrabMartV2ForAppBrandEnabled": false,
+            "isGrabMartV2ForItemAttributesEnabled": false,
+            "isGrabMartV2ForEditingItemAttributesEnabled": false,
+            "isPrintSKUCodeEnabled": false,
+            "departmentEnabled": false
+          },
+          "posFeatureEnabled": {
+            "isPosAvailabilityEnabled": true,
+            "isPosIntegrationEnabled": false
+          },
+          "isMexCancelOrderEnabled": true,
+          "isMenuInsightsEnabled": true,
+          "isConcurrencyHandlingEnabled": true,
+          "specialItemSettings": [
+            {
+              "specialItemType": "alcohol",
+              "enablePromo": true,
+              "enableCampaign": true,
+              "enableMerchantMenuEditor": false,
+              "editableFields": [
+                "availableStatus",
+                "availableAt",
+                "status"
+              ]
+            },
+            {
+              "specialItemType": "meal_for_one",
+              "enablePromo": true,
+              "enableCampaign": true,
+              "enableMerchantMenuEditor": true,
+              "editableFields": [
+                "availableStatus",
+                "availableAt",
+                "status",
+                "purchasable",
+                "attributes",
+                "SellingTimeID"
+              ]
+            }
+          ],
+          "skipProofMenuEnabled": true,
+          "menuEditorFeatureEnabled": {
+            "searchDepartment": true
+          },
+          "isEdithEnabled": false,
+          "isOptInCampaignEnabledV2": true,
+          "isMerchantChargesEnabled": false,
+          "storeFrontSettings": null,
+          "isOrderListV3Enabled": true,
+          "menuGroupSetting": {
+            "disableEditMenu": false,
+            "itemEditableFields": [
+              "item availability",
+              "item stock"
+            ]
+          },
+          "multiPicsSetting": {
+            "enable": true,
+            "maxSize": 4
+          },
+          "mssMarketingEntranceNewLogicEnabled": true,
+          "isMssMigrateToImageAdsEnabled": false,
+          "mcorV2FeatureEnabled": {
+            "McorV2Enabled": false,
+            "ExperimentGroup": "B",
+            "NewMorUIEnabled": false
+          },
+          "itemWeightLimitSetting": {
+            "itemWarningWeightLimit": 10000,
+            "itemBlockWeightLimit": 25000
+          },
+          "hasEnabledSendSTOCollectionNotification": false,
+          "isAlcoholSaleAllowed": true,
+          "isDepartmentTaggingEnhancement": true,
+          "isInventoryManagementEnabled": true,
+          "isTobaccoSaleAllowed": false,
+          "isGlobalMREEnabled": false,
+          "isAfterEarlyLiveV2CutoffTime": false,
+          "isEarlyLifeV2Rollout": false,
+          "isGoLive": false
+        },
+        "isTroyUserManagementEnabled": false,
+        "specialOpeningHours": [],
+        "tempPause": {
+          "endDateTime": "2026-04-13T00:00:00+07:00",
+          "metadata": {
+            "description": "Mex Launch"
+          }
+        },
+        "optInCampaignHowItWorksUrl": {
+          "en-id": "https://help.grab.com/merchant/id-id/360044825332-%F0%9F%8E%A6-Fitur-Promo-Rekomendasi",
+          "en-my": "https://www.grab.com/my/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore",
+          "en-ph": "https://www.grab.com/ph/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore",
+          "en-sg": "https://www.grab.com/sg/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore",
+          "en-th": "https://www.grab.com/th/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore",
+          "id-id": "https://www.grab.com/id/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore",
+          "th-th": "https://www.grab.com/th/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore",
+          "vi-vn": "https://www.grab.com/vn/merchant/recommended-promotions/?utm_source=inapp&utm_medium=learnmore"
+        },
+        "cancelOrderHelpCenterUrl": {
+          "en-kh": "https://help.grab.com/merchant/en-kh/900005726846",
+          "en-my": "https://help.grab.com/merchant/en-my/360027910271-Report-a-payment-dispute",
+          "en-ph": "https://docs.google.com/forms/d/e/1FAIpQLSdbIRr686x-Co9_k_irC81oCg6MLCIZMbHGEtEd_eShqRqljw/viewform",
+          "en-sg": "https://help.grab.com/merchant/en-sg/360045212172",
+          "en-th": "https://help.grab.com/merchant/en-sg/360027910271",
+          "id-id": "https://food-merchant-help.grab.com/hc/id/articles/360026383292-Pesanan-sudah-disiapkan-tapi-Mitra-Pengemudi-tidak-mengambil-makanan",
+          "my-mm": "https://help.grab.com/merchant/my-mm/4405162032281",
+          "th-th": "https://help.grab.com/merchant/th-th/4608932986137",
+          "vi-vn": "https://help.grab.com/merchant/vi-vn/360027893552-Yeu-cau-boi-hoan-djon-hang-HUY-cua-Quan-Ua-Thich"
+        },
+        "isLeadsGenMerchant": false,
+        "isEnableLeadsGenFulfill": false,
+        "role": "Owner",
+        "featureFlag": 3890203290691944400,
+        "busyModeConfig": {
+          "busyModeFptLowerBound": 15,
+          "busyModeFptUpperBound": 60,
+          "busyModeApproach": 1
+        },
+        "smallPicture": "https://huawei-food-cms.grab.com/Merchants/5-C74ZCVDGJ6D2GJ/pictures/9dc87948bc574f9797f8c770cd5255cd_1778433635764403339.jpg",
+        "reviewTooltipUrl": "https://help.grab.com/merchant/vi-vn/4408080591001",
+        "orderHelpCenterUrl": {
+          "vi": "https://help.grab.com/merchant/vi-vn/360004458172-Quan-ly-djon-hang-GrabFood"
+        },
+        "blockOnDemandOrders": false,
+        "storefrontEnabled": false,
+        "supportDelivery": true,
+        "supportDineIn": false,
+        "dineInOpeningHours": [
+          {
+            "ranges": []
+          },
+          {
+            "ranges": []
+          },
+          {
+            "ranges": []
+          },
+          {
+            "ranges": []
+          },
+          {
+            "ranges": []
+          },
+          {
+            "ranges": []
+          },
+          {
+            "ranges": []
+          }
+        ],
+        "isDineInOpeningHoursSet": false,
+        "supportScheduledOrders": true,
+        "isDineInOpen": false,
+        "photoExhibition": null,
+        "menuTranslationSetting": {
+          "menuDefaultLanguage": "vi",
+          "menuSupportedLanguages": [
+            "en",
+            "ko",
+            "zh",
+            "ja"
+          ],
+          "isAutoTranslationEnabled": true,
+          "isTranslationFieldMandatory": false,
+          "languageFullNames": {
+            "en": "Tiếng Anh",
+            "id": "Tiếng Indonesia",
+            "ja": "Tiếng Nhật",
+            "km": "Tiếng Khmer",
+            "ko": "Tiếng Hàn",
+            "ms": "Tiếng Malaysia",
+            "my": "Tiếng Miến Điện",
+            "th": "Tiếng Thái",
+            "vi": "Tiếng Việt",
+            "zh": "Tiếng Trung"
+          },
+          "translationFieldMandatoryLanguages": [],
+          "translationModelSupportedLanguages": [
+            "en"
+          ]
+        },
+        "featureFlags": {
+          "EnableAIDescriptionSelfServe": true,
+          "enableBCRS": false,
+          "enableFlexibleModifierQuantityMexPhase1": false,
+          "enableGrabSplitLargeOrder": true,
+          "enableM41BasedOnAttribute": false,
+          "enableMexAiAssistantHome": true,
+          "enableMexAiAssistantNewEntrance": true,
+          "enableMexAiAssistantTileEntrance": true,
+          "enableMexAiAssistantTopFloor": true,
+          "enableMexMenuUniversalSearch": false,
+          "fedOptimizeMenuMainItemCode": true,
+          "isCashierAccountabilityGroupBEnable": true,
+          "isMORV3VNExperimentEnable": true,
+          "mexAiAssistantMexAppEnabled": true
+        },
+        "locationPhoneNumbers": null,
+        "nameTranslation": null,
+        "brandNameTranslation": null,
+        "isChainMerchant": false,
+        "featureFlagMapping": {
+          "EnableAutoOpenMexWhenOrderComeIn": true,
+          "EnableDepartmentTaggingEnhancement": true,
+          "EnableEditableFields": true,
+          "FoodInventoryManagementEnabled": true,
+          "IsBundleOfferPhase2Enabled": true,
+          "IsBundleOffersEnabled": true,
+          "IsBusyModeSupported": true,
+          "IsCategoryMoreOptionsEnabled": true,
+          "IsDecreaseFrequencyEnable": true,
+          "IsEnableDineOutReviews": true,
+          "IsEnableEditOrderMarkItemUnavailable": true,
+          "IsEnableMerchantReplies": true,
+          "IsEnableMexEditOrderMoreThanOnce": true,
+          "IsEnableMexMenuEditMenuTranslation": true,
+          "IsEnableMexMenuEditMultiLanguageMenuTranslation": true,
+          "IsEnableMexReviewForMexPortal": true,
+          "IsEnableMexReviewReplyButtonUIV2": true,
+          "IsMenuGroupEnabled": true,
+          "IsMexHermesMessageEnabled": true,
+          "IsMexNewPollIntervalEnabled": true,
+          "IsMexReimbursementEngineEnabled": true,
+          "IsNewMerchantUGCReviewEnabled": true,
+          "IsSellingTimeEnabled": true,
+          "IsSeparateMEOEditAndCancel": true,
+          "IsTempPauseEndOfDayEnabled": true,
+          "MerchantAppeasementVoucherEnabled": true,
+          "MerchantAppeasementVoucherFFUEnabled": true,
+          "MerchantOOSHandlingEnabled": true,
+          "MerchantSearchItemsImprovementsEnabled": true,
+          "MerchantSearchOrdersImprovementsEnabled": true,
+          "MexOrderReadyEnabled": true,
+          "MexPaxChatEnabled": true,
+          "OrderManagementRevampEnabled": true,
+          "SOHEnhancementEnabled": true
+        },
+        "publicEmail": "",
+        "storeContactNumber": "",
+        "storeContactEmail": "",
+        "dineoutListingPhotoUrl": ""
+      },
+      "nextOpenTime": null,
+      "updateOpeningHoursTimes": 5,
+      "maxOpeningPeriods": 3,
+      "setting": {
+        "acceptCountDownInMin": 5,
+        "updateOpeningHoursTimes": 5,
+        "maxOpeningPeriods": 3,
+        "vat": 0.1,
+        "inboxMessageCount": 500,
+        "campaign": {
+          "itemLevel": "NONE",
+          "orderLevel": "NONE",
+          "freeItem": "NONE",
+          "deliveryFee": "NONE",
+          "serviceTypes": [
+            {
+              "value": 0,
+              "name": "Delivery",
+              "displayName": ""
+            }
+          ]
+        },
+        "isPayOnCollect": false
+      },
+      "merchantUser": {
+        "appUserEmail": "lotomo.matcha@gmail.com"
+      },
+      "dailyCheckIn": true
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.658Z",
+    "url": "https://api.grab.com/food/merchant/v3/open-status",
+    "payload": {
+      "isOpen": true,
+      "closeReason": 0,
+      "isInSpecialOpeningHourRange": false,
+      "meta": {
+        "pauseEndingTime": null,
+        "reopeningTime": null,
+        "isPausedByCapacityReached": false,
+        "currentBusyModePrepTime": 0,
+        "isMexBusyModeAutoChanged": false,
+        "busyModeStartTime": "0001-01-01T00:00:00Z",
+        "pauseDayCount": 0,
+        "openUntil": "2026-06-04T21:00:00+07:00",
+        "closedUntil": null,
+        "isOpen24Hours": false
+      },
+      "isMexInBusyMode": false,
+      "needDailyCheckIn": false,
+      "checkInMessage": {
+        "title": "",
+        "message": "",
+        "bottomMessage": ""
+      },
+      "upcomingFestive": null,
+      "manualAcceptMode": {
+        "maChangeType": 0,
+        "content": "",
+        "skipTempPauseStatus": false
+      },
+      "statusDisplayInfo": {
+        "statusLabel": "Open",
+        "statusColor": "#00B14F",
+        "backgroundColor": "#00B14F",
+        "textColor": "#FFFFFF",
+        "subTextColor": "#D9FCDE",
+        "statusContent": "Đang mở cửa"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.687Z",
+    "url": "https://public.grab.com/x-transmitter/v2/scribesdk-web/webVariable/",
+    "payload": {
+      "value": "[\"Nhat Tin Logistics\"]",
+      "resolvedBy": "rollout",
+      "resolvedWith": "MexSupplierCourierList",
+      "variantID": "27c347e78b074a5ca76eaa9e316e7b02"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.749Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v1/reports/daily-pagination?states=&startTime=2026-06-04T00%3A00%3A00%2B07%3A00&endTime=2026-06-04T23%3A59%3A59%2B07%3A00&pageIndex=0&pageSize=50",
+    "payload": {
+      "hasMore": false,
+      "pageIndex": 0,
+      "pageEndTime": "2026-06-04T23:59:59+07:00",
+      "statements": [],
+      "pageSize": 50
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.916Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Ready&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:40:37.993857162Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.934Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=PreparingV2&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:40:37.994995186Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.951Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Upcoming&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:40:37.999988996Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.970Z",
+    "url": "https://api.grab.com/food/merchant/v1/merchant-report-summary?startDate=2026-06-04",
+    "payload": {
+      "currency": {
+        "code": "VND",
+        "symbol": "₫",
+        "exponent": "0",
+        "exponentUnit": 0
+      },
+      "totalEarningsInMinorUnit": 0,
+      "totalEarningDisplay": "0",
+      "revenueInMinorUnit": 0,
+      "revenueDisplay": "0",
+      "completedOrders": 0,
+      "cancelledOrders": 0
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:40:48.992Z",
+    "url": "https://api.grab.com/food/merchant/v2/menu",
+    "payload": {
+      "categories": [
+        {
+          "categoryID": "VNCAT2026040914125133577",
+          "categoryName": "Lơ Mơ Trà",
+          "availableStatus": 1,
+          "sortOrder": 200,
+          "items": [],
+          "sellingTimeID": "VNSLT202604080227070322",
+          "nameTranslation": {
+            "translation": {
+              "en": "Apricot Tea",
+              "ko": "로 모 차",
+              "zh": "罗梅茶"
+            },
+            "originalTranslationFromDS": null
+          },
+          "menuScanError": null,
+          "menuScanTaskMeta": null
+        },
+        {
+          "categoryID": "VNCAT2026040914123682989",
+          "categoryName": "Lơ Mơ Sữa",
+          "availableStatus": 1,
+          "sortOrder": 200,
+          "items": [
+            {
+              "itemID": "VNITE2026041614083585084",
+              "itemName": "Trà xanh nhài sữa",
+              "availableStatus": 1,
+              "priceDisplay": "25.000₫",
+              "sortOrder": 1,
+              "description": "",
+              "imageURL": "",
+              "priceInMin": 25000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914173195468",
+                "VNMOG2026040914154383647"
+              ],
+              "soldByWeight": false,
+              "webPURL": "",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "25.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": null,
+              "imageURLs": null,
+              "webPURLs": [],
+              "serviceTypePriceRange": {
+                "Delivery": "25.000₫"
+              },
+              "availableAt": "2026-05-24T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Green jasmine milk tea",
+                  "ko": "녹차 자스민 밀크티",
+                  "zh": "茉莉奶绿"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "ELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914123682989",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            }
+          ],
+          "sellingTimeID": "VNSLT202604080227070322",
+          "nameTranslation": {
+            "translation": {
+              "en": "Apricot Seed Milk",
+              "ko": "살구 밀크",
+              "zh": "罗望子牛奶"
+            },
+            "originalTranslationFromDS": null
+          },
+          "menuScanError": null,
+          "menuScanTaskMeta": null
+        },
+        {
+          "categoryID": "VNCAT2026040914113542190",
+          "categoryName": "Lơ Mơ Matcha",
+          "availableStatus": 1,
+          "sortOrder": 200,
+          "items": [
+            {
+              "itemID": "VNITE2026041604383653893",
+              "itemName": "Matcha Creamy",
+              "availableStatus": 2,
+              "priceDisplay": "35.000₫",
+              "sortOrder": 6,
+              "description": "",
+              "imageURL": "",
+              "priceInMin": 35000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914211505596",
+                "VNMOG2026040914102739048",
+                "VNMOG2026040914173195468"
+              ],
+              "soldByWeight": false,
+              "webPURL": "",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "35.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": null,
+              "imageURLs": null,
+              "webPURLs": [],
+              "serviceTypePriceRange": {
+                "Delivery": "35.000₫"
+              },
+              "availableAt": "2026-06-04T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Matcha Creamy",
+                  "ko": "말차 크리미",
+                  "zh": "抹茶奶油"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "UNELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914113542190",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            },
+            {
+              "itemID": "VNITE2026041604361441405",
+              "itemName": "Matcha Strawberry",
+              "availableStatus": 2,
+              "priceDisplay": "35.000₫",
+              "sortOrder": 5,
+              "description": "",
+              "imageURL": "",
+              "priceInMin": 35000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914211505596",
+                "VNMOG2026040914102739048",
+                "VNMOG2026040914154383647",
+                "VNMOG2026040914173195468"
+              ],
+              "soldByWeight": false,
+              "webPURL": "",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "35.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": null,
+              "imageURLs": null,
+              "webPURLs": [],
+              "serviceTypePriceRange": {
+                "Delivery": "35.000₫"
+              },
+              "availableAt": "2026-06-04T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Matcha Strawberry",
+                  "ko": "말차 딸기",
+                  "zh": "抹茶草莓"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "UNELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914113542190",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            },
+            {
+              "itemID": "VNITE2026041604343157576",
+              "itemName": "Matcha Mango",
+              "availableStatus": 2,
+              "priceDisplay": "35.000₫",
+              "sortOrder": 4,
+              "description": "",
+              "imageURL": "https://food-cms.grab.com/item/VNITE2026041604343157576/photos/menueditor_item_af179c1bc44544edadb0b27b52e1a0b2_1776949447647055545.jpg",
+              "priceInMin": 35000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914211505596",
+                "VNMOG2026040914102739048",
+                "VNMOG2026040914154383647",
+                "VNMOG2026040914173195468"
+              ],
+              "soldByWeight": false,
+              "webPURL": "https://food-cms.grab.com/compressed_webp/items/VNITE2026041604343157576/detail/menueditor_item_af179c1bc44544edadb0b27b52e1a0b2_1776949447647055545.webp",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "35.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": null,
+              "imageURLs": [
+                "https://food-cms.grab.com/item/VNITE2026041604343157576/photos/menueditor_item_af179c1bc44544edadb0b27b52e1a0b2_1776949447647055545.jpg",
+                "https://food-cms.grab.com/item/VNITE2026041604343157576/photos/menueditor_item_dfde09effb914d4fbaceea9f0d077dde_1776736910841997415.jpg"
+              ],
+              "webPURLs": [
+                "https://food-cms.grab.com/compressed_webp/items/VNITE2026041604343157576/detail/menueditor_item_af179c1bc44544edadb0b27b52e1a0b2_1776949447647055545.webp",
+                "https://food-cms.grab.com/compressed_webp/items/VNITE2026041604343157576/detail/menueditor_item_dfde09effb914d4fbaceea9f0d077dde_1776736910841997415.webp"
+              ],
+              "serviceTypePriceRange": {
+                "Delivery": "35.000₫"
+              },
+              "availableAt": "2026-06-04T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Matcha Mango",
+                  "ko": "말차 망고",
+                  "zh": "抹茶芒果"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "UNELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914113542190",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            },
+            {
+              "itemID": "VNITE2026041604333278204",
+              "itemName": "Matcha Caramel",
+              "availableStatus": 2,
+              "priceDisplay": "35.000₫",
+              "sortOrder": 3,
+              "description": "",
+              "imageURL": "https://food-cms.grab.com/item/VNITE2026041604333278204/photos/menueditor_item_f5bc5c560c604dbeaeda5452f133e615_1776949382749197056.jpg",
+              "priceInMin": 35000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914211505596",
+                "VNMOG2026040914173195468",
+                "VNMOG2026040914154383647",
+                "VNMOG2026040914102739048"
+              ],
+              "soldByWeight": false,
+              "webPURL": "https://food-cms.grab.com/compressed_webp/items/VNITE2026041604333278204/detail/menueditor_item_f5bc5c560c604dbeaeda5452f133e615_1776949382749197056.webp",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "35.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": null,
+              "imageURLs": [
+                "https://food-cms.grab.com/item/VNITE2026041604333278204/photos/menueditor_item_f5bc5c560c604dbeaeda5452f133e615_1776949382749197056.jpg",
+                "https://food-cms.grab.com/item/VNITE2026041604333278204/photos/menueditor_item_951a58189e49468e88bf0b02d874f690_1776736998877448215.jpg"
+              ],
+              "webPURLs": [
+                "https://food-cms.grab.com/compressed_webp/items/VNITE2026041604333278204/detail/menueditor_item_f5bc5c560c604dbeaeda5452f133e615_1776949382749197056.webp",
+                "https://food-cms.grab.com/compressed_webp/items/VNITE2026041604333278204/detail/menueditor_item_951a58189e49468e88bf0b02d874f690_1776736998877448215.webp"
+              ],
+              "serviceTypePriceRange": {
+                "Delivery": "35.000₫"
+              },
+              "availableAt": "2026-06-04T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Matcha Caramel",
+                  "ko": "말차 카라멜",
+                  "zh": "抹茶焦糖"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "UNELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914113542190",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            },
+            {
+              "itemID": "VNITE2026040914141618414",
+              "itemName": "Matcha Cold Whisk",
+              "availableStatus": 2,
+              "priceDisplay": "35.000₫",
+              "sortOrder": 2,
+              "description": "",
+              "imageURL": "https://food-cms.grab.com/item/VNITE2026040914141618414/photos/menueditor_item_ce34622e76da4d90a1b37bea3dd3eaa6_1776949306557904197.jpg",
+              "priceInMin": 35000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914102739048",
+                "VNMOG2026040914211505596",
+                "VNMOG2026040914154383647",
+                "VNMOG2026040914173195468"
+              ],
+              "soldByWeight": false,
+              "webPURL": "https://food-cms.grab.com/compressed_webp/items/VNITE2026040914141618414/detail/menueditor_item_ce34622e76da4d90a1b37bea3dd3eaa6_1776949306557904197.webp",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "35.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": [
+                {
+                  "itemID": "VNITE2026040914141618414",
+                  "attributeID": "ATT-C4JTFFX1HEMYSE8137",
+                  "value": "Vietnam",
+                  "cluster": "Origin of Goods",
+                  "version": 15,
+                  "itemAttributeValueID": "ITEATTRVAL-C75KKE5UJLM2DA-25910661",
+                  "status": "Enabled",
+                  "attributeClusterID": "ACL-C4JTFEMBL3DEEA5920",
+                  "metadata": {}
+                },
+                {
+                  "itemID": "VNITE2026040914141618414",
+                  "attributeID": "",
+                  "value": "thủ đức",
+                  "cluster": "Manufacturer Address",
+                  "version": 15,
+                  "itemAttributeValueID": "ITEATTRVAL-C75KKE5UJLNBTE-50832845",
+                  "status": "Enabled",
+                  "attributeClusterID": "ACL-C4KFT2VFV6MXGT2580",
+                  "metadata": {}
+                },
+                {
+                  "itemID": "VNITE2026040914141618414",
+                  "attributeID": "",
+                  "value": "thịnh",
+                  "cluster": "Manufacturer Name",
+                  "version": 15,
+                  "itemAttributeValueID": "ITEATTRVAL-C75KKE5UJLNAWA-50832845",
+                  "status": "Enabled",
+                  "attributeClusterID": "ACL-C4KANZNESA4ENX0654",
+                  "metadata": {}
+                }
+              ],
+              "imageURLs": [
+                "https://food-cms.grab.com/item/VNITE2026040914141618414/photos/menueditor_item_ce34622e76da4d90a1b37bea3dd3eaa6_1776949306557904197.jpg"
+              ],
+              "webPURLs": [
+                "https://food-cms.grab.com/compressed_webp/items/VNITE2026040914141618414/detail/menueditor_item_ce34622e76da4d90a1b37bea3dd3eaa6_1776949306557904197.webp"
+              ],
+              "serviceTypePriceRange": {
+                "Delivery": "35.000₫"
+              },
+              "availableAt": "2026-06-04T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Matcha Cold Whisk",
+                  "ko": "말차 콜드 휘스크",
+                  "zh": "抹茶冷搅拌"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "UNELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914113542190",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            },
+            {
+              "itemID": "VNITE20260408022707016374",
+              "itemName": "Matcha Latte",
+              "availableStatus": 1,
+              "priceDisplay": "30.000₫",
+              "sortOrder": 1,
+              "description": "",
+              "imageURL": "https://food-cms.grab.com/item/VNITE20260408022707016374/photos/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.jpg",
+              "priceInMin": 30000,
+              "weight": null,
+              "itemCode": "",
+              "itemClassID": "",
+              "specialItemType": "",
+              "itemClassName": "",
+              "skuID": "",
+              "brandName": "",
+              "itemStock": null,
+              "linkedModifierGroupIDs": [
+                "VNMOG2026040914102739048",
+                "VNMOG2026040914154383647",
+                "VNMOG2026040914173195468",
+                "VNMOG2026040914211505596"
+              ],
+              "soldByWeight": false,
+              "webPURL": "https://food-cms.grab.com/compressed_webp/items/VNITE20260408022707016374/detail/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.webp",
+              "sellingTimeID": "VNSLT202604080227070322",
+              "priceRange": "30.000₫",
+              "advancedPricing": null,
+              "purchasability": null,
+              "attributes": [
+                {
+                  "itemID": "VNITE20260408022707016374",
+                  "attributeID": "",
+                  "value": "thủ đức",
+                  "cluster": "Manufacturer Address",
+                  "version": 23,
+                  "itemAttributeValueID": "ITEATTRVAL-C74ZE8E2SE5FV6-78622230",
+                  "status": "Enabled",
+                  "attributeClusterID": "ACL-C4KFT2VFV6MXGT2580",
+                  "metadata": {}
+                },
+                {
+                  "itemID": "VNITE20260408022707016374",
+                  "attributeID": "ATT-C4JTFFX1HEMYSE8137",
+                  "value": "Vietnam",
+                  "cluster": "Origin of Goods",
+                  "version": 23,
+                  "itemAttributeValueID": "ITEATTRVAL-C74ZE8E2SE5CWA-59240470",
+                  "status": "Enabled",
+                  "attributeClusterID": "ACL-C4JTFEMBL3DEEA5920",
+                  "metadata": {}
+                },
+                {
+                  "itemID": "VNITE20260408022707016374",
+                  "attributeID": "",
+                  "value": "Luân",
+                  "cluster": "Manufacturer Name",
+                  "version": 23,
+                  "itemAttributeValueID": "ITEATTRVAL-C74ZE8E2SE5FJA-78622230",
+                  "status": "Enabled",
+                  "attributeClusterID": "ACL-C4KANZNESA4ENX0654",
+                  "metadata": {}
+                }
+              ],
+              "imageURLs": [
+                "https://food-cms.grab.com/item/VNITE20260408022707016374/photos/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.jpg",
+                "https://food-cms.grab.com/item/VNITE20260408022707016374/photos/menueditor_item_df69a6752e094f8fbf90635d83e6f2be_1776736737115888825.jpg"
+              ],
+              "webPURLs": [
+                "https://food-cms.grab.com/compressed_webp/items/VNITE20260408022707016374/detail/menueditor_item_e7d244f8184744e1a8a2ec9d8ad6e2bd_1776949262768627186.webp",
+                "https://food-cms.grab.com/compressed_webp/items/VNITE20260408022707016374/detail/menueditor_item_df69a6752e094f8fbf90635d83e6f2be_1776736737115888825.webp"
+              ],
+              "serviceTypePriceRange": {
+                "Delivery": "30.000₫"
+              },
+              "availableAt": "2026-04-21T17:00:00Z",
+              "stockPrediction": null,
+              "parentItemClassID": "",
+              "parentItemClassName": "",
+              "nameTranslation": {
+                "translation": {
+                  "en": "Green Tea Latte",
+                  "ko": "말차 라떼",
+                  "zh": "抹茶拿铁"
+                },
+                "originalTranslationFromDS": null
+              },
+              "descriptionTranslation": null,
+              "supportedAttributeClusterIDs": null,
+              "prediction": null,
+              "menuScanError": null,
+              "aiGeneratedFields": null,
+              "suggestFields": null,
+              "soldQuantity": 0,
+              "itemCampaignInfo": null,
+              "menuScanTaskMeta": null,
+              "oosNonReplacementReason": "",
+              "eligibleSellingStatus": "ELIGIBLE",
+              "m41MetaData": null,
+              "categoryID": "VNCAT2026040914113542190",
+              "categoryName": "",
+              "failedPhotos": null,
+              "bcrsInfo": null
+            }
+          ],
+          "sellingTimeID": "VNSLT202604080227070322",
+          "nameTranslation": {
+            "translation": {
+              "en": "Matcha Apricot",
+              "ko": "로 모 말차",
+              "zh": "迷糊抹茶"
+            },
+            "originalTranslationFromDS": null
+          },
+          "menuScanError": null,
+          "menuScanTaskMeta": null
+        }
+      ],
+      "modifierGroups": [
+        {
+          "modifierGroupID": "VNMOG2026040914211505596",
+          "modifierGroupName": "Loại sữa",
+          "selectionRangeMin": 1,
+          "selectionRangeMax": 1,
+          "modifiers": [
+            {
+              "modifierID": "VNMOD20260409142115018485",
+              "modifierName": "Sữa tươi",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 3,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Fresh Milk",
+                  "ko": "신선한 우유",
+                  "zh": "鲜牛奶"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409142115026757",
+              "modifierName": "Sữa hạt",
+              "priceDisplay": "6.000₫",
+              "isNeedExtraCost": true,
+              "availableStatus": 1,
+              "sortOrder": 2,
+              "quantity": 0,
+              "priceInMin": 6000,
+              "priceRange": "6.000₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Nut Milk",
+                  "ko": "곡물 우유",
+                  "zh": "坚果奶"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409142115031646",
+              "modifierName": "Sữa thanh trùng Meji",
+              "priceDisplay": "6.000₫",
+              "isNeedExtraCost": true,
+              "availableStatus": 3,
+              "sortOrder": 1,
+              "quantity": 0,
+              "priceInMin": 6000,
+              "priceRange": "6.000₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Meji Pasteurized Milk",
+                  "ko": "메이지 저온살균 우유",
+                  "zh": "明治巴氏杀菌牛奶"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            }
+          ],
+          "relatedItemIDs": [
+            "VNITE2026041604361441405",
+            "VNITE20260408022707016374",
+            "VNITE2026041604333278204",
+            "VNITE2026041604343157576",
+            "VNITE2026041604383653893",
+            "VNITE2026040914141618414"
+          ],
+          "availableStatus": 1,
+          "nameTranslation": {
+            "translation": {
+              "en": "Milk type",
+              "ko": "우유 종류",
+              "zh": "奶种类"
+            },
+            "originalTranslationFromDS": null
+          },
+          "isM41ItemLinked": false,
+          "isFlexibleQuantityEnabled": false,
+          "maxModifierSelectionQuantity": 1
+        },
+        {
+          "modifierGroupID": "VNMOG2026040914173195468",
+          "modifierGroupName": "Độ ngọt",
+          "selectionRangeMin": 1,
+          "selectionRangeMax": 1,
+          "modifiers": [
+            {
+              "modifierID": "VNMOD20260409141731014667",
+              "modifierName": "Thêm ngọt",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 4,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Extra Sweet",
+                  "ko": "추가 단맛",
+                  "zh": "加甜"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409141731021946",
+              "modifierName": "Bình thường",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 3,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Normal",
+                  "ko": "보통",
+                  "zh": "普通"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409141731035988",
+              "modifierName": "ít ngọt",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 2,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Less Sweet",
+                  "ko": "덜 달게",
+                  "zh": "少甜"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409141731047778",
+              "modifierName": "Không đường",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 1,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "No Sugar",
+                  "ko": "설탕 없음",
+                  "zh": "无糖"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            }
+          ],
+          "relatedItemIDs": [
+            "VNITE2026041614083585084",
+            "VNITE20260408022707016374",
+            "VNITE2026041604343157576",
+            "VNITE2026041604383653893",
+            "VNITE2026041604361441405",
+            "VNITE2026041604333278204",
+            "VNITE2026040914141618414"
+          ],
+          "availableStatus": 1,
+          "nameTranslation": {
+            "translation": {
+              "en": "Sweetness Level",
+              "ko": "단맛",
+              "zh": "甜度"
+            },
+            "originalTranslationFromDS": null
+          },
+          "isM41ItemLinked": false,
+          "isFlexibleQuantityEnabled": false,
+          "maxModifierSelectionQuantity": 1
+        },
+        {
+          "modifierGroupID": "VNMOG2026040914154383647",
+          "modifierGroupName": "Mức đá",
+          "selectionRangeMin": 1,
+          "selectionRangeMax": 1,
+          "modifiers": [
+            {
+              "modifierID": "VNMOD20260409141543013338",
+              "modifierName": "Không đá",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 3,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "No Ice",
+                  "ko": "얼음 없음",
+                  "zh": "不加冰"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409141543024593",
+              "modifierName": "Ít đá",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 2,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "Less Ice",
+                  "ko": "얼음 적게",
+                  "zh": "少冰"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409141543034217",
+              "modifierName": "Có đá",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 1,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "With Ice",
+                  "ko": "얼음 있음",
+                  "zh": "有冰"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            }
+          ],
+          "relatedItemIDs": [
+            "VNITE2026041614083585084",
+            "VNITE2026040914141618414",
+            "VNITE2026041604333278204",
+            "VNITE2026041604343157576",
+            "VNITE20260408022707016374",
+            "VNITE2026041604361441405"
+          ],
+          "availableStatus": 1,
+          "nameTranslation": {
+            "translation": {
+              "en": "Ice Level",
+              "ko": "얼음 수준",
+              "zh": "冰块"
+            },
+            "originalTranslationFromDS": null
+          },
+          "isM41ItemLinked": false,
+          "isFlexibleQuantityEnabled": false,
+          "maxModifierSelectionQuantity": 1
+        },
+        {
+          "modifierGroupID": "VNMOG2026040914102739048",
+          "modifierGroupName": "Kích cỡ",
+          "selectionRangeMin": 1,
+          "selectionRangeMax": 1,
+          "modifiers": [
+            {
+              "modifierID": "VNMOD20260409141027019371",
+              "modifierName": "M",
+              "priceDisplay": "",
+              "isNeedExtraCost": false,
+              "availableStatus": 1,
+              "sortOrder": 2,
+              "quantity": 0,
+              "priceInMin": 0,
+              "priceRange": "0₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "M",
+                  "ko": "M",
+                  "zh": "M"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            },
+            {
+              "modifierID": "VNMOD20260409141027029860",
+              "modifierName": "L",
+              "priceDisplay": "7.000₫",
+              "isNeedExtraCost": true,
+              "availableStatus": 1,
+              "sortOrder": 1,
+              "quantity": 0,
+              "priceInMin": 7000,
+              "priceRange": "7.000₫",
+              "advancedPricing": null,
+              "nameTranslation": {
+                "translation": {
+                  "en": "L",
+                  "ko": "L",
+                  "zh": "L"
+                },
+                "originalTranslationFromDS": null
+              },
+              "maxModifierSelectionQuantity": 1,
+              "bcrsInfo": null
+            }
+          ],
+          "relatedItemIDs": [
+            "VNITE2026041604383653893",
+            "VNITE2026041604333278204",
+            "VNITE2026041604361441405",
+            "VNITE20260408022707016374",
+            "VNITE2026041604343157576",
+            "VNITE2026040914141618414"
+          ],
+          "availableStatus": 1,
+          "nameTranslation": {
+            "translation": {
+              "en": "Size",
+              "ko": "크기",
+              "zh": "尺寸"
+            },
+            "originalTranslationFromDS": null
+          },
+          "isM41ItemLinked": false,
+          "isFlexibleQuantityEnabled": false,
+          "maxModifierSelectionQuantity": 1
+        }
+      ],
+      "sellingTimes": [
+        {
+          "sellingTimeID": "VNSLT202604080227070322",
+          "merchantID": "5-C74ZCVDGJ6D2GJ",
+          "name": "Always Available",
+          "status": "ACTIVE",
+          "serviceHours": {
+            "sun": {
+              "openPeriodType": "OpenAllDay"
+            },
+            "mon": {
+              "openPeriodType": "OpenAllDay"
+            },
+            "tue": {
+              "openPeriodType": "OpenAllDay"
+            },
+            "wed": {
+              "openPeriodType": "OpenAllDay"
+            },
+            "thu": {
+              "openPeriodType": "OpenAllDay"
+            },
+            "fri": {
+              "openPeriodType": "OpenAllDay"
+            },
+            "sat": {
+              "openPeriodType": "OpenAllDay"
+            }
+          },
+          "updatedAt": "2026-04-08T02:27:07Z",
+          "createdAt": "2026-04-08T02:27:07.657786Z",
+          "startTime": "1000-01-01T00:00:00Z",
+          "endTime": "9999-12-31T23:59:59Z"
+        }
+      ],
+      "isMenuEditorEnabled": true,
+      "attributesData": {
+        "attributeClusters": {
+          "ACL-C4JTFEMBL3DEEA5920": {
+            "id": "ACL-C4JTFEMBL3DEEA5920",
+            "name": "Origin of Goods",
+            "nameLocalization": "Xuất xứ hàng hóa",
+            "businessType": "FOOD",
+            "status": "Enabled",
+            "attributeClusterType": "PreDefined",
+            "attributeClusterOption": {
+              "countryID": 5,
+              "isShownToPax": true,
+              "isMexSelfServe": true,
+              "attributeClusterOptionID": "ACO-C4JTFEMBMALYN61526"
+            },
+            "metadata": {
+              "preDefinedMetadata": {
+                "attributesLimitPerItem": 1
+              }
+            }
+          },
+          "ACL-C4KANZNESA4ENX0654": {
+            "id": "ACL-C4KANZNESA4ENX0654",
+            "name": "Manufacturer Name",
+            "nameLocalization": "Tên của tổ chức, cá nhân chịu trách nhiệm về hàng hóa",
+            "businessType": "FOOD",
+            "status": "Enabled",
+            "attributeClusterType": "FreeText",
+            "attributeClusterOption": {
+              "countryID": 5,
+              "isShownToPax": true,
+              "isMexSelfServe": true,
+              "attributeClusterOptionID": "ACO-C4KANZNETB5XMA2657"
+            },
+            "metadata": {
+              "freeTextMetadata": {
+                "maxLength": 150
+              }
+            }
+          },
+          "ACL-C4KFT2VFV6MXGT2580": {
+            "id": "ACL-C4KFT2VFV6MXGT2580",
+            "name": "Manufacturer Address",
+            "nameLocalization": "Địa chỉ của tổ chức, cá nhân chịu trách nhiệm về hàng hóa",
+            "businessType": "FOOD",
+            "status": "Enabled",
+            "attributeClusterType": "FreeText",
+            "attributeClusterOption": {
+              "countryID": 5,
+              "isShownToPax": true,
+              "isMexSelfServe": true,
+              "attributeClusterOptionID": "ACO-C4KFT2VFWBXDJN3383"
+            },
+            "metadata": {
+              "freeTextMetadata": {
+                "maxLength": 150
+              }
+            }
+          }
+        }
+      },
+      "stockPhotoUsageStatus": "BELOW_THRESHOLD"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:41:48.482Z",
+    "url": "https://api.grab.com/food/merchant/v3/open-status",
+    "payload": {
+      "isOpen": true,
+      "closeReason": 0,
+      "isInSpecialOpeningHourRange": false,
+      "meta": {
+        "pauseEndingTime": null,
+        "reopeningTime": null,
+        "isPausedByCapacityReached": false,
+        "currentBusyModePrepTime": 0,
+        "isMexBusyModeAutoChanged": false,
+        "busyModeStartTime": "0001-01-01T00:00:00Z",
+        "pauseDayCount": 0,
+        "openUntil": "2026-06-04T21:00:00+07:00",
+        "closedUntil": null,
+        "isOpen24Hours": false
+      },
+      "isMexInBusyMode": false,
+      "needDailyCheckIn": false,
+      "checkInMessage": {
+        "title": "",
+        "message": "",
+        "bottomMessage": ""
+      },
+      "upcomingFestive": null,
+      "manualAcceptMode": {
+        "maChangeType": 0,
+        "content": "",
+        "skipTempPauseStatus": false
+      },
+      "statusDisplayInfo": {
+        "statusLabel": "Open",
+        "statusColor": "#00B14F",
+        "backgroundColor": "#00B14F",
+        "textColor": "#FFFFFF",
+        "subTextColor": "#D9FCDE",
+        "statusContent": "Đang mở cửa"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:41:49.603Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Upcoming&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:41:38.770753917Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:41:49.614Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=Ready&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:41:38.779148405Z"
+    }
+  },
+  {
+    "timestamp": "2026-06-04T13:41:49.625Z",
+    "url": "https://api.grab.com/delvplatformapi/merchant/v4/orders-pagination?AutoAcceptGroup=1&merchantID=5-C74ZCVDGJ6D2GJ&PageType=PreparingV2&searchToken=&size=50",
+    "payload": {
+      "orderStats": {},
+      "pollInterval": 300,
+      "nextSearchToken": "|",
+      "serverTime": "2026-06-04T13:41:38.791007596Z"
+    }
+  }
+]

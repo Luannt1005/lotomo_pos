@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Grab Order Sync to POS",
+  "version": "1.0",
+  "description": "Bắt dữ liệu đơn hàng Grab Merchant và đẩy về POS nội bộ",
+  "permissions": ["scripting"],
+  "host_permissions": ["*://merchant.grab.com/*", "http://localhost:3000/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://merchant.grab.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["*://merchant.grab.com/*"]
+    }
+  ]
+}
