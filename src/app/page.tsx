@@ -175,10 +175,10 @@ export default function POSPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 text-primary/30"><div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>
           ) : (
-            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 md:gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 md:gap-4 lg:gap-6">
               {products.filter(p => p.category === activeCategory).map((p) => (
-                <div key={p.id} onClick={() => setSelectedProduct(p)} className="bg-white rounded-lg md:rounded-[2rem] lg:rounded-[2.5rem] p-1.5 md:p-4 lg:p-5 cursor-pointer hover:shadow-2xl transition-all duration-500 active:scale-95 flex flex-col items-center text-center shadow-sm border-2 border-transparent hover:border-primary/20 group">
-                  <div className="w-full aspect-square mb-1 md:mb-3 lg:mb-4 rounded-md md:rounded-[1.5rem] lg:rounded-[2rem] bg-[#f1f3f5] flex items-center justify-center overflow-hidden relative">
+                <div key={p.id} onClick={() => setSelectedProduct(p)} className="bg-white rounded-xl md:rounded-[2rem] lg:rounded-[2.5rem] p-1.5 md:p-4 lg:p-5 cursor-pointer hover:shadow-xl transition-all duration-500 active:scale-95 flex flex-row md:flex-col items-center md:text-center text-left shadow-sm border border-transparent hover:border-primary/20 group gap-2.5 md:gap-0">
+                  <div className="w-10 h-10 md:w-full md:h-auto md:aspect-square md:mb-3 lg:mb-4 rounded-lg md:rounded-[1.5rem] lg:rounded-[2rem] bg-[#f1f3f5] flex shrink-0 items-center justify-center overflow-hidden relative">
                     {p.image_url ? (
                       <img 
                         src={p.image_url} 
@@ -189,8 +189,10 @@ export default function POSPage() {
                       <Coffee className="w-4 h-4 md:w-10 md:h-10 lg:w-12 lg:h-12 text-primary/10" />
                     )}
                   </div>
-                  <h3 className="font-black text-[7px] md:text-xs lg:text-sm uppercase tracking-tighter mb-0.5 lg:mb-2 line-clamp-2 leading-tight">{p.name}</h3>
-                  <div className="mt-auto font-black text-primary text-[8px] md:text-sm lg:text-base">{formatCurrency(p.sizes[0]?.price || 0)}</div>
+                  <div className="flex flex-row md:flex-col flex-1 justify-between md:justify-center items-center md:items-stretch w-full gap-2 md:gap-0">
+                    <h3 className="font-black text-[12px] md:text-xs lg:text-sm uppercase tracking-tighter mb-0 md:mb-1 lg:mb-2 line-clamp-1 md:line-clamp-2 leading-tight flex-1">{p.name}</h3>
+                    <div className="font-black text-primary text-[12px] md:text-sm lg:text-base mt-0 md:mt-auto shrink-0">{formatCurrency(p.sizes[0]?.price || 0)}</div>
+                  </div>
                 </div>
               ))}
             </div>

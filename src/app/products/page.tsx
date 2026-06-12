@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, X, Check, Coffee, Upload, Loader2, Image as ImageIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Check, Coffee, Upload, Loader2, Image as ImageIcon, ArrowUp, ArrowDown } from "lucide-react";
 import { Product, Category, Size, Topping } from "@/types/database";
 import { useAuthStore } from "@/store/auth";
 import { supabase } from "@/lib/supabase";
@@ -10,6 +10,7 @@ export default function ProductsPage() {
   const { role } = useAuthStore();
   const isAdmin = role === 'admin';
   const [activeTab, setActiveTab] = useState<"products" | "toppings">("products");
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<Category | "tất cả">("tất cả");
   const [products, setProducts] = useState<Product[]>([]);
   const [allToppings, setAllToppings] = useState<Topping[]>([]);
   const [loading, setLoading] = useState(true);
@@ -189,6 +190,43 @@ export default function ProductsPage() {
     }
   };
 
+  const swapOrder = async (endpoint: string, p1: any, p2: any) => {
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+          id1: p1.id, created1: p1.created_at,
+          id2: p2.id, created2: p2.created_at
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+      if (res.ok) fetchData();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const moveItem = async (item: any, direction: "up" | "down") => {
+    let list: any[];
+    let endpoint: string;
+
+    if (activeTab === "products") {
+      // Sort within the same category to make it logical
+      list = products.filter(p => p.category === item.category);
+      endpoint = "/api/products/reorder";
+    } else {
+      list = [...allToppings];
+      endpoint = "/api/toppings/reorder"; // I will create this too just in case
+    }
+
+    const index = list.findIndex(p => p.id === item.id);
+    if (direction === "up" && index > 0) {
+      await swapOrder(endpoint, item, list[index - 1]);
+    } else if (direction === "down" && index < list.length - 1) {
+      await swapOrder(endpoint, item, list[index + 1]);
+    }
+  };
+
   const formatCurrency = (amount: number) => new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
 
   return (
@@ -212,6 +250,20 @@ export default function ProductsPage() {
         )}
       </div>
 
+      {activeTab === "products" && (
+        <div className="flex gap-2 mb-3 overflow-x-auto no-scrollbar">
+          {["tất cả", "matcha", "trà sữa", "trà"].map((cat) => (
+            <button 
+              key={cat} 
+              onClick={() => setActiveCategoryFilter(cat as any)} 
+              className={`px-3 py-1.5 rounded-lg font-black text-[9px] md:text-xs uppercase tracking-widest transition-all whitespace-nowrap ${activeCategoryFilter === cat ? "bg-primary text-white shadow-md" : "bg-white text-muted-foreground border hover:border-primary/50"}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="flex-1 overflow-auto bg-white border border-black/5 rounded-xl lg:rounded-[2.5rem] shadow-sm">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -225,10 +277,10 @@ export default function ProductsPage() {
           <tbody>
             {loading ? (
               <tr><td colSpan={5} className="p-10 text-center font-black uppercase text-[10px] tracking-widest opacity-20 animate-pulse">Loading...</td></tr>
-            ) : (activeTab === "products" ? products : allToppings).length === 0 ? (
+            ) : (activeTab === "products" ? (activeCategoryFilter === "tất cả" ? products : products.filter(p => p.category === activeCategoryFilter)) : allToppings).length === 0 ? (
               <tr><td colSpan={5} className="p-10 text-center font-black uppercase text-[10px] tracking-widest opacity-10">Empty</td></tr>
             ) : (
-              (activeTab === "products" ? products : allToppings).map((item: any) => (
+              (activeTab === "products" ? (activeCategoryFilter === "tất cả" ? products : products.filter(p => p.category === activeCategoryFilter)) : allToppings).map((item: any) => (
                 <tr key={item.id} className="border-b last:border-0 hover:bg-primary/5 transition-all group">
                   <td className="p-2.5 md:p-4 lg:p-5">
                     <div className="flex items-center gap-2 md:gap-3">
@@ -255,7 +307,13 @@ export default function ProductsPage() {
                   {isAdmin && (
                     <td className="p-2.5 md:p-4 lg:p-5 text-right">
                       <div className="flex items-center justify-end gap-1.5">
-                        <button onClick={() => activeTab === "products" ? openEditProduct(item) : openEditTopping(item)} className="p-1.5 md:p-2.5 bg-secondary text-secondary-foreground hover:bg-primary hover:text-white rounded-lg transition-all shadow-sm active:scale-95">
+                        <button onClick={() => moveItem(item, "up")} title="Lên trên" className="p-1.5 md:p-2.5 bg-muted text-muted-foreground hover:bg-primary/20 hover:text-primary rounded-lg transition-all shadow-sm active:scale-95">
+                          <ArrowUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={() => moveItem(item, "down")} title="Xuống dưới" className="p-1.5 md:p-2.5 bg-muted text-muted-foreground hover:bg-primary/20 hover:text-primary rounded-lg transition-all shadow-sm active:scale-95">
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={() => activeTab === "products" ? openEditProduct(item) : openEditTopping(item)} className="p-1.5 md:p-2.5 bg-secondary text-secondary-foreground hover:bg-primary hover:text-white rounded-lg transition-all shadow-sm active:scale-95 ml-2">
                           <Pencil className="w-3.5 h-3.5" />
                         </button>
                         <button onClick={() => activeTab === "products" ? deleteProduct(item.id) : deleteTopping(item.id)} className="p-1.5 md:p-2.5 bg-destructive/5 text-destructive hover:bg-destructive hover:text-white rounded-lg transition-all shadow-sm active:scale-95">
