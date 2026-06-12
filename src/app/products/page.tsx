@@ -252,7 +252,7 @@ export default function ProductsPage() {
 
       {activeTab === "products" && (
         <div className="flex gap-2 mb-3 overflow-x-auto no-scrollbar">
-          {["tất cả", "matcha", "trà sữa", "trà"].map((cat) => (
+          {["tất cả", ...Array.from(new Set(products.map(p => p.category)))].map((cat) => (
             <button 
               key={cat} 
               onClick={() => setActiveCategoryFilter(cat as any)} 
@@ -347,9 +347,10 @@ export default function ProductsPage() {
                    </div>
                    <div className="space-y-2">
                       <label className="text-[9px] font-black uppercase tracking-widest opacity-40">Phân loại</label>
-                      <div className="flex gap-1.5">
-                        {["matcha", "trà sữa", "trà"].map(cat => (
-                            <button key={cat} type="button" onClick={() => setCategory(cat as any)} className={`flex-1 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border-2 transition-all ${category === cat ? "bg-primary text-white border-primary shadow-lg" : "bg-muted text-muted-foreground border-transparent hover:border-primary/10"}`}>{cat}</button>
+                      <input required value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-muted/20 focus:bg-white border-2 border-transparent focus:border-primary/20 rounded-2xl px-5 py-3 outline-none font-black text-lg tracking-tight lowercase" placeholder="VD: matcha" />
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {Array.from(new Set(products.map(p => p.category))).map(cat => (
+                            <button key={cat} type="button" onClick={() => setCategory(cat as any)} className={`px-3 py-1.5 rounded-lg font-black text-[9px] uppercase tracking-widest border-2 transition-all ${category === cat ? "bg-primary text-white border-primary" : "bg-muted text-muted-foreground border-transparent hover:border-primary/10"}`}>{cat}</button>
                         ))}
                       </div>
                    </div>

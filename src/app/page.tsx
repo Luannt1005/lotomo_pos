@@ -11,7 +11,8 @@ export default function POSPage() {
   const [allToppings, setAllToppings] = useState<Topping[]>([]);
   const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<string>("matcha");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string>("");
   
   const { items, addItem, removeItem, updateQuantity, getTotal, clearCart } = useCartStore();
   
@@ -21,6 +22,7 @@ export default function POSPage() {
   const [sugar, setSugar] = useState<SugarLevel>("100%");
   const [ice, setIce] = useState<IceLevel>("bình thường");
   const [milk, setMilk] = useState<MilkType>("sữa tươi");
+  const [matchaType, setMatchaType] = useState<MatchaType>("mặc định");
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [note, setNote] = useState("");
   
@@ -46,7 +48,25 @@ export default function POSPage() {
       const tData = await tRes.json();
       const dData = await dRes.json();
       
-      if (!pData.error) setProducts(pData.filter((p: Product) => p.is_available));
+      if (!pData.error) {
+        const availableProducts = pData.filter((p: Product) => p.is_available);
+        setProducts(availableProducts);
+        
+        const uniqueCategories = Array.from(new Set(availableProducts.map((p: Product) => p.category))) as string[];
+        
+        const categoryOrder = ["matcha", "trà sữa", "trà"];
+        uniqueCategories.sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a.toLowerCase());
+          const indexB = categoryOrder.indexOf(b.toLowerCase());
+          if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+          if (indexA !== -1) return -1;
+          if (indexB !== -1) return 1;
+          return a.localeCompare(b);
+        });
+
+        setCategories(uniqueCategories);
+        if (uniqueCategories.length > 0) setActiveCategory(uniqueCategories[0]);
+      }
       if (!tData.error) setAllToppings(tData);
       if (!dData.error) setDiscounts(dData);
     } catch (e) { console.error(e); }
@@ -57,7 +77,11 @@ export default function POSPage() {
     if (!selectedProduct) return 0;
     const sizeData = selectedProduct.sizes.find(s => s.size === size);
     let price = sizeData ? sizeData.price : 0;
-    if (selectedProduct.category === 'matcha' && (milk === 'sữa Oat' || milk === 'sữa Meiji')) price += 5000;
+    if (selectedProduct.category === 'matcha') {
+      if (milk === 'sữa Oat') price += 5000;
+      if (matchaType === 'Kawa') price += 5000;
+      if (matchaType === 'MK4') price += 10000;
+    }
     selectedToppings.forEach(name => {
       const topping = allToppings.find(t => t.name === name);
       if (topping) price += topping.price;
@@ -77,6 +101,7 @@ export default function POSPage() {
       sugar,
       ice,
       milk: selectedProduct.category === 'matcha' ? milk : undefined,
+      matcha_type: selectedProduct.category === 'matcha' ? matchaType : undefined,
       toppings: selectedToppings,
       unit_price: unitPrice,
       total_price: unitPrice,
@@ -91,6 +116,7 @@ export default function POSPage() {
     setSugar("100%");
     setIce("bình thường");
     setMilk("sữa tươi");
+    setMatchaType("mặc định");
     setSelectedToppings([]);
     setNote("");
   };
@@ -121,6 +147,7 @@ export default function POSPage() {
       sugar: item.sugar,
       ice: item.ice,
       milk: item.milk,
+      matcha_type: item.matcha_type,
       toppings: item.toppings,
       unit_price: item.unit_price,
       total_price: item.total_price,
@@ -166,7 +193,7 @@ export default function POSPage() {
           </div>
         )}
         <div className="p-3 lg:p-6 bg-white/50 backdrop-blur-xl border-b flex gap-2 lg:gap-3 overflow-x-auto no-scrollbar scroll-smooth">
-          {["matcha", "trà sữa", "trà"].map((cat) => (
+          {categories.map((cat) => (
             <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-4 lg:px-10 py-2 lg:py-4 rounded-xl lg:rounded-[2rem] font-black text-[9px] lg:text-xs uppercase tracking-widest transition-all duration-500 border-2 shrink-0 ${activeCategory === cat ? "bg-primary text-white border-primary shadow-lg lg:shadow-2xl scale-105" : "bg-white text-muted-foreground border-transparent hover:border-black/5"}`}>{cat}</button>
           ))}
         </div>
@@ -177,8 +204,8 @@ export default function POSPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 md:gap-4 lg:gap-6">
               {products.filter(p => p.category === activeCategory).map((p) => (
-                <div key={p.id} onClick={() => setSelectedProduct(p)} className="bg-white rounded-xl md:rounded-[2rem] lg:rounded-[2.5rem] p-1.5 md:p-4 lg:p-5 cursor-pointer hover:shadow-xl transition-all duration-500 active:scale-95 flex flex-row md:flex-col items-center md:text-center text-left shadow-sm border border-transparent hover:border-primary/20 group gap-2.5 md:gap-0">
-                  <div className="w-10 h-10 md:w-full md:h-auto md:aspect-square md:mb-3 lg:mb-4 rounded-lg md:rounded-[1.5rem] lg:rounded-[2rem] bg-[#f1f3f5] flex shrink-0 items-center justify-center overflow-hidden relative">
+                <div key={p.id} onClick={() => setSelectedProduct(p)} className="bg-white rounded-xl md:rounded-[2rem] lg:rounded-[2.5rem] p-2 md:p-4 lg:p-5 cursor-pointer hover:shadow-xl transition-all duration-500 active:scale-95 flex flex-row md:flex-col items-center md:text-center text-left shadow-sm border border-transparent hover:border-primary/20 group gap-2.5 md:gap-0">
+                  <div className="w-12 h-12 md:w-full md:h-auto md:aspect-square md:mb-3 lg:mb-5 rounded-lg md:rounded-[1.5rem] lg:rounded-[2rem] bg-[#f1f3f5] flex shrink-0 items-center justify-center overflow-hidden relative">
                     {p.image_url ? (
                       <img 
                         src={p.image_url} 
@@ -186,12 +213,12 @@ export default function POSPage() {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (
-                      <Coffee className="w-4 h-4 md:w-10 md:h-10 lg:w-12 lg:h-12 text-primary/10" />
+                      <Coffee className="w-5 h-5 md:w-12 md:h-12 lg:w-14 lg:h-14 text-primary/10" />
                     )}
                   </div>
                   <div className="flex flex-row md:flex-col flex-1 justify-between md:justify-center items-center md:items-stretch w-full gap-2 md:gap-0">
-                    <h3 className="font-black text-[12px] md:text-xs lg:text-sm uppercase tracking-tighter mb-0 md:mb-1 lg:mb-2 line-clamp-1 md:line-clamp-2 leading-tight flex-1">{p.name}</h3>
-                    <div className="font-black text-primary text-[12px] md:text-sm lg:text-base mt-0 md:mt-auto shrink-0">{formatCurrency(p.sizes[0]?.price || 0)}</div>
+                    <h3 className="font-black text-[13px] md:text-sm lg:text-base uppercase tracking-tighter mb-0 md:mb-1 lg:mb-2 line-clamp-1 md:line-clamp-2 leading-tight flex-1">{p.name}</h3>
+                    <div className="font-black text-primary text-[13px] md:text-base lg:text-lg mt-0 md:mt-auto shrink-0">{formatCurrency(p.sizes[0]?.price || 0)}</div>
                   </div>
                 </div>
               ))}
@@ -229,6 +256,7 @@ export default function POSPage() {
                                    <p className="text-[8px] lg:text-[10px] font-black uppercase tracking-widest text-primary mt-1">
                                       {item.size}
                                       {item.milk && ` • ${item.milk}`}
+                                      {item.matcha_type && item.matcha_type !== "mặc định" && ` • ${item.matcha_type}`}
                                       {item.sugar !== "100%" && ` • ${item.sugar} đ`}
                                       {item.ice !== "bình thường" && ` • ${item.ice} đá`}
                                    </p>
@@ -351,11 +379,25 @@ export default function POSPage() {
                  {/* Row 4: Sữa (Optional) */}
                  {selectedProduct.category === 'matcha' && (
                   <div className="flex items-center gap-3 animate-in slide-in-from-left-2">
-                      <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Sữa (+5K)</label>
-                      <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
-                          {(['sữa tươi', 'sữa Oat', 'sữa Meiji'] as MilkType[]).map(m => (
+                      <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Sữa (Oat+5K)</label>
+                      <div className="flex-1 grid grid-cols-2 gap-1.5 lg:gap-2">
+                          {(['sữa tươi', 'sữa Oat'] as MilkType[]).map(m => (
                               <button key={m} onClick={() => setMilk(m)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black uppercase text-[10px] lg:text-xs tracking-tight transition-all ${milk === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
-                                {m === 'sữa tươi' ? 'Tươi' : m === 'sữa Oat' ? 'Oat' : 'Meiji'}
+                                {m === 'sữa tươi' ? 'Tươi' : 'Oat'}
+                              </button>
+                          ))}
+                      </div>
+                  </div>
+                 )}
+
+                 {/* Row 5: Loại Matcha (Optional) */}
+                 {selectedProduct.category === 'matcha' && (
+                  <div className="flex items-center gap-3 animate-in slide-in-from-left-2">
+                      <label className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest opacity-40 w-14 lg:w-16 shrink-0 text-left">Matcha</label>
+                      <div className="flex-1 grid grid-cols-3 gap-1.5 lg:gap-2">
+                          {(['mặc định', 'Kawa', 'MK4'] as MatchaType[]).map(m => (
+                              <button key={m} onClick={() => setMatchaType(m)} className={`py-2 lg:py-2.5 rounded-xl border-2 font-black uppercase text-[9px] lg:text-xs tracking-tight transition-all ${matchaType === m ? "bg-primary text-white border-primary shadow-sm" : "bg-muted border-transparent text-muted-foreground"}`}>
+                                {m === 'mặc định' ? 'Mặc định' : m === 'Kawa' ? 'Kawa+5K' : 'MK4+10K'}
                               </button>
                           ))}
                       </div>
