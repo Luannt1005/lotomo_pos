@@ -40,23 +40,27 @@ export default function ManageOrdersPage() {
   });
 
   const updateItemStatus = async (itemId: string, newStatus: OrderStatus, orderId: string) => {
-    try {
-      await fetch(`/api/order_items/${itemId}`, {
-          method: "PATCH",
-          body: JSON.stringify({ status: newStatus }),
-          headers: { "Content-Type": "application/json" }
-      });
-      // Update local state
-      setOrders(prev => prev.map(o => {
-        if (o.id === orderId) {
-          return {
-            ...o,
-            order_items: o.order_items.map(i => i.id === itemId ? { ...i, status: newStatus } : i)
-          };
-        }
-        return o;
-      }));
-    } catch (e) {}
+    // Optimistic Update
+    setOrders(prev => prev.map(o => {
+      if (o.id === orderId) {
+        // Also check if this is the last item to be done, then order is done
+        const updatedItems = o.order_items.map(i => i.id === itemId ? { ...i, status: newStatus } : i);
+        const allDone = updatedItems.every(i => i.status === 'done');
+        return {
+          ...o,
+          status: allDone ? 'done' : o.status,
+          order_items: updatedItems
+        };
+      }
+      return o;
+    }));
+
+    // Async call in background
+    fetch(`/api/order_items/${itemId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: newStatus }),
+        headers: { "Content-Type": "application/json" }
+    }).catch(e => console.error(e));
   };
 
   const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
@@ -66,24 +70,33 @@ export default function ManageOrdersPage() {
           body: JSON.stringify({ status: newStatus }),
           headers: { "Content-Type": "application/json" }
       });
-      fetchOrders(false);
+      // Optionally fetchOrders(false); but we are optimistic now
     } catch (e) {}
   };
 
   const markAllItemsDone = async (order: OrderWithItems) => {
-    try {
-      // Update all items in DB
-      await Promise.all(order.order_items.map(item => 
-        fetch(`/api/order_items/${item.id}`, {
-          method: "PATCH",
-          body: JSON.stringify({ status: 'done' }),
-          headers: { "Content-Type": "application/json" }
-        })
-      ));
-      
-      // Also update the order status to done
-      await updateOrderStatus(order.id, 'done');
-    } catch (e) {}
+    // Optimistic Update
+    setOrders(prev => prev.map(o => {
+      if (o.id === order.id) {
+        return {
+          ...o,
+          status: 'done',
+          order_items: o.order_items.map(i => ({ ...i, status: 'done' }))
+        };
+      }
+      return o;
+    }));
+
+    // Async calls in background
+    Promise.all(order.order_items.map(item => 
+      fetch(`/api/order_items/${item.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: 'done' }),
+        headers: { "Content-Type": "application/json" }
+      })
+    )).then(() => {
+       updateOrderStatus(order.id, 'done');
+    }).catch(e => console.error(e));
   };
 
   const formatCurrency = (amount: number) => new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);

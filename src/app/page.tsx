@@ -3,15 +3,13 @@
 import { useEffect, useState } from "react";
 import { Product, Size, SugarLevel, IceLevel, Topping, Discount, MilkType } from "@/types/database";
 import { useCartStore } from "@/store/cart";
+import { useCatalogStore } from "@/store/catalog";
 import { Plus, Minus, X, ShoppingCart, Coffee, CheckCircle2, Trash2, Check, Edit3, Tag } from "lucide-react";
 import { getActiveDiscount, calculateDiscount } from "@/lib/discounts";
 
 export default function POSPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [allToppings, setAllToppings] = useState<Topping[]>([]);
-  const [discounts, setDiscounts] = useState<Discount[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<string[]>([]);
+  const { products, toppings: allToppings, discounts, categories, lastFetched, setCatalog } = useCatalogStore();
+  const [loading, setLoading] = useState(lastFetched === 0);
   const [activeCategory, setActiveCategory] = useState<string>("");
   
   const { items, addItem, removeItem, updateQuantity, getTotal, clearCart } = useCartStore();
@@ -33,10 +31,16 @@ export default function POSPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const activeDiscount = getActiveDiscount(discounts);
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    // If we have cached categories, set the first one active instantly
+    if (categories.length > 0 && !activeCategory) setActiveCategory(categories[0]);
+    
+    // Always fetch in background to get latest, but only show loading if it's the first time
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
-    setLoading(true);
+    if (lastFetched === 0) setLoading(true);
     try {
       const [pRes, tRes, dRes] = await Promise.all([
         fetch("/api/products"),
@@ -50,10 +54,8 @@ export default function POSPage() {
       
       if (!pData.error) {
         const availableProducts = pData.filter((p: Product) => p.is_available);
-        setProducts(availableProducts);
         
         const uniqueCategories = Array.from(new Set(availableProducts.map((p: Product) => p.category))) as string[];
-        
         const categoryOrder = ["matcha", "trà sữa", "trà"];
         uniqueCategories.sort((a, b) => {
           const indexA = categoryOrder.indexOf(a.toLowerCase());
@@ -64,11 +66,15 @@ export default function POSPage() {
           return a.localeCompare(b);
         });
 
-        setCategories(uniqueCategories);
-        if (uniqueCategories.length > 0) setActiveCategory(uniqueCategories[0]);
+        if (uniqueCategories.length > 0 && !activeCategory) setActiveCategory(uniqueCategories[0]);
+        
+        setCatalog({
+          products: availableProducts,
+          categories: uniqueCategories,
+          toppings: !tData.error ? tData : [],
+          discounts: !dData.error ? dData : []
+        });
       }
-      if (!tData.error) setAllToppings(tData);
-      if (!dData.error) setDiscounts(dData);
     } catch (e) { console.error(e); }
     setLoading(false);
   };
