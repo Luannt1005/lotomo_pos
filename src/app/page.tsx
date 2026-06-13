@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product, Size, SugarLevel, IceLevel, Topping, Discount, MilkType } from "@/types/database";
+import { Product, Size, SugarLevel, IceLevel, Topping, Discount, MilkType, MatchaType } from "@/types/database";
 import { useCartStore } from "@/store/cart";
 import { useCatalogStore } from "@/store/catalog";
 import { Plus, Minus, X, ShoppingCart, Coffee, CheckCircle2, Trash2, Check, Edit3, Tag } from "lucide-react";
