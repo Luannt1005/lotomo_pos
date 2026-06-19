@@ -139,6 +139,92 @@ export default function POSPage() {
     else { setSelectedToppings(prev => [...prev, name]); }
   };
 
+  const printLabels = (orderItems: any[]) => {
+    const frameId = 'print-frame-pos';
+    let frame = document.getElementById(frameId) as HTMLIFrameElement;
+    if (!frame) {
+      frame = document.createElement('iframe');
+      frame.id = frameId;
+      frame.style.display = 'none';
+      document.body.appendChild(frame);
+    }
+
+    const doc = frame.contentWindow?.document;
+    if (!doc) return;
+
+    const now = new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+    let labelsHtml = '';
+
+    orderItems.forEach(item => {
+      for (let i = 0; i < item.quantity; i++) {
+        labelsHtml += `
+          <div class="label">
+            <div class="header">
+               <span class="shop">lơ tơ mơ</span>
+               <span class="time">${now}</span>
+            </div>
+            <div class="product-name">${item.name} (${item.size})</div>
+            <div class="options">
+              ${item.milk ? `<span class="milk">${item.milk.toUpperCase()}</span>` : ''}
+              ${item.matcha_type && item.matcha_type !== 'mặc định' ? `<span class="milk" style="background:#4b5563;">${item.matcha_type.toUpperCase()}</span>` : ''}
+              ${(item.milk || (item.matcha_type && item.matcha_type !== 'mặc định')) && (item.sugar !== "100%" || item.ice !== "bình thường") ? ' • ' : ''}
+              ${item.sugar !== "100%" ? `${item.sugar} Đường` : ''} 
+              ${item.sugar !== "100%" && item.ice !== "bình thường" ? ' - ' : ''}
+              ${item.ice !== "bình thường" ? `${item.ice} Đá` : ''}
+            </div>
+            ${item.toppings.length > 0 ? `<div class="toppings">Top: ${item.toppings.join(', ')}</div>` : ''}
+            ${item.note ? `<div class="note">Ghi chú: ${item.note}</div>` : ''}
+            <div class="footer">
+               <span>Số: ${i + 1}/${item.quantity}</span>
+               <span class="price">${new Intl.NumberFormat("vi-VN").format(item.unit_price)}đ</span>
+               <span>Đơn: #${item.order_id?.slice(-4).toUpperCase() || 'POS'}</span>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    const style = `
+      <style>
+        @page { size: 40mm 30mm; margin: 0; }
+        @media print {
+          html, body { margin: 0; padding: 0; }
+          header, footer { display: none !important; }
+        }
+        body { 
+          margin: 0; padding: 0; 
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          -webkit-print-color-adjust: exact;
+        }
+        .label { 
+          width: 40mm; height: 30mm; 
+          padding: 1.2mm 2.5mm; box-sizing: border-box; 
+          display: flex; flex-direction: column; 
+          page-break-after: always; overflow: hidden; background: white;
+        }
+        .header { display: flex; justify-content: space-between; border-bottom: 0.1mm solid #000; padding-bottom: 0.3mm; margin-bottom: 0.5mm; }
+        .shop { font-size: 6.5pt; font-weight: 900; letter-spacing: 0.1mm; text-transform: lowercase; }
+        .time { font-size: 5pt; font-weight: 500; opacity: 0.7; }
+        .product-name { font-size: 8.5pt; font-weight: 950; text-transform: uppercase; margin-bottom: 0.4mm; line-height: 1.0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .options { font-size: 7pt; font-weight: 700; margin-bottom: 0.2mm; line-height: 1.1; }
+        .milk { background: #000; color: #fff; padding: 0.1mm 0.4mm; border-radius: 0.2mm; font-size: 6.5pt; margin-right: 0.5mm; }
+        .toppings { font-size: 6pt; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
+        .note { font-size: 6pt; font-style: italic; background: #f4f4f4; padding: 0.2mm 0.6mm; border-radius: 0.4mm; margin-top: 0.6mm; line-height: 1.05; }
+        .footer { margin-top: auto; font-size: 5pt; font-weight: 700; display: flex; justify-content: space-between; color: #333; border-top: 0.1mm dashed #ccc; padding-top: 0.4mm; }
+        .price { font-size: 6pt; color: #000; font-weight: 900; }
+      </style>
+    `;
+
+    doc.open();
+    doc.write(`<html><head>${style}</head><body>${labelsHtml}</body></html>`);
+    doc.close();
+
+    setTimeout(() => {
+      frame.contentWindow?.focus();
+      frame.contentWindow?.print();
+    }, 500);
+  };
+
   const handleCheckout = async () => {
     if (items.length === 0) return;
     setIsCheckingOut(true);
@@ -174,6 +260,15 @@ export default function POSPage() {
     try {
       const res = await fetch("/api/orders", { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
       if (res.ok) {
+        const orderData = await res.json();
+        
+        // Print labels immediately
+        const itemsToPrint = orderItemsPayload.map(item => ({
+          ...item,
+          order_id: orderData.id
+        }));
+        printLabels(itemsToPrint);
+
         clearCart();
         setIsCheckingOut(false);
         setIsCartOpen(false);

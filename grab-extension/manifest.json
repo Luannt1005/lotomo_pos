@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "Bắt dữ liệu đơn hàng Grab Merchant và đẩy về POS nội bộ",
   "permissions": ["scripting"],
-  "host_permissions": ["*://merchant.grab.com/*", "http://localhost:3000/*"],
+  "host_permissions": ["*://merchant.grab.com/*", "http://localhost:3000/*", "https://lotomopos.vercel.app/*"],
   "content_scripts": [
     {
       "matches": ["*://merchant.grab.com/*"],

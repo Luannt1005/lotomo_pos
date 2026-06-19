@@ -16,14 +16,21 @@ window.addEventListener('message', function(event) {
   // Basic throttling/deduplication (Grab might poll the same data)
   // We will just send the raw data to localhost. The local POS app will figure out what to do.
   
-  fetch('http://localhost:3000/api/sync/grab', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      url: event.data.url,
-      payload: event.data.data
-    })
-  }).catch(err => console.error("Failed to sync grab order", err));
+  const targets = [
+    'http://localhost:3000/api/sync/grab',
+    'https://lotomopos.vercel.app/api/sync/grab'
+  ];
+
+  targets.forEach(target => {
+    fetch(target, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        url: event.data.url,
+        payload: event.data.data
+      })
+    }).catch(err => console.error("Failed to sync grab order to " + target, err));
+  });
 });
