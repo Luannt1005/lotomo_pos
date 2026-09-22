@@ -334,52 +334,7 @@ export default function PayrollPage() {
     }
   };
 
-  // Quick Preset Handlers
-  const handleApplyPreset = (presetType: "late" | "early_leave" | "ot" | "bonus" | "penalty" | "standard") => {
-    if (presetType === "late") {
-      setAdjustmentForm({
-        type: "late",
-        hoursAdjustment: -1,
-        amountAdjustment: 0,
-        note: "Đi trễ 1 tiếng làm"
-      });
-    } else if (presetType === "early_leave") {
-      setAdjustmentForm({
-        type: "early_leave",
-        hoursAdjustment: -0.5,
-        amountAdjustment: 0,
-        note: "Về sớm 30 phút"
-      });
-    } else if (presetType === "ot") {
-      setAdjustmentForm({
-        type: "ot",
-        hoursAdjustment: 1,
-        amountAdjustment: 0,
-        note: "Đi sớm / Tăng ca OT 1 tiếng"
-      });
-    } else if (presetType === "bonus") {
-      setAdjustmentForm({
-        type: "bonus",
-        hoursAdjustment: 0,
-        amountAdjustment: 50000,
-        note: "Thưởng làm việc xuất sắc"
-      });
-    } else if (presetType === "penalty") {
-      setAdjustmentForm({
-        type: "penalty",
-        hoursAdjustment: 0,
-        amountAdjustment: -30000,
-        note: "Phạt lỗi đồng phục / quy định"
-      });
-    } else if (presetType === "standard") {
-      setAdjustmentForm({
-        type: "standard",
-        hoursAdjustment: 0,
-        amountAdjustment: 0,
-        note: ""
-      });
-    }
-  };
+
 
   // Export CSV
   const handleExportCSV = () => {
@@ -1507,56 +1462,6 @@ export default function PayrollPage() {
               </button>
             </div>
 
-            {/* Quick Preset Buttons (2 Columns on iPhone for clean fitting without overlapping) */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Chọn nhanh tình huống:
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("late")}
-                  className="px-2 py-2 rounded-xl text-xs font-bold bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition-all text-center cursor-pointer"
-                >
-                  🔴 Đi trễ (-1h)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("early_leave")}
-                  className="px-2 py-2 rounded-xl text-xs font-bold bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 transition-all text-center cursor-pointer"
-                >
-                  🟠 Về sớm (-0.5h)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("ot")}
-                  className="px-2 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition-all text-center cursor-pointer"
-                >
-                  🟢 OT (+1h)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("bonus")}
-                  className="px-2 py-2 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-all text-center cursor-pointer"
-                >
-                  🎁 Thưởng (+50k)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("penalty")}
-                  className="px-2 py-2 rounded-xl text-xs font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-all text-center cursor-pointer"
-                >
-                  ⚠️ Phạt (-30k)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApplyPreset("standard")}
-                  className="px-2 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-all text-center cursor-pointer"
-                >
-                  ⚪ Ca chuẩn (0)
-                </button>
-              </div>
-            </div>
 
             {/* Hours Adjustment & Amount Adjustment */}
             <div className="grid grid-cols-2 gap-2.5">
