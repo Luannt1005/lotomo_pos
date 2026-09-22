@@ -468,16 +468,12 @@ export default function ShiftsPage() {
 
       {/* Main Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-foreground">Lịch Làm Việc</h1>
-            {isWeekLocked && (
-              <span className="bg-destructive/10 text-destructive text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1">
-                <Lock className="w-3 h-3" /> Đã khóa
-              </span>
-            )}
-          </div>
-          <p className="text-muted-foreground text-sm">Đăng ký và quản lý ca làm nhân viên</p>
+        <div className="flex items-center gap-2">
+          {isWeekLocked && (
+            <span className="bg-destructive/10 text-destructive text-xs uppercase font-bold tracking-wider px-3 py-1 rounded-full flex items-center gap-1.5 border border-destructive/20">
+              <Lock className="w-3.5 h-3.5" /> Tuần đã khóa
+            </span>
+          )}
         </div>
         
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">

@@ -183,9 +183,10 @@ export default function InventoryPage() {
     <div className="p-2 md:p-6 h-full flex flex-col bg-muted/5 w-full space-y-3">
       {/* Header section - responsive padding and spacing */}
       <div className="flex flex-row justify-between items-center px-1">
-        <div className="flex items-center gap-1.5 md:gap-3">
-          <h1 className="text-base md:text-3xl font-black tracking-tighter uppercase">KHO</h1>
-          <span className="text-[7px] md:text-xs font-bold text-muted-foreground uppercase opacity-60 bg-muted px-1.5 py-0.5 rounded">Tồn kho</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-slate-500 bg-white px-2.5 py-1 rounded-lg border border-border shadow-2xs">
+            Tổng {ingredients.length} nguyên liệu
+          </span>
         </div>
         
         <div className="flex items-center gap-1.5 md:gap-3">

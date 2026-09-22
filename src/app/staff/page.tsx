@@ -123,17 +123,18 @@ export default function StaffPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Quản lý nhân sự</h1>
-          <p className="text-muted-foreground mt-1">Tạo và phân quyền tài khoản cho nhân viên</p>
+          <span className="text-xs font-semibold text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-border shadow-2xs">
+            Tổng số: {users.length} tài khoản nhân sự
+          </span>
         </div>
         <button
           onClick={() => openModal()}
-          className="bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium flex items-center gap-2 hover:bg-primary/90 transition-colors"
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-xs"
         >
           <Plus className="w-5 h-5" />
-          <span className="hidden md:inline">Thêm nhân viên</span>
+          <span>Thêm nhân viên</span>
         </button>
       </div>
 

@@ -272,13 +272,10 @@ export default function ReportsPage() {
       
       {/* Page Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div>
-          <h1 className="text-2xl lg:text-3xl font-black uppercase tracking-tighter text-foreground flex items-center gap-2">
-            <BarChart3 className="w-7 h-7 text-primary" /> Phân Tích Báo Cáo
-          </h1>
-          <p className="text-muted-foreground text-xs lg:text-sm font-medium mt-1">
-            Số liệu thống kê doanh số bán hàng, hiệu suất giờ cao điểm và nhóm sản phẩm.
-          </p>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-black/5 shadow-2xs">
+            Khoảng thời gian:
+          </span>
         </div>
 
         {/* Filters Panel */}

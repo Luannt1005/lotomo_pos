@@ -2,16 +2,18 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
+import { HeaderBar } from "@/components/HeaderBar";
 import { AuthProvider } from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
   },
   icons: {
     apple: "/icon-192.png",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -33,18 +35,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-background antialiased`}>
+    <html lang="vi" suppressHydrationWarning>
+      <body className={`${inter.className} flex flex-col md:flex-row h-screen w-screen overflow-hidden bg-background antialiased selection:bg-primary/20`}>
         <AuthProvider>
-          <div className="hidden md:block">
-             <Sidebar />
-          </div>
-          <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
-            {children}
-            <Toaster position="top-right" />
-          </main>
-          <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border">
-             <Sidebar />
+          <Sidebar />
+          <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
+            <HeaderBar />
+            <main className="flex-1 overflow-y-auto min-w-0 overscroll-contain bg-[#f8fafc]">
+              {children}
+              <Toaster position="top-right" />
+            </main>
           </div>
         </AuthProvider>
       </body>

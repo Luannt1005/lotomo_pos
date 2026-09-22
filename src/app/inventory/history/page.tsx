@@ -49,14 +49,10 @@ export default function InventoryHistoryPage() {
   return (
     <div className="p-2 md:p-6 h-full flex flex-col bg-muted/5 w-full">
       <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
-          <Link href="/inventory" className="p-3 bg-white border border-black/5 rounded-2xl hover:bg-black hover:text-white transition-all shadow-sm">
-            <ArrowLeft className="w-5 h-5" />
+        <div className="flex items-center gap-3">
+          <Link href="/inventory" className="py-2 px-3.5 bg-white border border-border rounded-xl hover:bg-slate-100 transition-all shadow-2xs flex items-center gap-2 text-xs font-semibold text-slate-700">
+            <ArrowLeft className="w-4 h-4" /> Quay lại kho
           </Link>
-          <div>
-            <h1 className="text-sm md:text-3xl font-black tracking-tighter uppercase">LỊCH SỬ KHO</h1>
-            <p className="text-[7px] md:text-sm font-medium text-muted-foreground uppercase opacity-50">Nhập, xuất, kiểm kho</p>
-          </div>
         </div>
         
         <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-black/5">
