@@ -549,40 +549,28 @@ export default function PayrollPage() {
       {/* ========================================================================= */}
       {viewMode === "daily" && (
         <div className="bg-white border border-slate-300/80 rounded-2xl shadow-sm overflow-hidden animate-in fade-in duration-200">
-          {/* Top Brand Banner (Matching Excel image) */}
-          <div className="bg-[#1b4332] text-white px-4 py-3 md:px-5 md:py-3.5 border-b border-emerald-800 flex items-center justify-between">
-            <div className="flex flex-col">
-              <h1 className="text-base sm:text-lg md:text-xl font-black tracking-wider uppercase text-emerald-100">
-                LƠ TƠ MƠ
-              </h1>
-              <span className="text-[11px] sm:text-xs font-medium text-emerald-200/90 -mt-0.5">
-                Bảng đăng ký ca & Tính lương theo ngày
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="flex flex-col text-right">
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                  Tổng lương cả kỳ
+          {/* Compact Sub-bar: Grand Total & Display Switcher */}
+          <div className="px-3 sm:px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <div className="flex items-baseline gap-1.5 shrink-0">
+                <span className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Tổng lương:
                 </span>
-                <span className="text-base sm:text-xl md:text-2xl font-black text-rose-400 font-mono leading-tight">
-                  {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)} <span className="text-[10px] sm:text-xs font-bold text-rose-300">VNĐ</span>
+                <span className="text-xs sm:text-sm md:text-base font-black text-rose-600 font-mono leading-none">
+                  {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)} <span className="text-[10px] font-bold">VNĐ</span>
+                </span>
+              </div>
+              <span className="hidden md:inline text-slate-300">|</span>
+              <div className="hidden md:flex items-center gap-1.5 text-slate-500 truncate text-[11px]">
+                <Sparkles className="w-3.5 h-3.5 text-[#059669] shrink-0" />
+                <span className="truncate">
+                  Bấm vào nhân viên để ghi chú lỗi/OT
                 </span>
               </div>
             </div>
-          </div>
-
-          {/* Sub-toggle for Mobile: Spreadsheet vs Mobile Cards */}
-          <div className="px-4 py-2 bg-emerald-50/70 border-b border-emerald-100 flex items-center justify-between gap-2 text-xs">
-            <div className="flex items-center gap-1.5 text-slate-600 truncate">
-              <Sparkles className="w-3.5 h-3.5 text-[#059669] shrink-0" />
-              <span className="truncate">
-                Bấm vào nhân viên để ghi chú lỗi/OT
-              </span>
-            </div>
 
             {/* Display Switcher (Table vs Cards for mobile convenience) */}
-            <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-emerald-200 shrink-0">
+            <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 shrink-0">
               <button
                 type="button"
                 onClick={() => setDailyDisplay("table")}
