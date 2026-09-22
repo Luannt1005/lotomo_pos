@@ -412,7 +412,7 @@ export default function ShiftsPage() {
   if (loading && shifts.length === 0) return <div className="p-8">Đang tải lịch làm việc...</div>;
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="p-2 sm:p-4 md:p-6 max-w-7xl mx-auto space-y-3 sm:space-y-4">
       
       
       {/* Pending Swaps Alerts */}
@@ -506,15 +506,15 @@ export default function ShiftsPage() {
             </div>
           )}
           {/* Week switching controls */}
-          <div className="flex items-center bg-secondary rounded-xl p-1 justify-between flex-1 md:flex-none">
-            <button onClick={() => handleWeekChange(subWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
-              <ChevronLeft className="w-5 h-5" />
+          <div className="flex items-center bg-secondary/80 rounded-xl p-0.5 sm:p-1 justify-between flex-1 md:flex-none">
+            <button onClick={() => handleWeekChange(subWeeks(currentWeekStart, 1))} className="p-1.5 hover:bg-background rounded-lg transition-colors cursor-pointer" title="Tuần trước">
+              <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="px-4 font-medium text-xs md:text-sm">
+            <span className="px-2.5 sm:px-3 font-bold text-xs sm:text-sm">
               {format(weekDays[0], 'dd/MM')} - {format(weekDays[6], 'dd/MM')}
             </span>
-            <button onClick={() => handleWeekChange(addWeeks(currentWeekStart, 1))} className="p-2 hover:bg-background rounded-lg">
-              <ChevronRight className="w-5 h-5" />
+            <button onClick={() => handleWeekChange(addWeeks(currentWeekStart, 1))} className="p-1.5 hover:bg-background rounded-lg transition-colors cursor-pointer" title="Tuần sau">
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
@@ -522,7 +522,7 @@ export default function ShiftsPage() {
           {role === 'admin' && (
             <button
               onClick={handleToggleWeekLock}
-              className={`px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                 isWeekLocked 
                   ? "bg-destructive/10 text-destructive border border-destructive/20 hover:bg-destructive/20" 
                   : "bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
@@ -530,11 +530,11 @@ export default function ShiftsPage() {
             >
               {isWeekLocked ? (
                 <>
-                  <Unlock className="w-4 h-4" /> Mở khóa tuần này
+                  <Unlock className="w-3.5 h-3.5" /> Mở khóa
                 </>
               ) : (
                 <>
-                  <Lock className="w-4 h-4" /> Khóa tuần này
+                  <Lock className="w-3.5 h-3.5" /> Khóa tuần
                 </>
               )}
             </button>
@@ -548,34 +548,36 @@ export default function ShiftsPage() {
                 setNewShift({ name: "", start_time: "", end_time: "", max_staff: 1 });
                 setShowShiftModal(true);
               }}
-              className="bg-primary text-primary-foreground px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium whitespace-nowrap"
+              className="bg-primary text-primary-foreground px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs sm:text-sm font-bold whitespace-nowrap cursor-pointer hover:bg-primary/90 transition-all shadow-xs"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" />
               Quản lý Ca
             </button>
           )}
         </div>
       </div>
 
-      {/* Roster Grid Table */}
-      <div className="bg-card rounded-2xl border border-border overflow-hidden overflow-x-auto shadow-sm">
-        <table className="w-full text-sm text-left border-collapse">
-          <thead className="bg-secondary/40 border-b border-border text-muted-foreground">
+      {/* Roster Grid Table (Compact & Optimized View) */}
+      <div className="bg-card rounded-2xl border border-border overflow-hidden overflow-x-auto shadow-xs">
+        <table className="w-full text-xs text-left border-collapse">
+          <thead className="bg-secondary/50 border-b border-border text-muted-foreground">
             <tr>
-              <th className="p-4 font-bold text-foreground text-xs uppercase tracking-wider min-w-[170px] bg-secondary/10">Ca Làm</th>
+              <th className="p-2 sm:p-2.5 font-bold text-foreground text-[10px] sm:text-xs uppercase tracking-wider w-[95px] min-w-[95px] sm:w-[110px] sm:min-w-[110px] sticky left-0 z-20 bg-secondary/80 shadow-[2px_0_4px_rgba(0,0,0,0.04)]">
+                Ca Làm
+              </th>
               {weekDays.map(date => {
                 const today = isTodayDate(date);
                 return (
                   <th 
                     key={date.toString()} 
-                    className={`p-4 font-bold min-w-[150px] text-center border-l border-border/40 transition-colors ${
+                    className={`p-1.5 sm:p-2 font-bold w-[95px] min-w-[95px] sm:w-[110px] sm:min-w-[110px] text-center border-l border-border/40 transition-colors ${
                       today ? "bg-primary/[0.04] text-primary" : "text-muted-foreground"
                     }`}
                   >
-                    <div className={`text-[10px] uppercase tracking-widest font-extrabold ${today ? "text-primary/70" : "text-muted-foreground/60"}`}>
+                    <div className={`text-[9px] uppercase tracking-wider font-extrabold ${today ? "text-primary/70" : "text-muted-foreground/60"}`}>
                       {format(date, 'EEEE', { locale: vi })}
                     </div>
-                    <div className={`text-base mt-0.5 font-black ${today ? "text-primary" : "text-foreground"}`}>
+                    <div className={`text-xs sm:text-sm mt-0.5 font-black ${today ? "text-primary" : "text-foreground"}`}>
                       {format(date, 'dd/MM')}
                     </div>
                   </th>
@@ -588,17 +590,17 @@ export default function ShiftsPage() {
               const shiftStyle = getShiftBadgeStyle(shift.name, idx);
               return (
                 <tr key={shift.id} className="hover:bg-muted/[0.02] transition-colors">
-                  {/* Shift Details Cell */}
-                  <td className={`p-4 bg-secondary/15 border-b border-border/50 ${shiftStyle.border}`}>
-                    <div className="font-extrabold text-foreground text-sm uppercase tracking-tight flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${shiftStyle.dot}`} />
+                  {/* Shift Details Cell (Sticky on left with opaque background) */}
+                  <td className={`p-1.5 sm:p-2 bg-background sticky left-0 z-10 border-b border-r border-border/50 shadow-[2px_0_4px_rgba(0,0,0,0.04)] ${shiftStyle.border}`}>
+                    <div className="font-extrabold text-foreground text-xs uppercase tracking-tight flex items-center gap-1">
+                      <span className={`w-1.5 h-1.5 rounded-full ${shiftStyle.dot}`} />
                       {shift.name}
                     </div>
-                    <div className="text-muted-foreground text-xs font-semibold mt-1.5 bg-background py-0.5 px-1.5 rounded-md border border-border/40 inline-block shadow-[0_1px_1px_rgba(0,0,0,0.02)]">
+                    <div className="text-muted-foreground text-[10px] font-semibold mt-1 bg-secondary/40 py-0.5 px-1 rounded border border-border/40 inline-block shadow-[0_1px_1px_rgba(0,0,0,0.02)]">
                       {shift.start_time.substring(0, 5)} - {shift.end_time.substring(0, 5)}
                     </div>
-                    <div className="text-[10px] font-bold text-primary mt-2 flex items-center gap-1 opacity-85">
-                      <Users className="w-3 h-3" /> Tối đa {shift.max_staff}
+                    <div className="text-[9px] font-bold text-primary mt-1 flex items-center gap-1 opacity-85">
+                      <Users className="w-2.5 h-2.5" /> Tối đa {shift.max_staff}
                     </div>
                   </td>
                   
@@ -614,24 +616,24 @@ export default function ShiftsPage() {
                     return (
                       <td 
                         key={date.toString()} 
-                        className={`p-2.5 text-center border-l border-b border-border/40 align-top transition-colors ${
+                        className={`p-1 sm:p-1.5 text-center border-l border-b border-border/40 align-top transition-colors ${
                           today ? "bg-primary/[0.01]" : ""
                         }`}
                       >
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           {/* List registered staff */}
                           {dayRegs.map(reg => {
                             const isMe = reg.user_id === user?.id;
                             return (
                               <div 
                                 key={reg.id} 
-                                className={`relative flex items-center justify-between py-1.5 px-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-lg text-xs transition-all group ${
+                                className={`relative flex items-center justify-between py-1 px-1.5 sm:px-2 shadow-[0_1px_2px_rgba(0,0,0,0.02)] rounded-md text-[11px] transition-all group ${
                                   isMe 
-                                    ? "bg-primary/10 border border-primary/50 text-primary font-black shadow-[0_1px_3px_rgba(var(--primary),0.1)]" 
+                                    ? "bg-primary/10 border border-primary/50 text-primary font-black" 
                                     : "bg-background border border-border text-foreground font-black hover:border-primary/30"
                                 }`}
                               >
-                                <span className="truncate pr-1 flex items-center gap-1.5 font-bold">
+                                <span className="truncate pr-0.5 flex items-center gap-1 font-bold text-[11px] leading-tight">
                                   {isMe && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
                                   {reg.user_email}
                                 </span>
@@ -647,9 +649,9 @@ export default function ShiftsPage() {
                                         setShowSwapModal(true);
                                       }}
                                       title="Hoán ca"
-                                      className="text-primary hover:bg-primary/10 p-1 rounded-md transition-colors"
+                                      className="text-primary hover:bg-primary/10 p-0.5 rounded transition-colors"
                                     >
-                                      <ArrowLeftRight className="w-3.5 h-3.5" />
+                                      <ArrowLeftRight className="w-3 h-3" />
                                     </button>
                                   )}
                                   
@@ -657,9 +659,10 @@ export default function ShiftsPage() {
                                   {((role === 'admin') || (myReg && myReg.id === reg.id)) && (!isWeekLocked || role === 'admin') && (
                                     <button
                                       onClick={() => handleUnregister(reg.id)}
-                                      className="text-destructive hover:bg-destructive/10 p-1 rounded-md transition-colors"
+                                      className="text-destructive hover:bg-destructive/10 p-0.5 rounded transition-colors cursor-pointer"
+                                      title="Xóa nhân viên khỏi ca"
                                     >
-                                      <Trash2 className="w-3.5 h-3.5" />
+                                      <Trash2 className="w-3 h-3" />
                                     </button>
                                   )}
                                 </div>
@@ -671,15 +674,15 @@ export default function ShiftsPage() {
                           {role !== 'admin' && !myReg && !isFull && !isWeekLocked && (
                             <button
                               onClick={() => handleRegister(shift.id, date)}
-                              className="w-full py-1.5 border border-dashed border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs font-bold transition-all"
+                              className="w-full py-1 border border-dashed border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-md text-[11px] font-bold transition-all cursor-pointer"
                             >
                               Đăng ký
                             </button>
                           )}
 
                           {role !== 'admin' && isWeekLocked && !myReg && (
-                            <div className="text-[10px] text-muted-foreground/40 bg-secondary/10 py-1.5 rounded-lg flex items-center justify-center gap-1 font-medium">
-                              <Lock className="w-3 h-3" /> Khóa
+                            <div className="text-[9px] text-muted-foreground/40 bg-secondary/10 py-1 rounded-md flex items-center justify-center gap-1 font-medium">
+                              <Lock className="w-2.5 h-2.5" /> Khóa
                             </div>
                           )}
 
@@ -692,22 +695,22 @@ export default function ShiftsPage() {
                                   e.target.value = "";
                                 }
                               }}
-                              className="w-full px-2 py-1.5 border border-dashed border-primary/30 text-primary hover:border-primary hover:bg-primary/5 rounded-lg text-xs bg-background cursor-pointer outline-none transition-all text-center font-bold"
+                              className="w-full px-1 py-1 border border-dashed border-primary/30 text-primary hover:border-primary hover:bg-primary/5 rounded-md text-[11px] bg-background cursor-pointer outline-none transition-all text-center font-bold"
                               defaultValue=""
                             >
-                            <option value="" disabled>+ Thêm NV</option>
-                            {users.map(u => (
-                              <option key={u.id} value={u.id}>{u.username}</option>
-                            ))}
-                          </select>
-                        )}
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
+                              <option value="" disabled>+ Thêm NV</option>
+                              {users.map(u => (
+                                <option key={u.id} value={u.id}>{u.username}</option>
+                              ))}
+                            </select>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
             {shifts.length === 0 && (
               <tr>
                 <td colSpan={8} className="p-8 text-center text-muted-foreground">
