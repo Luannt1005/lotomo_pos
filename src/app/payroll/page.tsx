@@ -892,26 +892,25 @@ export default function PayrollPage() {
                                       return (
                                         <td 
                                           key={slotIdx} 
-                                          className={cn("p-1 text-center border-r", cellBg)}
+                                          className={cn("p-1 text-center border-r group/cell transition-colors cursor-pointer", cellBg)}
+                                          onClick={() => handleOpenAssignModal({
+                                            shift: cell.shift,
+                                            dateStr: row.dateStr,
+                                            formattedDate: row.formattedDate
+                                          })}
                                         >
-                                          <button
-                                            type="button"
-                                            onClick={() => handleOpenAssignModal({
-                                              shift: cell.shift,
-                                              dateStr: row.dateStr,
-                                              formattedDate: row.formattedDate
-                                            })}
+                                          <div
                                             className={cn(
-                                              "w-full h-8 px-1 rounded-lg text-[10px] font-medium transition-all flex items-center justify-center gap-1 cursor-pointer group",
+                                              "w-full h-8 px-1 rounded-lg text-[10px] font-bold transition-all flex items-center justify-center gap-1 opacity-0 group-hover/cell:opacity-100 select-none",
                                               isSunday
-                                                ? "text-indigo-400/80 hover:text-indigo-800 hover:bg-white/80 border border-dashed border-indigo-300/60"
-                                                : "text-slate-300 hover:text-emerald-700 hover:bg-white border border-dashed border-slate-200 hover:border-emerald-300"
+                                                ? "text-indigo-800 bg-white/90 border border-dashed border-indigo-300 shadow-2xs"
+                                                : "text-emerald-700 bg-white border border-dashed border-emerald-300 shadow-2xs"
                                             )}
-                                            title={`Xếp nhân viên vào ${cell.shift.name} (${row.formattedDate})`}
+                                            title={`Phân ca ${cell.shift.name} (${row.formattedDate})`}
                                           >
-                                            <UserPlus className="w-3 h-3 opacity-60 group-hover:opacity-100" />
-                                            <span className="hidden sm:inline">+ Phân ca</span>
-                                          </button>
+                                            <UserPlus className="w-3 h-3" />
+                                            <span>+ Phân ca</span>
+                                          </div>
                                         </td>
                                       );
                                     }
