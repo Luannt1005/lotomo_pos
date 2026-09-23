@@ -480,7 +480,7 @@ export default function PayrollPage() {
 
     // 3. Background API request (non-blocking)
     try {
-      const userEmail = u.email || `${u.id}@lotomo.local`;
+      const userEmail = u.name || u.email?.split('@')[0] || "Nhân viên";
       const res = await fetch("/api/shift-registrations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

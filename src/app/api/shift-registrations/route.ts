@@ -25,7 +25,14 @@ export async function POST(req: Request) {
     if (!body.user_email && body.user_id) {
       try {
         const { data: userData } = await supabaseAdmin.auth.admin.getUserById(body.user_id);
-        if (userData?.user?.email) {
+        const name = 
+          userData?.user?.user_metadata?.name || 
+          userData?.user?.user_metadata?.full_name || 
+          userData?.user?.user_metadata?.username || 
+          userData?.user?.email?.split('@')[0];
+        if (name) {
+          body.user_email = name;
+        } else if (userData?.user?.email) {
           body.user_email = userData.user.email;
         }
       } catch (err) {

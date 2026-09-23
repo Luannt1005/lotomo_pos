@@ -11,6 +11,7 @@ interface FormattedUser {
   id: string;
   email: string;
   role: string;
+  name?: string;
   username: string;
 }
 
@@ -78,10 +79,18 @@ export default function ShiftsPage() {
   }, [currentWeekStart]);
 
   useEffect(() => {
-    if (role === 'admin' || user) {
-      fetchUsersAndSwaps();
-    }
+    fetchUsersAndSwaps();
   }, [role, user]);
+
+  const getStaffDisplayName = (userId: string, fallbackNameOrEmail?: string) => {
+    const staffUser = users.find(
+      u => u.id === userId || (fallbackNameOrEmail && (u.email === fallbackNameOrEmail || u.username === fallbackNameOrEmail || u.name === fallbackNameOrEmail))
+    );
+    if (staffUser?.name) return staffUser.name;
+    if (staffUser?.username) return staffUser.username;
+    if (!fallbackNameOrEmail) return "Nhân viên";
+    return fallbackNameOrEmail.includes("@") ? fallbackNameOrEmail.split("@")[0] : fallbackNameOrEmail;
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -436,7 +445,7 @@ export default function ShiftsPage() {
                 <div key={swap.id} className="bg-card p-4 rounded-xl border border-border flex flex-col justify-between gap-4">
                   <div className="text-xs space-y-1">
                     <div>
-                      <span className="font-bold text-foreground">{swap.requestor_email}</span> muốn hoán đổi ca làm với bạn:
+                      <span className="font-bold text-foreground">{getStaffDisplayName(swap.requestor_id, swap.requestor_email)}</span> muốn hoán đổi ca làm với bạn:
                     </div>
                     <div className="text-primary font-medium mt-1">
                       Ca của họ: {reqShift?.name} ({reqReg ? format(parseISO(reqReg.date), 'dd/MM') : ''})
@@ -635,7 +644,7 @@ export default function ShiftsPage() {
                               >
                                 <span className="truncate pr-0.5 flex items-center gap-1 font-bold text-[11px] leading-tight">
                                   {isMe && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
-                                  {reg.user_email}
+                                  {getStaffDisplayName(reg.user_id, reg.user_email)}
                                 </span>
                                 
                                 <div className="flex gap-0.5 shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
@@ -736,7 +745,7 @@ export default function ShiftsPage() {
               return (
                 <div key={swap.id} className="flex justify-between items-center text-xs bg-secondary/30 p-3 rounded-xl border border-border/50">
                   <div>
-                    Yêu cầu hoán ca <span className="font-semibold text-primary">{reqShift?.name} ({reqReg ? format(parseISO(reqReg.date), 'dd/MM') : ''})</span> sang cho <span className="font-semibold">{swap.target_email}</span>
+                    Yêu cầu hoán ca <span className="font-semibold text-primary">{reqShift?.name} ({reqReg ? format(parseISO(reqReg.date), 'dd/MM') : ''})</span> sang cho <span className="font-semibold">{getStaffDisplayName(swap.target_id, swap.target_email)}</span>
                     <div className="text-[10px] text-muted-foreground mt-0.5">
                       {tarReg ? `Lấy ca: ${tarShift?.name} (${format(parseISO(tarReg.date), 'dd/MM')})` : 'Hình thức: Nhờ làm hộ'}
                     </div>
