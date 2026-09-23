@@ -387,11 +387,15 @@ export default function PayrollPage() {
 
     try {
       setAssigningLoading(true);
+      const selectedUser = allUsers.find(u => u.id === assignUserId);
+      const userEmail = selectedUser?.email || `${assignUserId}@lotomo.local`;
+
       const res = await fetch("/api/shift-registrations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: assignUserId,
+          user_email: userEmail,
           shift_id: assigningSlot.shift.id,
           date: assigningSlot.dateStr
         })
@@ -399,8 +403,7 @@ export default function PayrollPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Không thể phân ca");
 
-      const assignedUser = allUsers.find(u => u.id === assignUserId);
-      toast.success(`Đã phân ca cho ${assignedUser?.name || 'nhân viên'}!`);
+      toast.success(`Đã phân ca cho ${selectedUser?.name || 'nhân viên'}!`);
       setAssigningSlot(null);
       setAssignUserId("");
       await fetchPayroll();
