@@ -11,7 +11,6 @@ import {
   X, 
   Edit2, 
   Check, 
-  Sparkles, 
   ChevronRight, 
   FileText, 
   CalendarDays, 
@@ -71,8 +70,8 @@ export default function PayrollPage() {
   const [shifts, setShifts] = useState<ShiftItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // View mode: "daily" (Excel table vertical) vs "staff" (by employee)
-  const [viewMode, setViewMode] = useState<"daily" | "staff">("daily");
+  // View mode: "staff" (by employee) vs "daily" (Excel table vertical)
+  const [viewMode, setViewMode] = useState<"daily" | "staff">("staff");
 
   // Daily sub-display: "table" (cuộn ngang spreadsheet) vs "cards" (dạng thẻ cuộn dọc tối ưu iPhone)
   const [dailyDisplay, setDailyDisplay] = useState<"table" | "cards">("table");
@@ -220,6 +219,8 @@ export default function PayrollPage() {
         dayOfWeek,
         dayShort,
         isWeekend: d.getDay() === 0 || d.getDay() === 6,
+        isSaturday: d.getDay() === 6,
+        isSunday: d.getDay() === 0,
         shiftCells,
         dayTotalSalary
       };
@@ -506,22 +507,13 @@ export default function PayrollPage() {
         <div className="bg-white border border-slate-300/80 rounded-2xl shadow-sm overflow-hidden animate-in fade-in duration-200">
           {/* Compact Sub-bar: Grand Total & Display Switcher */}
           <div className="px-3 sm:px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 text-xs">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <div className="flex items-baseline gap-1.5 shrink-0">
-                <span className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Tổng lương:
-                </span>
-                <span className="text-xs sm:text-sm md:text-base font-black text-rose-600 font-mono leading-none">
-                  {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)} <span className="text-[10px] font-bold">VNĐ</span>
-                </span>
-              </div>
-              <span className="hidden md:inline text-slate-300">|</span>
-              <div className="hidden md:flex items-center gap-1.5 text-slate-500 truncate text-[11px]">
-                <Sparkles className="w-3.5 h-3.5 text-[#059669] shrink-0" />
-                <span className="truncate">
-                  Bấm vào nhân viên để ghi chú lỗi/OT
-                </span>
-              </div>
+            <div className="flex items-baseline gap-1.5 shrink-0">
+              <span className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Tổng lương:
+              </span>
+              <span className="text-xs sm:text-sm md:text-base font-black text-emerald-700 font-mono leading-none">
+                {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)} <span className="text-[10px] font-bold">VNĐ</span>
+              </span>
             </div>
 
             {/* Display Switcher (Table vs Cards for mobile convenience) */}
@@ -554,9 +546,9 @@ export default function PayrollPage() {
             </div>
           </div>
 
-          {/* DISPLAY OPTION A: EXCEL SPREADSHEET TABLE (FIXED ZERO-OVERLAP FOR IPHONE) */}
+          {/* DISPLAY OPTION A: EXCEL SPREADSHEET TABLE (NATURAL VERTICAL FLOW - SCROLLS WITH PAGE) */}
           {dailyDisplay === "table" && (
-            <div className="overflow-x-auto max-h-[720px] [scrollbar-width:thin]">
+            <div className="overflow-x-auto [scrollbar-width:thin]">
               <table className="w-full text-left border-collapse text-xs">
                 <thead className="sticky top-0 z-30 shadow-xs">
                   {/* Header Level 1: Category Groups */}
@@ -582,7 +574,7 @@ export default function PayrollPage() {
                       );
                     })}
 
-                    <th className="p-2.5 text-center bg-[#1b4332] text-rose-300 font-black min-w-[110px] whitespace-nowrap">
+                    <th className="p-2.5 text-center bg-[#1b4332] text-emerald-300 font-black min-w-[110px] whitespace-nowrap">
                       Tổng Lương Ngày
                     </th>
                   </tr>
@@ -629,20 +621,27 @@ export default function PayrollPage() {
                   ) : (
                     dailyData.rows.map((row, rowIdx) => {
                       const isEven = rowIdx % 2 === 0;
-                      // SOLID opaque background colors to prevent bleed-through when scrolling on iPhone
-                      const stickyBg = row.isWeekend 
-                        ? "bg-amber-100 text-amber-950" 
+                      // SOLID opaque background colors for Saturday & Sunday (No pink)
+                      const stickyBg = row.isSunday 
+                        ? "bg-indigo-100 text-indigo-950" 
+                        : row.isSaturday
+                        ? "bg-sky-100 text-sky-950"
                         : isEven 
                         ? "bg-white text-slate-900" 
                         : "bg-slate-100 text-slate-900";
 
+                      const rowBg = row.isSunday
+                        ? "bg-indigo-50/40 hover:bg-indigo-100/40"
+                        : row.isSaturday
+                        ? "bg-sky-50/40 hover:bg-sky-100/40"
+                        : isEven 
+                        ? "bg-white hover:bg-emerald-50/30" 
+                        : "bg-slate-50/40 hover:bg-emerald-50/30";
+
                       return (
                         <tr 
                           key={row.dateStr}
-                          className={cn(
-                            "transition-colors hover:bg-emerald-50/40",
-                            row.isWeekend ? "bg-amber-50/30" : isEven ? "bg-white" : "bg-slate-50/40"
-                          )}
+                          className={cn("transition-colors", rowBg)}
                         >
                           {/* Single Combined Sticky Time Column (SOLID OPAQUE BG, ZERO BLEED-THROUGH) */}
                           <td className={cn(
@@ -653,8 +652,8 @@ export default function PayrollPage() {
                               {row.shortDate}
                             </div>
                             <div className={cn(
-                              "text-[10px] font-semibold leading-tight mt-0.5",
-                              row.dayOfWeek === "Chủ Nhật" ? "text-rose-600 font-bold" : row.dayOfWeek === "Thứ Bảy" ? "text-amber-700 font-bold" : "text-slate-500"
+                              "text-[10px] leading-tight mt-0.5",
+                              row.isSunday ? "text-indigo-800 font-black" : row.isSaturday ? "text-sky-800 font-bold" : "text-slate-500 font-semibold"
                             )}>
                               {row.dayOfWeek}
                             </div>
@@ -681,7 +680,7 @@ export default function PayrollPage() {
 
                                   return (
                                     <td 
-                                      key={slotIdx}
+                                      key={slotIdx} 
                                       className="p-1 text-center border-r border-slate-200"
                                     >
                                       <button
@@ -728,10 +727,10 @@ export default function PayrollPage() {
                             );
                           })}
 
-                          {/* Tổng lương ngày */}
-                          <td className="p-2 text-right pr-3 font-mono font-black border-l border-slate-200 bg-slate-100/50 whitespace-nowrap">
+                          {/* Tổng lương ngày (No pink - Distinct emerald finance color) */}
+                          <td className="p-2 text-right pr-3 font-mono font-black border-l border-slate-200 bg-emerald-50/30 whitespace-nowrap">
                             {row.dayTotalSalary > 0 ? (
-                              <span className="text-slate-900 text-xs sm:text-sm">
+                              <span className="text-emerald-800 text-xs sm:text-sm font-black">
                                 {new Intl.NumberFormat('vi-VN').format(row.dayTotalSalary)}
                               </span>
                             ) : (
@@ -744,7 +743,7 @@ export default function PayrollPage() {
                   )}
                 </tbody>
 
-                {/* Bottom Grand Summary Row (Matching Excel footer) */}
+                {/* Bottom Grand Summary Row (Matching Excel footer - No pink) */}
                 <tfoot className="sticky bottom-0 z-30 bg-slate-200 border-t-2 border-slate-400 font-bold text-xs shadow-md">
                   <tr>
                     <td className="p-2.5 text-center uppercase tracking-wider font-black text-slate-900 border-r-2 border-slate-300 sticky left-0 z-40 bg-slate-200 shadow-[2px_0_4px_rgba(0,0,0,0.08)]">
@@ -766,7 +765,7 @@ export default function PayrollPage() {
                       );
                     })}
 
-                    <td className="p-2.5 text-right pr-3 font-mono font-black text-sm text-rose-700 bg-slate-300 whitespace-nowrap">
+                    <td className="p-2.5 text-right pr-3 font-mono font-black text-sm text-emerald-900 bg-emerald-100 whitespace-nowrap">
                       {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)}đ
                     </td>
                   </tr>
@@ -777,7 +776,7 @@ export default function PayrollPage() {
 
           {/* DISPLAY OPTION B: DẠNG THẺ THEO NGÀY (TỐI ƯU 100% CHO IPHONE 13 PRO) */}
           {dailyDisplay === "cards" && (
-            <div className="p-3 space-y-3 max-h-[720px] overflow-y-auto">
+            <div className="p-3 space-y-3">
               {dailyData.rows.length === 0 ? (
                 <div className="p-8 text-center text-slate-400 text-sm">
                   Không có ngày nào trong khoảng thời gian đã chọn
@@ -789,7 +788,11 @@ export default function PayrollPage() {
                       key={row.dateStr}
                       className={cn(
                         "rounded-2xl border p-3.5 space-y-2.5 shadow-2xs transition-all",
-                        row.isWeekend ? "bg-amber-50/30 border-amber-200/80" : "bg-white border-slate-200/80"
+                        row.isSunday 
+                          ? "bg-indigo-50/30 border-indigo-200/80" 
+                          : row.isSaturday 
+                          ? "bg-sky-50/30 border-sky-200/80" 
+                          : "bg-white border-slate-200/80"
                       )}
                     >
                       {/* Day Card Header */}
@@ -797,7 +800,11 @@ export default function PayrollPage() {
                         <div className="flex items-center gap-2">
                           <span className={cn(
                             "px-2 py-0.5 rounded-lg text-xs font-bold",
-                            row.dayOfWeek === "Chủ Nhật" ? "bg-rose-100 text-rose-700" : row.dayOfWeek === "Thứ Bảy" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"
+                            row.isSunday 
+                              ? "bg-indigo-100 text-indigo-800" 
+                              : row.isSaturday 
+                              ? "bg-sky-100 text-sky-800" 
+                              : "bg-slate-100 text-slate-700"
                           )}>
                             {row.dayOfWeek}
                           </span>
@@ -812,7 +819,7 @@ export default function PayrollPage() {
                           </span>
                           <span className={cn(
                             "font-mono font-black text-sm",
-                            row.dayTotalSalary > 0 ? "text-slate-900" : "text-slate-300"
+                            row.dayTotalSalary > 0 ? "text-emerald-700" : "text-slate-300"
                           )}>
                             {new Intl.NumberFormat('vi-VN').format(row.dayTotalSalary)}đ
                           </span>
@@ -957,9 +964,6 @@ export default function PayrollPage() {
                   {payrolls.length} nhân viên
                 </span>
               </div>
-              <span className="text-xs text-slate-400">
-                💡 Bấm vào dòng nhân viên để xem danh sách ca làm
-              </span>
             </div>
 
             <div className="overflow-x-auto">
@@ -1323,9 +1327,6 @@ export default function PayrollPage() {
                     <CalendarDays className="w-3.5 h-3.5 text-[#059669]" />
                     Danh Sách Ca Làm Việc ({activeStaff.shifts.length} ca)
                   </h4>
-                  <span className="text-[10px] text-slate-400">
-                    Mới nhất xếp trước
-                  </span>
                 </div>
 
                 {activeStaff.shifts.length === 0 ? (
@@ -1477,9 +1478,6 @@ export default function PayrollPage() {
                   className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                   placeholder="Ví dụ: -1 hoặc 1.5"
                 />
-                <p className="text-[10px] text-slate-400">
-                  Âm (-) nếu trễ, dương (+) nếu OT
-                </p>
               </div>
 
               <div className="space-y-1">
@@ -1494,9 +1492,6 @@ export default function PayrollPage() {
                   className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                   placeholder="0"
                 />
-                <p className="text-[10px] text-slate-400">
-                  Cộng (+) hoặc trừ (-)
-                </p>
               </div>
             </div>
 

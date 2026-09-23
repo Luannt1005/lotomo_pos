@@ -9,7 +9,6 @@ import {
   Calculator, 
   BarChart3, 
   LogOut,
-  Headphones,
   X,
   Sparkles
 } from "lucide-react";
@@ -133,28 +132,8 @@ export function Sidebar() {
           {renderNavLinks()}
         </nav>
 
-        {/* Bottom Support Widget (Montra Style Gradient Card) */}
-        <div className="mt-auto pt-3">
-          <div className="mb-3 p-3.5 rounded-2xl bg-gradient-to-br from-slate-900 via-[#06241a] to-slate-950 text-white border border-emerald-800/30 relative overflow-hidden shadow-sm">
-            <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-emerald-500/20 rounded-full blur-xl pointer-events-none" />
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <Headphones className="w-3.5 h-3.5" />
-              </div>
-              <h4 className="font-semibold text-xs text-white">Hỗ Trợ Thu Ngân</h4>
-            </div>
-            <p className="text-[11px] text-slate-300/85 leading-tight">
-              Hệ thống POS đang kết nối máy in & cơ sở dữ liệu ổn định.
-            </p>
-            <button 
-              onClick={() => alert("Tổng đài hỗ trợ kỹ thuật: 0909.123.456 (24/7)")}
-              className="mt-2.5 w-full py-1.5 px-3 bg-white text-slate-900 hover:bg-slate-100 rounded-xl text-xs font-semibold shadow-xs transition-colors text-center cursor-pointer"
-            >
-              Liên hệ hỗ trợ
-            </button>
-          </div>
-
-          {/* Logout Button */}
+        {/* Logout Button */}
+        <div className="mt-auto pt-3 border-t border-slate-100">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-red-600 hover:bg-red-50/80 transition-all active:scale-[0.98] cursor-pointer"
@@ -204,18 +183,8 @@ export function Sidebar() {
               {renderNavLinks(closeMobileSidebar)}
             </nav>
 
-            {/* Support card & Logout */}
+            {/* Logout button */}
             <div className="mt-auto pt-3 border-t border-slate-100">
-              <div className="mb-3 p-3 rounded-xl bg-gradient-to-br from-slate-900 via-[#06241a] to-slate-950 text-white border border-emerald-800/30">
-                <div className="flex items-center gap-2 mb-1">
-                  <Headphones className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="font-semibold text-xs text-white">Hỗ trợ kỹ thuật</span>
-                </div>
-                <p className="text-[10px] text-slate-300 leading-tight">
-                  Hotline: 0909.123.456 (24/7)
-                </p>
-              </div>
-
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors"
