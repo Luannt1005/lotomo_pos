@@ -137,27 +137,42 @@ export default function PayrollPage() {
     fetchPayroll();
   }, [role, startDate, endDate]);
 
-  const fetchPayroll = async () => {
+  const fetchPayroll = async (showLoadingSpinner = true) => {
     try {
-      setLoading(true);
-      const [pRes, sRes, uRes] = await Promise.all([
-        fetch(`/api/payroll?start_date=${startDate}&end_date=${endDate}`),
-        fetch("/api/shifts"),
-        fetch("/api/users")
-      ]);
-      
+      if (showLoadingSpinner && payrolls.length === 0) {
+        setLoading(true);
+      }
+
+      // If shifts and allUsers are already cached in state, only fetch /api/payroll
+      const promises: Promise<any>[] = [
+        fetch(`/api/payroll?start_date=${startDate}&end_date=${endDate}`)
+      ];
+      const needShifts = shifts.length === 0;
+      const needUsers = allUsers.length === 0;
+
+      if (needShifts) promises.push(fetch("/api/shifts"));
+      if (needUsers) promises.push(fetch("/api/users"));
+
+      const results = await Promise.all(promises);
+      const pRes = results[0];
       if (!pRes.ok) throw new Error("Không thể tải bảng lương");
       const pData: PayrollStaff[] = await pRes.json();
       setPayrolls(pData || []);
 
-      if (sRes.ok) {
-        const sData: ShiftItem[] = await sRes.json();
-        setShifts(sData || []);
+      let curIdx = 1;
+      if (needShifts) {
+        const sRes = results[curIdx++];
+        if (sRes?.ok) {
+          const sData: ShiftItem[] = await sRes.json();
+          setShifts(sData || []);
+        }
       }
-
-      if (uRes.ok) {
-        const uData = await uRes.json();
-        setAllUsers(Array.isArray(uData) ? uData : []);
+      if (needUsers) {
+        const uRes = results[curIdx++];
+        if (uRes?.ok) {
+          const uData = await uRes.json();
+          setAllUsers(Array.isArray(uData) ? uData : []);
+        }
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -187,10 +202,24 @@ export default function PayrollPage() {
     return list;
   }, [startDate, endDate]);
 
-  // Compute Daily Spreadsheet Data (matching Excel Lơ Tơ Mơ)
+  // Compute Daily Spreadsheet Data (High-performance with O(1) Map indexing)
   const dailyData = useMemo(() => {
     const sortedShifts = [...shifts].sort((a, b) => a.start_time.localeCompare(b.start_time));
     
+    // Index staff assignments into a quick map: key = `${date}_${shiftId}`
+    const assignmentMap = new Map<string, { staff: PayrollStaff; shiftItem: ShiftDetail }[]>();
+    payrolls.forEach(staff => {
+      staff.shifts.forEach(shiftItem => {
+        const key = `${shiftItem.date}_${shiftItem.shiftId}`;
+        let list = assignmentMap.get(key);
+        if (!list) {
+          list = [];
+          assignmentMap.set(key, list);
+        }
+        list.push({ staff, shiftItem });
+      });
+    });
+
     // Track shift totals for bottom footer
     const shiftGrandTotals: Record<string, number> = {};
     sortedShifts.forEach(s => { shiftGrandTotals[s.id] = 0; });
@@ -209,15 +238,7 @@ export default function PayrollPage() {
 
       const shiftCells = sortedShifts.map(s => {
         const maxSlots = Math.max(2, s.max_staff || 2);
-        const assignments: { staff: PayrollStaff; shiftItem: ShiftDetail }[] = [];
-
-        payrolls.forEach(staff => {
-          staff.shifts.forEach(shiftItem => {
-            if (shiftItem.date === dateStr && shiftItem.shiftId === s.id) {
-              assignments.push({ staff, shiftItem });
-            }
-          });
-        });
+        const assignments = assignmentMap.get(`${dateStr}_${s.id}`) || [];
 
         const shiftTotalSalary = assignments.reduce((sum, a) => sum + a.shiftItem.shiftSalary, 0);
         dayTotalSalary += shiftTotalSalary;
@@ -387,57 +408,147 @@ export default function PayrollPage() {
     setAssigningSlot({ ...slotInfo, pos });
   };
 
-  // Quick assign staff directly from small popover (1-click)
+  // Quick assign staff directly from small popover (1-click with 0ms OPTIMISTIC UPDATE)
   const handleQuickAssign = async (u: { id: string; name: string; email: string }) => {
     if (!assigningSlot) return;
 
-    try {
-      setAssigningLoading(true);
-      const userEmail = u.email || `${u.id}@lotomo.local`;
+    const targetSlot = assigningSlot;
+    // 1. Close popover immediately (0ms delay)
+    setAssigningSlot(null);
 
+    // 2. Optimistic UI update: Insert shift immediately into payrolls
+    const targetShift = shifts.find(s => s.id === targetSlot.shift.id);
+    const [startH, startM] = (targetShift?.start_time || "00:00").split(':').map(Number);
+    const [endH, endM] = (targetShift?.end_time || "00:00").split(':').map(Number);
+    let standardHours = (endH + endM/60) - (startH + startM/60);
+    if (standardHours < 0) standardHours += 24;
+
+    const existingStaff = payrolls.find(p => p.userId === u.id);
+    const hourlyRate = existingStaff?.hourlyRate || 20000;
+    const shiftSalary = Math.round(standardHours * hourlyRate);
+
+    const tempRegId = `temp_${Date.now()}`;
+    const optimisticShift: ShiftDetail = {
+      registrationId: tempRegId,
+      shiftId: targetSlot.shift.id,
+      shiftName: targetSlot.shift.name,
+      date: targetSlot.dateStr,
+      startTime: targetShift?.start_time || "00:00",
+      endTime: targetShift?.end_time || "00:00",
+      standardHours,
+      hoursAdjustment: 0,
+      actualHours: standardHours,
+      amountAdjustment: 0,
+      note: "",
+      type: "standard",
+      shiftSalary,
+      updatedAt: null
+    };
+
+    setPayrolls(prev => {
+      const idx = prev.findIndex(p => p.userId === u.id);
+      if (idx >= 0) {
+        const updated = [...prev];
+        const staff = { ...updated[idx] };
+        staff.shifts = [...staff.shifts, optimisticShift];
+        staff.totalShifts += 1;
+        staff.totalStandardHours += standardHours;
+        staff.totalActualHours += standardHours;
+        staff.totalSalary += shiftSalary;
+        updated[idx] = staff;
+        return updated;
+      } else {
+        const newStaff: PayrollStaff = {
+          userId: u.id,
+          email: u.email,
+          name: u.name,
+          role: 'staff',
+          hourlyRate,
+          totalShifts: 1,
+          totalStandardHours: standardHours,
+          totalAdjustmentHours: 0,
+          totalActualHours: standardHours,
+          totalAmountAdjustment: 0,
+          totalSalary: shiftSalary,
+          shifts: [optimisticShift]
+        };
+        return [...prev, newStaff];
+      }
+    });
+
+    toast.success(`Đã phân ca cho ${u.name}!`);
+
+    // 3. Background API request (non-blocking)
+    try {
+      const userEmail = u.email || `${u.id}@lotomo.local`;
       const res = await fetch("/api/shift-registrations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: u.id,
           user_email: userEmail,
-          shift_id: assigningSlot.shift.id,
-          date: assigningSlot.dateStr
+          shift_id: targetSlot.shift.id,
+          date: targetSlot.dateStr
         })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Không thể phân ca");
 
-      toast.success(`Đã phân ca cho ${u.name}!`);
-      setAssigningSlot(null);
-      await fetchPayroll();
+      // Replace temp id quietly in background
+      if (data?.id) {
+        setPayrolls(prev => prev.map(p => {
+          if (p.userId !== u.id) return p;
+          return {
+            ...p,
+            shifts: p.shifts.map(s => s.registrationId === tempRegId ? { ...s, registrationId: data.id } : s)
+          };
+        }));
+      }
     } catch (err: any) {
-      toast.error(err.message);
-    } finally {
-      setAssigningLoading(false);
+      toast.error(err.message || "Lỗi lưu ca, đang hoàn tác...");
+      fetchPayroll(false);
     }
   };
 
-  // Unregister/remove staff from a shift
+  // Unregister/remove staff from a shift (with 0ms OPTIMISTIC UPDATE)
   const handleUnregisterShift = async () => {
     if (!adjustingShift || !adjustingShift.shift.registrationId) return;
     if (!confirm(`Bạn có chắc muốn xóa ${adjustingShift.staff.name} khỏi ca ${adjustingShift.shift.shiftName} ngày ${adjustingShift.shift.date}?`)) return;
 
+    const removingRegId = adjustingShift.shift.registrationId;
+    const removingUserId = adjustingShift.staff.userId;
+    const removingShiftSalary = adjustingShift.shift.shiftSalary;
+    const removingStandardHours = adjustingShift.shift.standardHours;
+    const removingActualHours = adjustingShift.shift.actualHours;
+
+    // 1. Close modal immediately (0ms)
+    setAdjustingShift(null);
+
+    // 2. Optimistic UI update: Remove shift immediately
+    setPayrolls(prev => prev.map(p => {
+      if (p.userId !== removingUserId) return p;
+      return {
+        ...p,
+        shifts: p.shifts.filter(s => s.registrationId !== removingRegId),
+        totalShifts: Math.max(0, p.totalShifts - 1),
+        totalStandardHours: Math.max(0, p.totalStandardHours - removingStandardHours),
+        totalActualHours: Math.max(0, p.totalActualHours - removingActualHours),
+        totalSalary: Math.max(0, p.totalSalary - removingShiftSalary)
+      };
+    }));
+
+    toast.success("Đã xóa nhân viên khỏi ca làm việc!");
+
+    // 3. Background API request
     try {
-      setSavingAdjustment(true);
-      const res = await fetch(`/api/shift-registrations/${adjustingShift.shift.registrationId}`, {
+      const res = await fetch(`/api/shift-registrations/${removingRegId}`, {
         method: "DELETE"
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Không thể xóa phân ca");
-
-      toast.success("Đã xóa nhân viên khỏi ca làm việc!");
-      setAdjustingShift(null);
-      await fetchPayroll();
     } catch (err: any) {
-      toast.error(err.message);
-    } finally {
-      setSavingAdjustment(false);
+      toast.error(err.message || "Lỗi khi xóa, đang hoàn tác...");
+      fetchPayroll(false);
     }
   };
 

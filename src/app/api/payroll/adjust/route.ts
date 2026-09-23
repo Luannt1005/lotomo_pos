@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { invalidateUsersCache } from "@/lib/usersCache";
 
 export const dynamic = "force-dynamic";
 
@@ -68,6 +69,8 @@ export async function POST(req: Request) {
     if (updateError) {
       throw updateError;
     }
+
+    invalidateUsersCache();
 
     return NextResponse.json({ success: true, metadata: updatedMetadata });
   } catch (err: any) {

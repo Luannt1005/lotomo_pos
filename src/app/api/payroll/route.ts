@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { getCachedUsers } from "@/lib/usersCache";
 
 export const dynamic = "force-dynamic";
 
@@ -9,24 +10,26 @@ export async function GET(req: Request) {
   const end = searchParams.get('end_date');
 
   try {
-    // 1. Lấy danh sách ca làm việc để tính số giờ chuẩn
-    const { data: shifts, error: shiftsError } = await supabaseAdmin.from("shifts").select("*");
-    if (shiftsError) throw shiftsError;
-
-    // 2. Lấy lịch đăng ký ca trong khoảng thời gian đã chọn
-    let query = supabaseAdmin.from("shift_registrations").select("*");
+    // Chạy song song cả 3 truy vấn (Shifts, Shift Registrations, Cached Users) cùng lúc
+    let regQuery = supabaseAdmin.from("shift_registrations").select("*");
     if (start && end) {
-      query = query.gte("date", start).lte("date", end);
+      regQuery = regQuery.gte("date", start).lte("date", end);
     }
-    const { data: registrations, error: regError } = await query;
-    if (regError) throw regError;
 
-    // 3. Lấy thông tin user (tên, email, mức lương, ghi chú ca làm)
-    const { data: usersData, error: usersError } = await supabaseAdmin.auth.admin.listUsers();
-    if (usersError) throw usersError;
+    const [shiftsRes, regRes, usersList] = await Promise.all([
+      supabaseAdmin.from("shifts").select("*"),
+      regQuery,
+      getCachedUsers()
+    ]);
+
+    if (shiftsRes.error) throw shiftsRes.error;
+    if (regRes.error) throw regRes.error;
+
+    const shifts = shiftsRes.data || [];
+    const registrations = regRes.data || [];
 
     const usersMap = new Map();
-    usersData?.users.forEach(u => {
+    usersList?.forEach(u => {
       const name = 
         u.user_metadata?.name || 
         u.user_metadata?.full_name || 
