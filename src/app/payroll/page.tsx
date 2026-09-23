@@ -621,39 +621,63 @@ export default function PayrollPage() {
                   ) : (
                     dailyData.rows.map((row, rowIdx) => {
                       const isEven = rowIdx % 2 === 0;
-                      // SOLID opaque background colors for Saturday & Sunday (No pink)
-                      const stickyBg = row.isSunday 
-                        ? "bg-indigo-100 text-indigo-950" 
-                        : row.isSaturday
-                        ? "bg-sky-100 text-sky-950"
-                        : isEven 
-                        ? "bg-white text-slate-900" 
-                        : "bg-slate-100 text-slate-900";
+                      const isSunday = row.isSunday;
+                      const isSaturday = row.isSaturday;
+                      const isWeekend = isSunday || isSaturday;
 
-                      const rowBg = row.isSunday
-                        ? "bg-indigo-50/40 hover:bg-indigo-100/40"
-                        : row.isSaturday
-                        ? "bg-sky-50/40 hover:bg-sky-100/40"
-                        : isEven 
-                        ? "bg-white hover:bg-emerald-50/30" 
-                        : "bg-slate-50/40 hover:bg-emerald-50/30";
+                      // Full Row Background & Border styles across all cells
+                      const cellBg = isSunday
+                        ? "bg-indigo-100/70 border-indigo-200"
+                        : isSaturday
+                        ? "bg-sky-100/70 border-sky-200"
+                        : isEven
+                        ? "bg-white border-slate-200"
+                        : "bg-slate-50/70 border-slate-200";
+
+                      const stickyCellBg = isSunday
+                        ? "bg-indigo-200/90 text-indigo-950 border-r-2 border-indigo-300"
+                        : isSaturday
+                        ? "bg-sky-200/90 text-sky-950 border-r-2 border-sky-300"
+                        : isEven
+                        ? "bg-white text-slate-900 border-r-2 border-slate-300"
+                        : "bg-slate-100 text-slate-900 border-r-2 border-slate-300";
+
+                      const shiftTotalCellBg = isSunday
+                        ? "bg-indigo-200/60 text-indigo-950 font-bold border-r-2 border-indigo-300"
+                        : isSaturday
+                        ? "bg-sky-200/60 text-sky-950 font-bold border-r-2 border-sky-300"
+                        : "bg-emerald-50/30 text-slate-700 font-bold border-r-2 border-slate-300";
+
+                      const dayTotalCellBg = isSunday
+                        ? "bg-indigo-200/80 border-l border-indigo-300"
+                        : isSaturday
+                        ? "bg-sky-200/80 border-l border-sky-300"
+                        : "bg-emerald-50/30 border-l border-slate-200";
+
+                      const rowBg = isSunday
+                        ? "bg-indigo-100/70 hover:bg-indigo-100"
+                        : isSaturday
+                        ? "bg-sky-100/70 hover:bg-sky-100"
+                        : isEven
+                        ? "bg-white hover:bg-slate-50"
+                        : "bg-slate-50/70 hover:bg-slate-100";
 
                       return (
                         <tr 
                           key={row.dateStr}
                           className={cn("transition-colors", rowBg)}
                         >
-                          {/* Single Combined Sticky Time Column (SOLID OPAQUE BG, ZERO BLEED-THROUGH) */}
+                          {/* Single Combined Sticky Time Column */}
                           <td className={cn(
-                            "p-2 text-center border-r-2 border-slate-300 sticky left-0 z-20 shadow-[2px_0_4px_rgba(0,0,0,0.06)] select-none whitespace-nowrap",
-                            stickyBg
+                            "p-2 text-center sticky left-0 z-20 shadow-[2px_0_4px_rgba(0,0,0,0.06)] select-none whitespace-nowrap",
+                            stickyCellBg
                           )}>
                             <div className="font-mono font-bold text-xs leading-tight">
                               {row.shortDate}
                             </div>
                             <div className={cn(
                               "text-[10px] leading-tight mt-0.5",
-                              row.isSunday ? "text-indigo-800 font-black" : row.isSaturday ? "text-sky-800 font-bold" : "text-slate-500 font-semibold"
+                              isSunday ? "text-indigo-800 font-black" : isSaturday ? "text-sky-800 font-bold" : "text-slate-500 font-semibold"
                             )}>
                               {row.dayOfWeek}
                             </div>
@@ -668,7 +692,11 @@ export default function PayrollPage() {
                                     return (
                                       <td 
                                         key={slotIdx} 
-                                        className="p-2 text-center border-r border-slate-200 text-slate-300 font-mono text-xs select-none"
+                                        className={cn(
+                                          "p-2 text-center border-r font-mono text-xs select-none",
+                                          cellBg,
+                                          isWeekend ? "text-slate-400" : "text-slate-300"
+                                        )}
                                       >
                                         -
                                       </td>
@@ -681,7 +709,7 @@ export default function PayrollPage() {
                                   return (
                                     <td 
                                       key={slotIdx} 
-                                      className="p-1 text-center border-r border-slate-200"
+                                      className={cn("p-1 text-center border-r", cellBg)}
                                     >
                                       <button
                                         type="button"
@@ -694,6 +722,8 @@ export default function PayrollPage() {
                                               : slot.shiftItem.type === "ot"
                                               ? "bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100"
                                               : "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
+                                            : isWeekend
+                                            ? "bg-white/95 hover:bg-white text-slate-900 border border-slate-300/80 shadow-2xs"
                                             : "bg-slate-100 hover:bg-emerald-100/70 text-slate-800 hover:text-emerald-900 border border-slate-200/80"
                                         )}
                                         title={slot.shiftItem.note || `${slot.staff.name} (${slot.shiftItem.actualHours}h)`}
@@ -714,13 +744,13 @@ export default function PayrollPage() {
                                 })}
 
                                 {/* Tổng lương ca */}
-                                <td className="p-2 text-center border-r-2 border-slate-300 font-mono font-bold text-slate-700 bg-emerald-50/30 whitespace-nowrap">
+                                <td className={cn("p-2 text-center font-mono whitespace-nowrap", shiftTotalCellBg)}>
                                   {cell.shiftTotalSalary > 0 ? (
-                                    <span className="text-emerald-700">
+                                    <span className={isWeekend ? "text-slate-900 font-bold" : "text-emerald-700 font-bold"}>
                                       {new Intl.NumberFormat('vi-VN').format(cell.shiftTotalSalary)}
                                     </span>
                                   ) : (
-                                    <span className="text-slate-300 font-normal">0</span>
+                                    <span className={isWeekend ? "text-slate-400 font-normal" : "text-slate-300 font-normal"}>0</span>
                                   )}
                                 </td>
                               </React.Fragment>
@@ -728,13 +758,13 @@ export default function PayrollPage() {
                           })}
 
                           {/* Tổng lương ngày (No pink - Distinct emerald finance color) */}
-                          <td className="p-2 text-right pr-3 font-mono font-black border-l border-slate-200 bg-emerald-50/30 whitespace-nowrap">
+                          <td className={cn("p-2 text-right pr-3 font-mono font-black whitespace-nowrap", dayTotalCellBg)}>
                             {row.dayTotalSalary > 0 ? (
                               <span className="text-emerald-800 text-xs sm:text-sm font-black">
                                 {new Intl.NumberFormat('vi-VN').format(row.dayTotalSalary)}
                               </span>
                             ) : (
-                              <span className="text-slate-300 font-normal">0</span>
+                              <span className={isWeekend ? "text-slate-400 font-normal" : "text-slate-300 font-normal"}>0</span>
                             )}
                           </td>
                         </tr>
