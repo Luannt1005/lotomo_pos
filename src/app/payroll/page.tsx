@@ -18,7 +18,10 @@ import {
   Trash2,
   Table as TableIcon,
   LayoutList,
-  AlertCircle
+  AlertCircle,
+  SlidersHorizontal,
+  UserPlus,
+  UserMinus
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
@@ -87,6 +90,24 @@ export default function PayrollPage() {
   // Selected staff for Shift Detail Drawer
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
 
+  // Column visibility controls for Excel spreadsheet
+  const [hiddenShiftIds, setHiddenShiftIds] = useState<string[]>([]);
+  const [showShiftSalaryColumns, setShowShiftSalaryColumns] = useState<boolean>(true);
+  const [showDayTotalColumn, setShowDayTotalColumn] = useState<boolean>(true);
+  const [showColumnFilterMenu, setShowColumnFilterMenu] = useState<boolean>(false);
+
+  // All registered staff list (from /api/users)
+  const [allUsers, setAllUsers] = useState<{ id: string; name: string; email: string; role: string }[]>([]);
+
+  // Direct Shift Assignment modal state
+  const [assigningSlot, setAssigningSlot] = useState<{
+    shift: ShiftItem;
+    dateStr: string;
+    formattedDate: string;
+  } | null>(null);
+  const [assignUserId, setAssignUserId] = useState<string>("");
+  const [assigningLoading, setAssigningLoading] = useState<boolean>(false);
+
   // Quick edit hourly rate state (inside table or drawer)
   const [editingRateUserId, setEditingRateUserId] = useState<string | null>(null);
   const [newRateValue, setNewRateValue] = useState<number>(20000);
@@ -119,9 +140,10 @@ export default function PayrollPage() {
   const fetchPayroll = async () => {
     try {
       setLoading(true);
-      const [pRes, sRes] = await Promise.all([
+      const [pRes, sRes, uRes] = await Promise.all([
         fetch(`/api/payroll?start_date=${startDate}&end_date=${endDate}`),
-        fetch("/api/shifts")
+        fetch("/api/shifts"),
+        fetch("/api/users")
       ]);
       
       if (!pRes.ok) throw new Error("Không thể tải bảng lương");
@@ -131,6 +153,11 @@ export default function PayrollPage() {
       if (sRes.ok) {
         const sData: ShiftItem[] = await sRes.json();
         setShifts(sData || []);
+      }
+
+      if (uRes.ok) {
+        const uData = await uRes.json();
+        setAllUsers(Array.isArray(uData) ? uData : []);
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -234,6 +261,11 @@ export default function PayrollPage() {
     };
   }, [datesList, shifts, payrolls]);
 
+  // Filtered shifts based on column visibility toggle
+  const visibleShifts = useMemo(() => {
+    return dailyData.sortedShifts.filter(s => !hiddenShiftIds.includes(s.id));
+  }, [dailyData.sortedShifts, hiddenShiftIds]);
+
   // Handle Quick Wage Update
   const handleStartEditRate = (staff: PayrollStaff) => {
     setEditingRateUserId(staff.userId);
@@ -326,6 +358,73 @@ export default function PayrollPage() {
       if (!res.ok) throw new Error(data.error || "Không thể xóa ghi chú");
 
       toast.success("Đã xóa điều chỉnh ca!");
+      setAdjustingShift(null);
+      await fetchPayroll();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setSavingAdjustment(false);
+    }
+  };
+
+  // Open modal to assign staff to an empty shift slot
+  const handleOpenAssignModal = (slotInfo: { shift: ShiftItem; dateStr: string; formattedDate: string }) => {
+    setAssigningSlot(slotInfo);
+    // Suggest first staff not already on this shift, or first user
+    const dayRow = dailyData.rows.find(r => r.dateStr === slotInfo.dateStr);
+    const shiftCell = dayRow?.shiftCells.find(c => c.shift.id === slotInfo.shift.id);
+    const assignedIds = new Set(shiftCell?.assignments.map(a => a.staff.userId) || []);
+    const available = allUsers.find(u => !assignedIds.has(u.id)) || allUsers[0];
+    setAssignUserId(available?.id || "");
+  };
+
+  // Confirm assigning staff to shift
+  const handleConfirmAssign = async () => {
+    if (!assigningSlot || !assignUserId) {
+      toast.error("Vui lòng chọn nhân viên cần phân ca!");
+      return;
+    }
+
+    try {
+      setAssigningLoading(true);
+      const res = await fetch("/api/shift-registrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: assignUserId,
+          shift_id: assigningSlot.shift.id,
+          date: assigningSlot.dateStr
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Không thể phân ca");
+
+      const assignedUser = allUsers.find(u => u.id === assignUserId);
+      toast.success(`Đã phân ca cho ${assignedUser?.name || 'nhân viên'}!`);
+      setAssigningSlot(null);
+      setAssignUserId("");
+      await fetchPayroll();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setAssigningLoading(false);
+    }
+  };
+
+  // Unregister/remove staff from a shift
+  const handleUnregisterShift = async () => {
+    if (!adjustingShift || !adjustingShift.shift.registrationId) return;
+    if (!confirm(`Bạn có chắc muốn xóa ${adjustingShift.staff.name} khỏi ca ${adjustingShift.shift.shiftName} ngày ${adjustingShift.shift.date}?`)) return;
+
+    try {
+      setSavingAdjustment(true);
+      const res = await fetch(`/api/shift-registrations/${adjustingShift.shift.registrationId}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Không thể xóa phân ca");
+
+      toast.success("Đã xóa nhân viên khỏi ca làm việc!");
       setAdjustingShift(null);
       await fetchPayroll();
     } catch (err: any) {
@@ -505,8 +604,8 @@ export default function PayrollPage() {
       {/* ========================================================================= */}
       {viewMode === "daily" && (
         <div className="bg-white border border-slate-300/80 rounded-2xl shadow-sm overflow-hidden animate-in fade-in duration-200">
-          {/* Compact Sub-bar: Grand Total & Display Switcher */}
-          <div className="px-3 sm:px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 text-xs">
+          {/* Compact Sub-bar: Grand Total, Column Toggle & Display Switcher */}
+          <div className="px-3 sm:px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 text-xs relative">
             <div className="flex items-baseline gap-1.5 shrink-0">
               <span className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Tổng lương:
@@ -516,33 +615,134 @@ export default function PayrollPage() {
               </span>
             </div>
 
-            {/* Display Switcher (Table vs Cards for mobile convenience) */}
-            <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 shrink-0">
-              <button
-                type="button"
-                onClick={() => setDailyDisplay("table")}
-                className={cn(
-                  "px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors",
-                  dailyDisplay === "table" ? "bg-[#059669] text-white" : "text-slate-600 hover:text-slate-900"
-                )}
-                title="Bảng tính Excel cuộn ngang"
-              >
-                <TableIcon className="w-3 h-3" />
-                <span className="hidden sm:inline">Bảng tính</span>
-              </button>
+            <div className="flex items-center gap-2">
+              {/* Column Visibility Filter Toggle (Excel Ẩn/Hiện cột) */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowColumnFilterMenu(!showColumnFilterMenu)}
+                  className={cn(
+                    "px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all border cursor-pointer",
+                    hiddenShiftIds.length > 0 || !showShiftSalaryColumns || !showDayTotalColumn
+                      ? "bg-emerald-50 text-[#059669] border-emerald-300 shadow-2xs"
+                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-2xs"
+                  )}
+                  title="Ẩn / hiện cột trong bảng tính"
+                >
+                  <SlidersHorizontal className="w-3 h-3 text-[#059669]" />
+                  <span>Ẩn/Hiện cột</span>
+                  {(hiddenShiftIds.length > 0 || !showShiftSalaryColumns || !showDayTotalColumn) && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  )}
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setDailyDisplay("cards")}
-                className={cn(
-                  "px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors",
-                  dailyDisplay === "cards" ? "bg-[#059669] text-white" : "text-slate-600 hover:text-slate-900"
+                {/* Dropdown Menu Popover */}
+                {showColumnFilterMenu && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setShowColumnFilterMenu(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-1.5 w-60 bg-white rounded-xl shadow-xl border border-slate-200 p-2.5 z-50 text-xs space-y-2 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-100 font-bold text-slate-800">
+                        <span>Cấu hình cột</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setHiddenShiftIds([]);
+                            setShowShiftSalaryColumns(true);
+                            setShowDayTotalColumn(true);
+                          }}
+                          className="text-[10px] text-[#059669] hover:underline cursor-pointer"
+                        >
+                          Hiện tất cả
+                        </button>
+                      </div>
+
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                          Các ca làm
+                        </span>
+                        {dailyData.sortedShifts.map((s) => {
+                          const isHidden = hiddenShiftIds.includes(s.id);
+                          return (
+                            <label key={s.id} className="flex items-center gap-2 py-1 px-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-slate-700">
+                              <input
+                                type="checkbox"
+                                checked={!isHidden}
+                                onChange={() => {
+                                  if (isHidden) {
+                                    setHiddenShiftIds(hiddenShiftIds.filter(id => id !== s.id));
+                                  } else {
+                                    setHiddenShiftIds([...hiddenShiftIds, s.id]);
+                                  }
+                                }}
+                                className="w-3.5 h-3.5 rounded text-[#059669] accent-[#059669]"
+                              />
+                              <span className="truncate text-[11px] font-medium">
+                                {s.name} ({s.start_time?.slice(0, 5)} - {s.end_time?.slice(0, 5)})
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+
+                      <div className="pt-1.5 border-t border-slate-100 space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
+                          Cột tiền lương
+                        </span>
+                        <label className="flex items-center gap-2 py-1 px-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={showShiftSalaryColumns}
+                            onChange={(e) => setShowShiftSalaryColumns(e.target.checked)}
+                            className="w-3.5 h-3.5 rounded text-[#059669] accent-[#059669]"
+                          />
+                          <span className="text-[11px] font-medium">Cột "Lương ca"</span>
+                        </label>
+                        <label className="flex items-center gap-2 py-1 px-1.5 rounded-lg hover:bg-slate-50 cursor-pointer text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={showDayTotalColumn}
+                            onChange={(e) => setShowDayTotalColumn(e.target.checked)}
+                            className="w-3.5 h-3.5 rounded text-[#059669] accent-[#059669]"
+                          />
+                          <span className="text-[11px] font-medium">Cột "Tổng lương ngày"</span>
+                        </label>
+                      </div>
+                    </div>
+                  </>
                 )}
-                title="Dạng thẻ cuộn dọc (Tối ưu màn hình điện thoại)"
-              >
-                <LayoutList className="w-3 h-3" />
-                <span className="hidden sm:inline">Dạng thẻ</span>
-              </button>
+              </div>
+
+              {/* Display Switcher (Table vs Cards for mobile convenience) */}
+              <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setDailyDisplay("table")}
+                  className={cn(
+                    "px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors",
+                    dailyDisplay === "table" ? "bg-[#059669] text-white" : "text-slate-600 hover:text-slate-900"
+                  )}
+                  title="Bảng tính Excel cuộn ngang"
+                >
+                  <TableIcon className="w-3 h-3" />
+                  <span className="hidden sm:inline">Bảng tính</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setDailyDisplay("cards")}
+                  className={cn(
+                    "px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors",
+                    dailyDisplay === "cards" ? "bg-[#059669] text-white" : "text-slate-600 hover:text-slate-900"
+                  )}
+                  title="Dạng thẻ cuộn dọc (Tối ưu màn hình điện thoại)"
+                >
+                  <LayoutList className="w-3 h-3" />
+                  <span className="hidden sm:inline">Dạng thẻ</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -558,15 +758,16 @@ export default function PayrollPage() {
                       Thời Gian
                     </th>
 
-                    {dailyData.sortedShifts.map((s, idx) => {
+                    {visibleShifts.map((s, idx) => {
                       const maxSlots = Math.max(2, s.max_staff || 2);
+                      const colSpan = maxSlots + (showShiftSalaryColumns ? 1 : 0);
                       const bgColors = ["bg-[#2d6a4f]", "bg-[#1e5238]", "bg-[#17422c]"];
                       const headerBg = bgColors[idx % bgColors.length];
 
                       return (
                         <th 
                           key={s.id} 
-                          colSpan={maxSlots + 1}
+                          colSpan={colSpan}
                           className={cn("p-2.5 text-center border-r border-emerald-700/60 whitespace-nowrap", headerBg)}
                         >
                           {s.name} ({s.start_time?.slice(0, 5)} - {s.end_time?.slice(0, 5)})
@@ -574,9 +775,11 @@ export default function PayrollPage() {
                       );
                     })}
 
-                    <th className="p-2.5 text-center bg-[#1b4332] text-emerald-300 font-black min-w-[110px] whitespace-nowrap">
-                      Tổng Lương Ngày
-                    </th>
+                    {showDayTotalColumn && (
+                      <th className="p-2.5 text-center bg-[#1b4332] text-emerald-300 font-black min-w-[110px] whitespace-nowrap">
+                        Tổng Lương Ngày
+                      </th>
+                    )}
                   </tr>
 
                   {/* Header Level 2: Sub-columns */}
@@ -586,7 +789,7 @@ export default function PayrollPage() {
                       Ngày / Thứ
                     </th>
 
-                    {dailyData.sortedShifts.map((s) => {
+                    {visibleShifts.map((s) => {
                       const maxSlots = Math.max(2, s.max_staff || 2);
                       return (
                         <React.Fragment key={s.id}>
@@ -598,23 +801,27 @@ export default function PayrollPage() {
                               Nhân viên {slotIdx + 1}
                             </th>
                           ))}
-                          <th className="p-2 text-center border-r-2 border-slate-400 bg-emerald-50 text-emerald-800 min-w-[95px] whitespace-nowrap">
-                            Lương ca
-                          </th>
+                          {showShiftSalaryColumns && (
+                            <th className="p-2 text-center border-r-2 border-slate-400 bg-emerald-50 text-emerald-800 min-w-[95px] whitespace-nowrap">
+                              Lương ca
+                            </th>
+                          )}
                         </React.Fragment>
                       );
                     })}
 
-                    <th className="p-2 text-right pr-3 bg-slate-200/80 text-slate-900 font-black min-w-[110px]">
-                      VNĐ
-                    </th>
+                    {showDayTotalColumn && (
+                      <th className="p-2 text-right pr-3 bg-slate-200/80 text-slate-900 font-black min-w-[110px]">
+                        VNĐ
+                      </th>
+                    )}
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-slate-200">
                   {dailyData.rows.length === 0 ? (
                     <tr>
-                      <td colSpan={20} className="p-10 text-center text-slate-400 font-medium">
+                      <td colSpan={25} className="p-10 text-center text-slate-400 font-medium">
                         Không có ngày nào trong khoảng thời gian đã chọn
                       </td>
                     </tr>
@@ -622,42 +829,30 @@ export default function PayrollPage() {
                     dailyData.rows.map((row, rowIdx) => {
                       const isEven = rowIdx % 2 === 0;
                       const isSunday = row.isSunday;
-                      const isSaturday = row.isSaturday;
-                      const isWeekend = isSunday || isSaturday;
 
-                      // Full Row Background & Border styles across all cells
+                      // Full Row Background & Border styles across all cells (Only Sunday is colored, Saturday is normal)
                       const cellBg = isSunday
                         ? "bg-indigo-100/70 border-indigo-200"
-                        : isSaturday
-                        ? "bg-sky-100/70 border-sky-200"
                         : isEven
                         ? "bg-white border-slate-200"
                         : "bg-slate-50/70 border-slate-200";
 
                       const stickyCellBg = isSunday
                         ? "bg-indigo-200/90 text-indigo-950 border-r-2 border-indigo-300"
-                        : isSaturday
-                        ? "bg-sky-200/90 text-sky-950 border-r-2 border-sky-300"
                         : isEven
                         ? "bg-white text-slate-900 border-r-2 border-slate-300"
                         : "bg-slate-100 text-slate-900 border-r-2 border-slate-300";
 
                       const shiftTotalCellBg = isSunday
                         ? "bg-indigo-200/60 text-indigo-950 font-bold border-r-2 border-indigo-300"
-                        : isSaturday
-                        ? "bg-sky-200/60 text-sky-950 font-bold border-r-2 border-sky-300"
                         : "bg-emerald-50/30 text-slate-700 font-bold border-r-2 border-slate-300";
 
                       const dayTotalCellBg = isSunday
                         ? "bg-indigo-200/80 border-l border-indigo-300"
-                        : isSaturday
-                        ? "bg-sky-200/80 border-l border-sky-300"
                         : "bg-emerald-50/30 border-l border-slate-200";
 
                       const rowBg = isSunday
                         ? "bg-indigo-100/70 hover:bg-indigo-100"
-                        : isSaturday
-                        ? "bg-sky-100/70 hover:bg-sky-100"
                         : isEven
                         ? "bg-white hover:bg-slate-50"
                         : "bg-slate-50/70 hover:bg-slate-100";
@@ -677,110 +872,129 @@ export default function PayrollPage() {
                             </div>
                             <div className={cn(
                               "text-[10px] leading-tight mt-0.5",
-                              isSunday ? "text-indigo-800 font-black" : isSaturday ? "text-sky-800 font-bold" : "text-slate-500 font-semibold"
+                              isSunday ? "text-indigo-800 font-black" : "text-slate-500 font-semibold"
                             )}>
                               {row.dayOfWeek}
                             </div>
                           </td>
 
-                          {/* Shift Cells */}
-                          {row.shiftCells.map((cell) => {
-                            return (
-                              <React.Fragment key={cell.shift.id}>
-                                {cell.slots.map((slot, slotIdx) => {
-                                  if (!slot) {
+                          {/* Shift Cells (Filtered by hidden shifts) */}
+                          {row.shiftCells
+                            .filter(cell => !hiddenShiftIds.includes(cell.shift.id))
+                            .map((cell) => {
+                              return (
+                                <React.Fragment key={cell.shift.id}>
+                                  {cell.slots.map((slot, slotIdx) => {
+                                    if (!slot) {
+                                      return (
+                                        <td 
+                                          key={slotIdx} 
+                                          className={cn("p-1 text-center border-r", cellBg)}
+                                        >
+                                          <button
+                                            type="button"
+                                            onClick={() => handleOpenAssignModal({
+                                              shift: cell.shift,
+                                              dateStr: row.dateStr,
+                                              formattedDate: row.formattedDate
+                                            })}
+                                            className={cn(
+                                              "w-full h-8 px-1 rounded-lg text-[10px] font-medium transition-all flex items-center justify-center gap-1 cursor-pointer group",
+                                              isSunday
+                                                ? "text-indigo-400/80 hover:text-indigo-800 hover:bg-white/80 border border-dashed border-indigo-300/60"
+                                                : "text-slate-300 hover:text-emerald-700 hover:bg-white border border-dashed border-slate-200 hover:border-emerald-300"
+                                            )}
+                                            title={`Xếp nhân viên vào ${cell.shift.name} (${row.formattedDate})`}
+                                          >
+                                            <UserPlus className="w-3 h-3 opacity-60 group-hover:opacity-100" />
+                                            <span className="hidden sm:inline">+ Phân ca</span>
+                                          </button>
+                                        </td>
+                                      );
+                                    }
+
+                                    const hasNote = Boolean(slot.shiftItem.note);
+                                    const hasAdj = slot.shiftItem.hoursAdjustment !== 0 || slot.shiftItem.amountAdjustment !== 0;
+
                                     return (
                                       <td 
                                         key={slotIdx} 
-                                        className={cn(
-                                          "p-2 text-center border-r font-mono text-xs select-none",
-                                          cellBg,
-                                          isWeekend ? "text-slate-400" : "text-slate-300"
-                                        )}
+                                        className={cn("p-1 text-center border-r", cellBg)}
                                       >
-                                        -
+                                        <button
+                                          type="button"
+                                          onClick={() => handleOpenAdjustment(slot.staff, slot.shiftItem)}
+                                          className={cn(
+                                            "w-full px-2 py-1.5 rounded-lg font-bold text-[11px] transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer leading-tight",
+                                            hasNote || hasAdj
+                                              ? slot.shiftItem.type === "late"
+                                                ? "bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100"
+                                                : slot.shiftItem.type === "ot"
+                                                ? "bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100"
+                                                : "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
+                                              : isSunday
+                                              ? "bg-white/95 hover:bg-white text-slate-900 border border-slate-300/80 shadow-2xs"
+                                              : "bg-slate-100 hover:bg-emerald-100/70 text-slate-800 hover:text-emerald-900 border border-slate-200/80"
+                                          )}
+                                          title={slot.shiftItem.note || `${slot.staff.name} (${slot.shiftItem.actualHours}h)`}
+                                        >
+                                          <span className="truncate max-w-[85px]">{slot.staff.name}</span>
+                                          
+                                          {/* Mini Adjustment Badge */}
+                                          {hasAdj && (
+                                            <span className="text-[9px] font-mono font-bold leading-none px-1 py-0.2 rounded bg-white/90">
+                                              {slot.shiftItem.hoursAdjustment > 0 
+                                                ? `+${slot.shiftItem.hoursAdjustment}h` 
+                                                : `${slot.shiftItem.hoursAdjustment}h`}
+                                            </span>
+                                          )}
+                                        </button>
                                       </td>
                                     );
-                                  }
+                                  })}
 
-                                  const hasNote = Boolean(slot.shiftItem.note);
-                                  const hasAdj = slot.shiftItem.hoursAdjustment !== 0 || slot.shiftItem.amountAdjustment !== 0;
-
-                                  return (
-                                    <td 
-                                      key={slotIdx} 
-                                      className={cn("p-1 text-center border-r", cellBg)}
-                                    >
-                                      <button
-                                        type="button"
-                                        onClick={() => handleOpenAdjustment(slot.staff, slot.shiftItem)}
-                                        className={cn(
-                                          "w-full px-2 py-1.5 rounded-lg font-bold text-[11px] transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer leading-tight",
-                                          hasNote || hasAdj
-                                            ? slot.shiftItem.type === "late"
-                                              ? "bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100"
-                                              : slot.shiftItem.type === "ot"
-                                              ? "bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100"
-                                              : "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
-                                            : isWeekend
-                                            ? "bg-white/95 hover:bg-white text-slate-900 border border-slate-300/80 shadow-2xs"
-                                            : "bg-slate-100 hover:bg-emerald-100/70 text-slate-800 hover:text-emerald-900 border border-slate-200/80"
-                                        )}
-                                        title={slot.shiftItem.note || `${slot.staff.name} (${slot.shiftItem.actualHours}h)`}
-                                      >
-                                        <span className="truncate max-w-[85px]">{slot.staff.name}</span>
-                                        
-                                        {/* Mini Adjustment Badge */}
-                                        {hasAdj && (
-                                          <span className="text-[9px] font-mono font-bold leading-none px-1 py-0.2 rounded bg-white/90">
-                                            {slot.shiftItem.hoursAdjustment > 0 
-                                              ? `+${slot.shiftItem.hoursAdjustment}h` 
-                                              : `${slot.shiftItem.hoursAdjustment}h`}
-                                          </span>
-                                        )}
-                                      </button>
+                                  {/* Lương ca (hiển thị khi showShiftSalaryColumns === true) */}
+                                  {showShiftSalaryColumns && (
+                                    <td className={cn("p-2 text-center font-mono whitespace-nowrap", shiftTotalCellBg)}>
+                                      {cell.shiftTotalSalary > 0 ? (
+                                        <span className={isSunday ? "text-slate-900 font-bold" : "text-emerald-700 font-bold"}>
+                                          {new Intl.NumberFormat('vi-VN').format(cell.shiftTotalSalary)}
+                                        </span>
+                                      ) : (
+                                        <span className={isSunday ? "text-slate-400 font-normal" : "text-slate-300 font-normal"}>0</span>
+                                      )}
                                     </td>
-                                  );
-                                })}
-
-                                {/* Tổng lương ca */}
-                                <td className={cn("p-2 text-center font-mono whitespace-nowrap", shiftTotalCellBg)}>
-                                  {cell.shiftTotalSalary > 0 ? (
-                                    <span className={isWeekend ? "text-slate-900 font-bold" : "text-emerald-700 font-bold"}>
-                                      {new Intl.NumberFormat('vi-VN').format(cell.shiftTotalSalary)}
-                                    </span>
-                                  ) : (
-                                    <span className={isWeekend ? "text-slate-400 font-normal" : "text-slate-300 font-normal"}>0</span>
                                   )}
-                                </td>
-                              </React.Fragment>
-                            );
-                          })}
+                                </React.Fragment>
+                              );
+                            })}
 
-                          {/* Tổng lương ngày (No pink - Distinct emerald finance color) */}
-                          <td className={cn("p-2 text-right pr-3 font-mono font-black whitespace-nowrap", dayTotalCellBg)}>
-                            {row.dayTotalSalary > 0 ? (
-                              <span className="text-emerald-800 text-xs sm:text-sm font-black">
-                                {new Intl.NumberFormat('vi-VN').format(row.dayTotalSalary)}
-                              </span>
-                            ) : (
-                              <span className={isWeekend ? "text-slate-400 font-normal" : "text-slate-300 font-normal"}>0</span>
-                            )}
-                          </td>
+                          {/* Tổng lương ngày (hiển thị khi showDayTotalColumn === true) */}
+                          {showDayTotalColumn && (
+                            <td className={cn("p-2 text-right pr-3 font-mono font-black whitespace-nowrap", dayTotalCellBg)}>
+                              {row.dayTotalSalary > 0 ? (
+                                <span className="text-emerald-800 text-xs sm:text-sm font-black">
+                                  {new Intl.NumberFormat('vi-VN').format(row.dayTotalSalary)}
+                                </span>
+                              ) : (
+                                <span className={isSunday ? "text-slate-400 font-normal" : "text-slate-300 font-normal"}>0</span>
+                              )}
+                            </td>
+                          )}
                         </tr>
                       );
                     })
                   )}
                 </tbody>
 
-                {/* Bottom Grand Summary Row (Matching Excel footer - No pink) */}
+                {/* Bottom Grand Summary Row */}
                 <tfoot className="sticky bottom-0 z-30 bg-slate-200 border-t-2 border-slate-400 font-bold text-xs shadow-md">
                   <tr>
                     <td className="p-2.5 text-center uppercase tracking-wider font-black text-slate-900 border-r-2 border-slate-300 sticky left-0 z-40 bg-slate-200 shadow-[2px_0_4px_rgba(0,0,0,0.08)]">
                       TỔNG CỘNG
                     </td>
 
-                    {dailyData.sortedShifts.map((s) => {
+                    {visibleShifts.map((s) => {
                       const maxSlots = Math.max(2, s.max_staff || 2);
                       const shiftTotal = dailyData.shiftGrandTotals[s.id] || 0;
                       return (
@@ -788,16 +1002,20 @@ export default function PayrollPage() {
                           <td colSpan={maxSlots} className="p-2.5 text-center border-r border-slate-300 text-slate-400 font-normal">
                             -
                           </td>
-                          <td className="p-2.5 text-center border-r-2 border-slate-400 font-mono font-black text-emerald-800 bg-emerald-100/70 whitespace-nowrap">
-                            {new Intl.NumberFormat('vi-VN').format(shiftTotal)}
-                          </td>
+                          {showShiftSalaryColumns && (
+                            <td className="p-2.5 text-center border-r-2 border-slate-400 font-mono font-black text-emerald-800 bg-emerald-100/70 whitespace-nowrap">
+                              {new Intl.NumberFormat('vi-VN').format(shiftTotal)}
+                            </td>
+                          )}
                         </React.Fragment>
                       );
                     })}
 
-                    <td className="p-2.5 text-right pr-3 font-mono font-black text-sm text-emerald-900 bg-emerald-100 whitespace-nowrap">
-                      {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)}đ
-                    </td>
+                    {showDayTotalColumn && (
+                      <td className="p-2.5 text-right pr-3 font-mono font-black text-sm text-emerald-900 bg-emerald-100 whitespace-nowrap">
+                        {new Intl.NumberFormat('vi-VN').format(dailyData.grandTotal)}đ
+                      </td>
+                    )}
                   </tr>
                 </tfoot>
               </table>
@@ -820,8 +1038,6 @@ export default function PayrollPage() {
                         "rounded-2xl border p-3.5 space-y-2.5 shadow-2xs transition-all",
                         row.isSunday 
                           ? "bg-indigo-50/30 border-indigo-200/80" 
-                          : row.isSaturday 
-                          ? "bg-sky-50/30 border-sky-200/80" 
                           : "bg-white border-slate-200/80"
                       )}
                     >
@@ -832,8 +1048,6 @@ export default function PayrollPage() {
                             "px-2 py-0.5 rounded-lg text-xs font-bold",
                             row.isSunday 
                               ? "bg-indigo-100 text-indigo-800" 
-                              : row.isSaturday 
-                              ? "bg-sky-100 text-sky-800" 
                               : "bg-slate-100 text-slate-700"
                           )}>
                             {row.dayOfWeek}
@@ -858,7 +1072,9 @@ export default function PayrollPage() {
 
                       {/* Shifts within this day */}
                       <div className="space-y-2">
-                        {row.shiftCells.map((cell) => {
+                        {row.shiftCells
+                          .filter(cell => !hiddenShiftIds.includes(cell.shift.id))
+                          .map((cell) => {
                           return (
                             <div 
                               key={cell.shift.id}
@@ -868,19 +1084,21 @@ export default function PayrollPage() {
                                 <span className="font-bold text-slate-800">
                                   {cell.shift.name} <span className="text-[11px] text-slate-400 font-normal">({cell.shift.start_time.slice(0, 5)} - {cell.shift.end_time.slice(0, 5)})</span>
                                 </span>
-                                <span className="font-mono font-bold text-emerald-700 text-xs">
-                                  {cell.shiftTotalSalary > 0 ? `${new Intl.NumberFormat('vi-VN').format(cell.shiftTotalSalary)}đ` : "-"}
-                                </span>
+                                {showShiftSalaryColumns && (
+                                  <span className="font-mono font-bold text-emerald-700 text-xs">
+                                    {cell.shiftTotalSalary > 0 ? `${new Intl.NumberFormat('vi-VN').format(cell.shiftTotalSalary)}đ` : "-"}
+                                  </span>
+                                )}
                               </div>
 
                               {/* Staff list in this shift */}
-                              {cell.assignments.length === 0 ? (
-                                <div className="text-[11px] text-slate-400 italic">
-                                  Chưa có nhân viên đăng ký ca
-                                </div>
-                              ) : (
-                                <div className="flex flex-wrap gap-1.5">
-                                  {cell.assignments.map(({ staff, shiftItem }) => {
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                {cell.assignments.length === 0 ? (
+                                  <div className="text-[11px] text-slate-400 italic mr-1">
+                                    Chưa có NV
+                                  </div>
+                                ) : (
+                                  cell.assignments.map(({ staff, shiftItem }) => {
                                     const hasAdj = shiftItem.hoursAdjustment !== 0 || shiftItem.amountAdjustment !== 0;
                                     const hasNote = Boolean(shiftItem.note);
 
@@ -909,9 +1127,23 @@ export default function PayrollPage() {
                                         <Edit2 className="w-3 h-3 text-slate-400" />
                                       </button>
                                     );
+                                  })
+                                )}
+
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenAssignModal({
+                                    shift: cell.shift,
+                                    dateStr: row.dateStr,
+                                    formattedDate: row.formattedDate
                                   })}
-                                </div>
-                              )}
+                                  className="px-2 py-1 rounded-xl text-[11px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-dashed border-emerald-300 transition-all flex items-center gap-1 cursor-pointer"
+                                  title="Phân ca cho nhân viên"
+                                >
+                                  <UserPlus className="w-3 h-3" />
+                                  <span>+ Phân ca</span>
+                                </button>
+                              </div>
                             </div>
                           );
                         })}
@@ -1558,15 +1790,29 @@ export default function PayrollPage() {
 
             {/* Actions */}
             <div className="flex items-center justify-between gap-2 pt-1">
-              <button
-                type="button"
-                onClick={handleDeleteAdjustment}
-                disabled={savingAdjustment}
-                className="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all flex items-center gap-1 cursor-pointer"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Xóa</span>
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleDeleteAdjustment}
+                  disabled={savingAdjustment}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all flex items-center gap-1 cursor-pointer"
+                  title="Xóa điều chỉnh ca và đưa về giờ chuẩn"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Xóa</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleUnregisterShift}
+                  disabled={savingAdjustment}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-all flex items-center gap-1 cursor-pointer"
+                  title="Xóa nhân viên khỏi ca này"
+                >
+                  <UserMinus className="w-3.5 h-3.5" />
+                  <span>Hủy ca</span>
+                </button>
+              </div>
 
               <div className="flex items-center gap-2">
                 <button
@@ -1574,7 +1820,7 @@ export default function PayrollPage() {
                   onClick={() => setAdjustingShift(null)}
                   className="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
                 >
-                  Hủy
+                  Đóng
                 </button>
                 <button
                   type="button"
@@ -1585,6 +1831,75 @@ export default function PayrollPage() {
                   {savingAdjustment ? "Đang lưu..." : "Lưu điều chỉnh"}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL PHÂN CA TRỰC TIẾP TỪ BẢNG EXCEL */}
+      {assigningSlot && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-4 md:p-5 shadow-2xl border border-slate-100 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
+                  <UserPlus className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-900 text-sm md:text-base">
+                    Phân Ca Cho Nhân Viên
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    {assigningSlot.shift.name} • {assigningSlot.formattedDate}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAssigningSlot(null)}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700 block">
+                Chọn nhân viên làm ca này:
+              </label>
+              <select
+                value={assignUserId}
+                onChange={(e) => setAssignUserId(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-sm font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all cursor-pointer"
+              >
+                {allUsers.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name} ({u.role === 'admin' ? 'Quản trị' : 'Nhân viên'})
+                  </option>
+                ))}
+              </select>
+              <div className="text-[11px] text-slate-500 font-medium">
+                Khung giờ: {assigningSlot.shift.start_time.slice(0, 5)} - {assigningSlot.shift.end_time.slice(0, 5)}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setAssigningSlot(null)}
+                disabled={assigningLoading}
+                className="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmAssign}
+                disabled={assigningLoading || !assignUserId}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#059669] hover:bg-emerald-700 disabled:opacity-50 text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>{assigningLoading ? "Đang phân..." : "Xác nhận phân ca"}</span>
+              </button>
             </div>
           </div>
         </div>
